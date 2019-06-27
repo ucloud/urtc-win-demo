@@ -328,16 +328,8 @@ void CVideoWnd::OnBnClickedBtnClose()
 {
 	if (m_pObserver)
 	{
-		m_pObserver->OnClose("", m_userid);
+		m_pObserver->OnCloseMedia("", m_userid);
 	}
-	// TODO: Add your control notification handler code here
-	//if (m_type == "local")
-	//{
-
-	//}
-	//else {
-
-	//}
 }
 
 

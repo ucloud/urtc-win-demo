@@ -16,6 +16,9 @@
     <Filter Include="urtcengine">
       <UniqueIdentifier>{5568ce42-f335-4e32-9a40-27574dff846a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="utiles">
+      <UniqueIdentifier>{6d5ddb0c-0d18-40aa-8ea7-587f010f9c51}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sdktestdemo\DeviceTestDlg.cpp">
@@ -27,9 +30,6 @@
     <ClCompile Include="sdktestdemo\SdkTestDemoDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sdktestdemo\SdkUtil.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sdktestdemo\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -38,6 +38,12 @@
     </ClCompile>
     <ClCompile Include="sdktestdemo\VideoWnd.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="urtcsdk\URTCEventHandler.cpp">
+      <Filter>urtcengine</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\SdkUtil.cpp">
+      <Filter>utiles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -56,9 +62,6 @@
     <ClInclude Include="sdktestdemo\SdkTestDemoDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sdktestdemo\SdkUtil.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sdktestdemo\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -70,6 +73,18 @@
     </ClInclude>
     <ClInclude Include="sdktestdemo\VideoWnd.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="urtcsdk\URTCEventHandler.h">
+      <Filter>urtcengine</Filter>
+    </ClInclude>
+    <ClInclude Include="urtcsdk\URTCEventmsg.h">
+      <Filter>urtcengine</Filter>
+    </ClInclude>
+    <ClInclude Include="urtcsdk\URTCDefine.h">
+      <Filter>urtcengine</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\SdkUtil.h">
+      <Filter>utiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

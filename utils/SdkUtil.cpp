@@ -1,7 +1,22 @@
-#include "stdafx.h"
 #include"SdkUtil.h"
 #include <windows.h>
+#include <time.h>
 #include "json/json.h"
+
+std::string get_randrom_string(int length)
+{
+	static const char alphanum[] =
+		"0123456789"
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		"abcdefghijklmnopqrstuvwxyz";
+	srand((unsigned)time(NULL));
+	std::string str;
+	for (int i = 0; i < length; ++i) {
+		str += alphanum[rand() % (sizeof(alphanum) - 1)];
+	}
+
+	return str;
+}
 
 std::string int_to_string(int i)
 {

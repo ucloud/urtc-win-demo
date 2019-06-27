@@ -10,7 +10,7 @@ public:
     virtual ~CVideoWndCallback() {}
     virtual void OnMuteAudio(std::string userid, eUCloudRtcMeidaType mediatype,  bool mute) = 0;
 	virtual void OnMuteVideo(std::string userid, eUCloudRtcMeidaType mediatype, bool mute) = 0;
-    virtual void OnClose(std::string type, std::string id) = 0;
+    virtual void OnCloseMedia(std::string type, std::string id) = 0;
 };
 
 // CVideoWnd ¶Ô»°¿ò

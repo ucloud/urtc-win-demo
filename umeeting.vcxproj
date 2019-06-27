@@ -79,7 +79,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>./urtcsdk/include;./third_party/jsoncpp/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./urtcsdk;./utils;./urtcsdk/include;./third_party/jsoncpp/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -95,7 +95,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>./urtcsdk/include;./third_party/jsoncpp/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./urtcsdk;./utils;./urtcsdk/include;./third_party/jsoncpp/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -111,10 +111,11 @@
     <ClCompile Include="sdktestdemo\DeviceTestDlg.cpp" />
     <ClCompile Include="sdktestdemo\SdkTestDemo.cpp" />
     <ClCompile Include="sdktestdemo\SdkTestDemoDlg.cpp" />
-    <ClCompile Include="sdktestdemo\SdkUtil.cpp" />
     <ClCompile Include="sdktestdemo\stdafx.cpp" />
     <ClCompile Include="sdktestdemo\VideoTips.cpp" />
     <ClCompile Include="sdktestdemo\VideoWnd.cpp" />
+    <ClCompile Include="urtcsdk\URTCEventHandler.cpp" />
+    <ClCompile Include="utils\SdkUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sdktestdemo\DeviceTestDlg.h" />
@@ -122,11 +123,14 @@
     <ClInclude Include="sdktestdemo\resource.h" />
     <ClInclude Include="sdktestdemo\SdkTestDemo.h" />
     <ClInclude Include="sdktestdemo\SdkTestDemoDlg.h" />
-    <ClInclude Include="sdktestdemo\SdkUtil.h" />
     <ClInclude Include="sdktestdemo\stdafx.h" />
     <ClInclude Include="sdktestdemo\targetver.h" />
     <ClInclude Include="sdktestdemo\VideoTips.h" />
     <ClInclude Include="sdktestdemo\VideoWnd.h" />
+    <ClInclude Include="urtcsdk\URTCDefine.h" />
+    <ClInclude Include="urtcsdk\URTCEventHandler.h" />
+    <ClInclude Include="urtcsdk\URTCEventmsg.h" />
+    <ClInclude Include="utils\SdkUtil.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="sdktestdemo\SdkTestDemo.rc" />

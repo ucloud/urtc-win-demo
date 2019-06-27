@@ -27,7 +27,6 @@ public:
 // й╣ож
 
 	DECLARE_MESSAGE_MAP()
-	afx_msg void OnBnClickedButtonLogin();
 };
 
 extern CSdkTestDemoApp theApp;

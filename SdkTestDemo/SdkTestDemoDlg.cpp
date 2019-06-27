@@ -13,73 +13,22 @@
 #define new DEBUG_NEW
 #endif
 
-static std::string get_randrom_string(int length)
-{
-	static const char alphanum[] =
-		"0123456789"
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-		"abcdefghijklmnopqrstuvwxyz";
-	srand((unsigned)time(NULL));
-	std::string str;
-	for (int i = 0; i < length; ++i) {
-		str += alphanum[rand() % (sizeof(alphanum) - 1)];
-	}
 
-	return str;
-}
-
-#define  TEST_APP_ID "URtc-h4r1txxy"
-#define  TEST_SECKEY "9129304dbf8c5c4bf68d70824462409f"
 // CSdkTestDemoDlg 对话框
 #include <string>
 #include <stdint.h>
-
-const int URTC_EVENT_MSG_BASE = WM_USER + 1;
-const int URTC_EVENT_MSG_JOINROOM_RSP = URTC_EVENT_MSG_BASE + 1;
-const int URTC_EVENT_MSG_LEAVEROOM_RSP = URTC_EVENT_MSG_BASE + 2;
-const int URTC_EVENT_MSG_USERJOIN_NOTIFY = URTC_EVENT_MSG_BASE + 3;
-const int URTC_EVENT_MSG_REJOINING = URTC_EVENT_MSG_BASE + 4;
-const int URTC_EVENT_MSG_ERRORMSG = URTC_EVENT_MSG_BASE + 5;
-const int URTC_EVENT_MSG_REMOTEUSERJOIN = URTC_EVENT_MSG_BASE + 6;
-const int URTC_EVENT_MSG_REMOTEUSERLEAVE = URTC_EVENT_MSG_BASE + 7;
-
-const int URTC_EVENT_MSG_LOCALPUBLISH_RSP = URTC_EVENT_MSG_BASE + 8;
-const int URTC_EVENT_MSG_LOCALUNPUBLISH_RSP = URTC_EVENT_MSG_BASE + 9;
-const int URTC_EVENT_MSG_REMOTEPUBLISH = URTC_EVENT_MSG_BASE + 10;
-const int URTC_EVENT_MSG_REMOTEUNPUBLISH = URTC_EVENT_MSG_BASE + 11;
-const int URTC_EVENT_MSG_REMOTESUB_RSP = URTC_EVENT_MSG_BASE + 12;
-const int URTC_EVENT_MSG_REMOTEUNSUBE_RSP = URTC_EVENT_MSG_BASE + 13;
-const int URTC_EVENT_MSG_KICKOFF = URTC_EVENT_MSG_BASE + 14;
-
-const int URTC_EVENT_MSG_LOCALSTREAMMUTE_RSP = URTC_EVENT_MSG_BASE + 15;
-const int URTC_EVENT_MSG_REMOTESTREAMMUTE_RSP = URTC_EVENT_MSG_BASE + 16;
-const int URTC_EVENT_MSG_REMOTETRACKST = URTC_EVENT_MSG_BASE + 17;
-
-const int URTC_EVENT_MSG_REJOINED = URTC_EVENT_MSG_BASE + 18;
-const int URTC_EVENT_MSG_REMOTE_AUDIOVOL = URTC_EVENT_MSG_BASE + 19;
-const int URTC_EVENT_MSG_LOCAL_AUDIOVOL = URTC_EVENT_MSG_BASE + 20;
-const int URTC_EVENT_MSG_REMOTE_ST_UPDATE = URTC_EVENT_MSG_BASE + 21;
-const int URTC_EVENT_MSG_LOCAL_ST_UPDATE = URTC_EVENT_MSG_BASE + 22;
-const int URTC_EVENT_MSG_ONSERVERDIS = URTC_EVENT_MSG_BASE + 23;
-
-typedef std::map<std::string, tUserInfo*>::iterator userit;
-typedef std::map<std::string, tStreamInfo*>::iterator streamit;
-typedef std::map<std::string, std::string>::iterator userstreammapit;
-typedef std::map<std::string, CVideoWnd*>::iterator streamrenderit;
-typedef std::list<CVideoWnd*>::iterator videowndit;
 
 
 CSdkTestDemoDlg::CSdkTestDemoDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_SFU, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-	m_userid = "win_"+get_randrom_string(12);
+	m_userid = "win_"+ get_randrom_string(12);
 	m_campub = false;
 	m_screenpub = false;
 	m_leaveroom = false;
-	m_maxretrynum = 3;
-	m_nowretry = 0;
 	m_isclose = false;
+	m_eventhandler = nullptr;
 }
 
 void CSdkTestDemoDlg::OnMuteAudio(std::string userid, eUCloudRtcMeidaType mediatype, bool mute) {
@@ -116,326 +65,8 @@ void CSdkTestDemoDlg::OnMuteVideo(std::string userid, eUCloudRtcMeidaType mediat
 	}
 }
 
-void CSdkTestDemoDlg::OnClose(std::string type, std::string id) {
+void CSdkTestDemoDlg::OnCloseMedia(std::string type, std::string id) {
 
-}
-
-void CSdkTestDemoDlg::onServerDisconnect()
-{
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_ONSERVERDIS;
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onJoinRoom(int code, const char* msg, const char* uid, const char* roomid) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_JOINROOM_RSP;
-
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["code"] = code;
-	jsonmsg["msg"] = msg;
-	jsonmsg["data"]["uid"] = uid;
-	jsonmsg["data"]["roomid"] = roomid;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-
-}
-void CSdkTestDemoDlg::onLeaveRoom(int code, const char* msg, const char* uid, const char* roomid) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_LEAVEROOM_RSP;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["code"] = code;
-	jsonmsg["msg"] = msg;
-	jsonmsg["data"]["uid"] = uid;
-	jsonmsg["data"]["roomid"] = roomid;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onRejoining(const char* uid, const char* roomid) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_REJOINING;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["data"]["uid"] = uid;
-	jsonmsg["data"]["roomid"] = roomid;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onReJoinRoom(const char* uid, const char* roomid) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_REJOINED;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["data"]["uid"] = uid;
-	jsonmsg["data"]["roomid"] = roomid;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onRemoteUserJoin(const char* uid) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_REMOTEUSERJOIN;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["data"]["uid"] = uid;
-	jsonmsg["data"]["cmd"] = "join";
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onRemoteUserLeave(const char* uid, int reson) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_REMOTEUSERLEAVE;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["data"]["cmd"] = "leave";
-	jsonmsg["data"]["uid"] = uid;
-	jsonmsg["data"]["reson"] = reson;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onRemotePublish(tUCloudRtcStreamInfo& info) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_REMOTEPUBLISH;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg; 
-	jsonmsg["data"]["cmd"] = "add";
-	jsonmsg["data"]["uid"] = info.mUserId;
-	jsonmsg["data"]["mtype"] = info.mStreamMtype;
-	jsonmsg["data"]["audio"] = info.mEnableAudio;
-	jsonmsg["data"]["video"] = info.mEnableVideo;
-	jsonmsg["data"]["data"] = info.mEnableData;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onRemoteUnPublish(tUCloudRtcStreamInfo& info) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_REMOTEUNPUBLISH;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["data"]["cmd"] = "remove";
-	jsonmsg["data"]["uid"] = info.mUserId;
-	jsonmsg["data"]["mtype"] = info.mStreamMtype;
-	jsonmsg["data"]["audio"] = info.mEnableAudio;
-	jsonmsg["data"]["video"] = info.mEnableVideo;
-	jsonmsg["data"]["data"] = info.mEnableData;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onLocalPublish(const int code, const char* msg, tUCloudRtcStreamInfo& info) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_LOCALPUBLISH_RSP;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["code"] = code;
-	jsonmsg["msg"] = msg;
-	jsonmsg["data"]["mtype"] = info.mStreamMtype;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onLocalUnPublish(const int code, const char* msg, tUCloudRtcStreamInfo& info) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_LOCALUNPUBLISH_RSP;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["code"] = code;
-	jsonmsg["msg"] = msg;
-	jsonmsg["data"]["mtype"] = info.mStreamMtype;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onSubscribeResult(const int code, const char* msg, tUCloudRtcStreamInfo& info) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_REMOTESUB_RSP;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["code"] = code;
-	jsonmsg["msg"] = msg;
-	jsonmsg["data"]["mtype"] = info.mStreamMtype;
-	jsonmsg["data"]["uid"] = info.mUserId;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onUnSubscribeResult(const int code, const char* msg, tUCloudRtcStreamInfo& info) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_REMOTEUNSUBE_RSP;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["code"] = code;
-	jsonmsg["msg"] = msg;
-	jsonmsg["data"]["mtype"] = info.mStreamMtype;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onLocalStreamMuteRsp(const int code, const char* msg,
-	eUCloudRtcMeidaType mediatype, eUCloudRtcTrackType tracktype, bool mute) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_LOCALSTREAMMUTE_RSP;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["code"] = code;
-	jsonmsg["msg"] = msg;
-	jsonmsg["data"]["mtype"] = mediatype;
-	jsonmsg["data"]["ttype"] = tracktype;
-	jsonmsg["data"]["mute"] = mute;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-void CSdkTestDemoDlg::onRemoteStreamMuteRsp(const int code, const char* msg, const char* uid,
-	eUCloudRtcMeidaType mediatype, eUCloudRtcTrackType tracktype, bool mute) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_REMOTESTREAMMUTE_RSP;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["code"] = code;
-	jsonmsg["msg"] = msg;
-	jsonmsg["data"]["uid"] = uid;
-	jsonmsg["data"]["mtype"] = mediatype;
-	jsonmsg["data"]["ttype"] = tracktype;
-	jsonmsg["data"]["mute"] = mute;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onRemoteTrackNotify(const char* uid,
-	eUCloudRtcMeidaType mediatype, eUCloudRtcTrackType tracktype, bool mute) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_REMOTETRACKST;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["data"]["uid"] = uid;
-	jsonmsg["data"]["mtype"] = mediatype;
-	jsonmsg["data"]["ttype"] = tracktype;
-	jsonmsg["data"]["mute"] = mute;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onError(int code) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_ERRORMSG;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["code"] = code;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onKickoff(int code) {
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_KICKOFF;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["code"] = code;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onRemoteAudioLevel(const char* uid, int volume)
-{
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_REMOTE_AUDIOVOL;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["data"]["uid"] = uid;
-	jsonmsg["data"]["vol"] = volume;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onLocalAudioLevel(int volume)
-{
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_LOCAL_AUDIOVOL;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["data"]["vol"] = volume;
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onSendRTCStats(tUCloudRtcStreamStats& rtstats)
-{
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_LOCAL_ST_UPDATE;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["data"]["mtype"] = rtstats.mStreamMtype;
-	jsonmsg["data"]["ttype"] = rtstats.mTracktype;
-	if (rtstats.mTracktype == UCLOUD_RTC_TRACKTYPE_AUDIO)
-	{
-		jsonmsg["data"]["bitrate"] = rtstats.mAudioBitrate;
-		jsonmsg["data"]["lostrate"] = rtstats.mPacketLostRate;
-	}
-	else
-	{
-		jsonmsg["data"]["bitrate"] = rtstats.mVideoBitrate;
-		jsonmsg["data"]["lostrate"] = rtstats.mPacketLostRate;
-		jsonmsg["data"]["height"] = rtstats.mVideoHeight;
-		jsonmsg["data"]["width"] = rtstats.mVideoWidth;
-		jsonmsg["data"]["framerate"] = rtstats.mVideoFrameRate;
-	}
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
-}
-
-void CSdkTestDemoDlg::onRemoteRTCStats(tUCloudRtcStreamStats rtstats)
-{
-	tCallMsg* callmsg = new tCallMsg;
-	callmsg->eventid = URTC_EVENT_MSG_REMOTE_ST_UPDATE;
-	Json::StyledWriter writer;
-	Json::Value jsonmsg;
-	jsonmsg["data"]["uid"] = rtstats.mUserId;
-	jsonmsg["data"]["mtype"] = rtstats.mStreamMtype;
-	jsonmsg["data"]["ttype"] = rtstats.mTracktype;
-	if (rtstats.mTracktype == UCLOUD_RTC_TRACKTYPE_AUDIO)
-	{
-		jsonmsg["data"]["bitrate"] = rtstats.mAudioBitrate;
-		jsonmsg["data"]["lostrate"] = rtstats.mPacketLostRate;
-	}
-	else
-	{
-		jsonmsg["data"]["bitrate"] = rtstats.mVideoBitrate;
-		jsonmsg["data"]["lostrate"] = rtstats.mPacketLostRate;
-		jsonmsg["data"]["height"] = rtstats.mVideoHeight;
-		jsonmsg["data"]["width"] = rtstats.mVideoWidth;
-		jsonmsg["data"]["framerate"] = rtstats.mVideoFrameRate;
-	}
-	callmsg->msg = writer.write(jsonmsg);
-
-	PostMessage(URTC_EVENT_MSG_BASE, (WPARAM)callmsg, 0);
 }
 
 void CSdkTestDemoDlg::DoDataExchange(CDataExchange* pDX)
@@ -523,9 +154,12 @@ BOOL CSdkTestDemoDlg::OnInitDialog()
 		pWnd->RegisterCallback(this);
 		m_remoteWnds.emplace_back(pWnd);
 	}
+	m_eventhandler = new URTCEventHandler;
+	m_eventhandler->initEventHandler(this->GetSafeHwnd());
+
 	m_audiocheck.SetCheck(1);
 	m_videocheck.SetCheck(1);
-	m_rtcengine = UCloudRtcEngine::sharedInstance(this);
+	m_rtcengine = UCloudRtcEngine::sharedInstance(m_eventhandler);
 	m_rtcengine->setStreamRole(UCLOUD_RTC_USER_STREAM_ROLE_BOTH);
 	m_rtcengine->setTokenSecKey(TEST_SECKEY);
 	m_rtcengine->setAudioOnlyMode(false);
@@ -588,13 +222,13 @@ HCURSOR CSdkTestDemoDlg::OnQueryDragIcon()
 
 void CSdkTestDemoDlg::OnBnClickedOk()
 {
-	CDialogEx::OnOK();
+	//CDialogEx::OnOK();
 }
 
 
 void CSdkTestDemoDlg::OnBnClickedCancel()
 {
-	CDialogEx::OnCancel();
+	//CDialogEx::OnCancel();
 }
 
 void CSdkTestDemoDlg::OnClose()
@@ -618,67 +252,67 @@ void CSdkTestDemoDlg::OnClose()
 
 HRESULT CSdkTestDemoDlg::OnCallBackMsg(WPARAM data, LPARAM lp)
 {
-	tCallMsg* callmsg = (tCallMsg*)data;
-	int eventid = callmsg->eventid;
+	tEventMsg* callmsg = (tEventMsg*)data;
+	int eventid = callmsg->mEventid;
 
 	switch (eventid)
 	{
 	case URTC_EVENT_MSG_JOINROOM_RSP:
-		OnJoinRoomHandler(callmsg->msg);
+		OnJoinRoomHandler(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_LEAVEROOM_RSP:
-		OnLeaveRoomHandler(callmsg->msg);
+		OnLeaveRoomHandler(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_REJOINING :
-		OnServerReconnectingHandler(callmsg->msg);
+		OnServerReconnectingHandler(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_REJOINED :
-		OnReJoinRoomHandler(callmsg->msg);
+		OnReJoinRoomHandler(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_ERRORMSG :
-		OnSdkErrorHandler(callmsg->msg);
+		OnSdkErrorHandler(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_REMOTEUSERLEAVE :
 	case URTC_EVENT_MSG_REMOTEUSERJOIN :
-		OnUserStHandler(callmsg->msg);
+		OnUserStHandler(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_LOCALPUBLISH_RSP :
-		OnPulibshStreamHandler(callmsg->msg);
+		OnPulibshStreamHandler(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_LOCALUNPUBLISH_RSP:
-		OnUnPulibshStreamHandler(callmsg->msg);
+		OnUnPulibshStreamHandler(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_REMOTEPUBLISH:
 	case URTC_EVENT_MSG_REMOTEUNPUBLISH:
-		OnStreamStHandler(callmsg->msg);
+		OnStreamStHandler(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_REMOTESUB_RSP :
-		OnSubStreamHandler(callmsg->msg);
+		OnSubStreamHandler(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_KICKOFF :
-		OnKickoffHandler(callmsg->msg);
+		OnKickoffHandler(callmsg->mJsonMsg);
 		break;
 
 	case URTC_EVENT_MSG_LOCALSTREAMMUTE_RSP :
-		OnLocalStreamMuteHandler(callmsg->msg);
+		OnLocalStreamMuteHandler(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_REMOTESTREAMMUTE_RSP :
-		OnRemoteStreamMuteHandler(callmsg->msg);
+		OnRemoteStreamMuteHandler(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_REMOTETRACKST :
-		OnRemoteTrackStNotify(callmsg->msg);
+		OnRemoteTrackStNotify(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_REMOTE_AUDIOVOL :
-		OnRemoteAudioVolHandler(callmsg->msg);
+		OnRemoteAudioVolHandler(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_LOCAL_AUDIOVOL :
-		OnLocalAudioVolHandler(callmsg->msg);
+		OnLocalAudioVolHandler(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_LOCAL_ST_UPDATE:
-		OnSendStHandler(callmsg->msg);
+		OnSendStHandler(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_REMOTE_ST_UPDATE:
-		OnRemoteStHandler(callmsg->msg);
+		OnRemoteStHandler(callmsg->mJsonMsg);
 		break;
 	case URTC_EVENT_MSG_ONSERVERDIS :
 		OnServerDisconnectHandler("");
@@ -1102,14 +736,14 @@ void CSdkTestDemoDlg::OnStreamStHandler(std::string jsonmsg) {
 	if (cmd == "add")
 	{
 		tStreamInfo* stream = new tStreamInfo;
-		stream->mediatype = mtype;
+		stream->mStreamMtype = mtype;
 		stream->mUserid = userid;
 		stream->mEnalbeaudio = retObj["data"]["audio"].asBool();
 		stream->mEnalbevideo = retObj["data"]["video"].asBool();
 		stream->mEnalbedata = retObj["data"]["data"].asBool();
 
 		char buf[8] = {0};
-		sprintf_s(buf, "%d", stream->mediatype);
+		sprintf_s(buf, "%d", stream->mStreamMtype);
 		m_streamsmap.insert( std::make_pair(stream->mUserid+ buf, stream) );
 		std::string desc = "流加入：";
 		OnMessageShow(desc);
@@ -1602,7 +1236,7 @@ void CSdkTestDemoDlg::UserLeave(std::string uid) {
 				if (info->mUserid == uid)
 				{
 					char buf[8] = { 0 };
-					sprintf_s(buf, "%d", info->mediatype);
+					sprintf_s(buf, "%d", info->mStreamMtype);
 					streamrenderit srit = m_mapRenders.find(info->mUserid + buf);
 					if (srit != m_mapRenders.end())
 					{

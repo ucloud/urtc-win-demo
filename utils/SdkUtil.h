@@ -2,6 +2,8 @@
 #include "stdio.h"
 #include <string>
 
+std::string get_randrom_string(int length);
+
 std::string int_to_string(int i);
 
 std::wstring Utf8ToWide(const char* str);

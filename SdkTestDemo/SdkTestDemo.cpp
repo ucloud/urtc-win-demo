@@ -15,7 +15,6 @@
 
 BEGIN_MESSAGE_MAP(CSdkTestDemoApp, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
-	ON_BN_CLICKED(IDC_BUTTON_LOGIN, &CSdkTestDemoApp::OnBnClickedButtonLogin)
 END_MESSAGE_MAP()
 
 
@@ -38,19 +37,6 @@ CSdkTestDemoApp theApp;
 
 // CSdkTestDemoApp 初始化
 
-void myInvalidParameterHandler(const wchar_t* expression,
-	const wchar_t* function,
-	const wchar_t* file,
-	unsigned int line,
-	uintptr_t pReserved)
-{
-	wprintf(L"Invalid parameter detected in function %s."
-		L" File: %s Line: %d\n", function, file, line);
-	wprintf(L"Expression: %s\n", expression);
-	abort();
-}
-_invalid_parameter_handler oldHandler, newHandler;
-
 BOOL CSdkTestDemoApp::InitInstance()
 {
 	// 如果一个运行在 Windows XP 上的应用程序清单指定要
@@ -62,10 +48,6 @@ BOOL CSdkTestDemoApp::InitInstance()
 	// 公共控件类。
 	InitCtrls.dwICC = ICC_WIN95_CLASSES;
 	InitCommonControlsEx(&InitCtrls);
-
-	oldHandler = _set_invalid_parameter_handler(myInvalidParameterHandler);
-	_set_thread_local_invalid_parameter_handler(myInvalidParameterHandler);
-	_CrtSetReportMode(_CRT_ASSERT, 0);
 
 	CWinApp::InitInstance();
 
@@ -118,11 +100,4 @@ BOOL CSdkTestDemoApp::InitInstance()
 	// 由于对话框已关闭，所以将返回 FALSE 以便退出应用程序，
 	//  而不是启动应用程序的消息泵。
 	return FALSE;
-}
-
-
-
-void CSdkTestDemoApp::OnBnClickedButtonLogin()
-{
-	// TODO: Add your control notification handler code here
 }
