@@ -62,8 +62,6 @@ const int URTC_EVENT_MSG_REMOTE_ST_UPDATE = URTC_EVENT_MSG_BASE + 21;
 const int URTC_EVENT_MSG_LOCAL_ST_UPDATE = URTC_EVENT_MSG_BASE + 22;
 const int URTC_EVENT_MSG_ONSERVERDIS = URTC_EVENT_MSG_BASE + 23;
 
-CSdkTestDemoDlg* g_dlg;
-
 typedef std::map<std::string, tUserInfo*>::iterator userit;
 typedef std::map<std::string, tStreamInfo*>::iterator streamit;
 typedef std::map<std::string, std::string>::iterator userstreammapit;
@@ -490,7 +488,6 @@ BOOL CSdkTestDemoDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-	g_dlg = this;
 	SetDlgItemText(IDC_EDIT_USERID, Ansi2WChar(m_userid.data()).data());
 	SetDlgItemText(IDC_EDIT_ROOM, L"urtc1");
 	GetDlgItem(IDC_EDIT_ROOM)->EnableWindow(TRUE);
