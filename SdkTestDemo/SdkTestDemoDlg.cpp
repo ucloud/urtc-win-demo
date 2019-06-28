@@ -8,6 +8,7 @@
 #include "DeviceTestDlg.h"
 #include "SdkUtil.h"
 #include "json/json.h"
+#include "RTCEventDefine.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -28,39 +29,58 @@ CSdkTestDemoDlg::CSdkTestDemoDlg(CWnd* pParent /*=NULL*/)
 	m_screenpub = false;
 	m_leaveroom = false;
 	m_isclose = false;
-	m_eventhandler = nullptr;
 }
 
 void CSdkTestDemoDlg::OnMuteAudio(std::string userid, eUCloudRtcMeidaType mediatype, bool mute) {
 	if (userid == "camera")
 	{
-		m_rtcengine->muteLocalMic(mute);
+		tRTCStreamMute mutest;
+		mutest.mMute = mute;
+		mutest.mUserid = m_userid;
+		m_rtcengine->MuteLocalCamAudio(mutest);
 	}
 	else if (userid == "screen")
 	{
 	}
 	else {
-		tUCloudRtcMuteSt info;
-		info.mUserId = const_cast<char*>(userid.data()) ;
-		info.mStreamMtype = mediatype;
-		m_rtcengine->muteRemoteAudio(info, mute);
+		tRTCStreamMute mutest;
+		mutest.mMute = mute;
+		mutest.mUserid = userid;
+		m_rtcengine->MuteRemoteCamAudio(mutest);
 	}
 }
 
 void CSdkTestDemoDlg::OnMuteVideo(std::string userid, eUCloudRtcMeidaType mediatype, bool mute) {
 	if (userid == "camera")
 	{
-		m_rtcengine->muteLocalVideo(mute, UCLOUD_RTC_MEDIATYPE_VIDEO);
+		tRTCStreamMute mutest;
+		mutest.mMute = mute;
+		mutest.mUserid = m_userid;
+		m_rtcengine->MuteLocalCamVideo(mutest);
 	}
 	else if (userid == "screen")
 	{
-		m_rtcengine->muteLocalVideo(mute, UCLOUD_RTC_MEDIATYPE_SCREEN);
+		tRTCStreamMute mutest;
+		mutest.mMute = mute;
+		mutest.mUserid = m_userid;
+		m_rtcengine->MuteLocalScreen(mutest);
 	}
 	else {
-		tUCloudRtcMuteSt info;
-		info.mUserId = const_cast<char*>(userid.data());
-		info.mStreamMtype = mediatype;
-		m_rtcengine->muteRemoteVideo(info, mute);
+		if (mediatype == UCLOUD_RTC_MEDIATYPE_VIDEO)
+		{
+			tRTCStreamMute mutest;
+			mutest.mMute = mute;
+			mutest.mUserid = userid;
+			m_rtcengine->MuteRemoteCamVideo(mutest);
+		}
+		else 
+		{
+			tRTCStreamMute mutest;
+			mutest.mMute = mute;
+			mutest.mUserid = userid;
+			m_rtcengine->MuteRemoteScreen(mutest);
+		}
+		
 		
 	}
 }
@@ -154,34 +174,10 @@ BOOL CSdkTestDemoDlg::OnInitDialog()
 		pWnd->RegisterCallback(this);
 		m_remoteWnds.emplace_back(pWnd);
 	}
-	m_eventhandler = new URTCEventHandler;
-	m_eventhandler->initEventHandler(this->GetSafeHwnd());
-
 	m_audiocheck.SetCheck(1);
 	m_videocheck.SetCheck(1);
-	m_rtcengine = UCloudRtcEngine::sharedInstance(m_eventhandler);
-	m_rtcengine->setStreamRole(UCLOUD_RTC_USER_STREAM_ROLE_BOTH);
-	m_rtcengine->setTokenSecKey(TEST_SECKEY);
-	m_rtcengine->setAudioOnlyMode(false);
-	m_rtcengine->setAutoPublishSubscribe(false, true);
-	m_rtcengine->configLocalAudioPublish(false);
-	m_rtcengine->configLocalCameraPublish(true);
-	m_rtcengine->configLocalScreenPublish(false);
-	if (m_rtcengine->isAutoPublish())
-	{
-		if (m_rtcengine->isLocalCameraPublishEnabled() || m_rtcengine->isLocalAudioPublishEnabled())
-		{
-			GetDlgItem(IDC_BUTTON_PUBC)->ShowWindow(FALSE);
-		}
-
-		if (m_rtcengine->isLocalScreenPublishEnabled())
-		{
-			GetDlgItem(IDC_BUTTON_PUBS)->ShowWindow(FALSE);
-		}
-	}
-	m_rtcengine->setVideoProfile(UCLOUD_RTC_VIDEO_PROFILE_640_360);
-	m_rtcengine->getSdkVersion();
-	m_rtcengine->setSdkMode(UCLOUD_RTC_SDK_MODE_TRIVAL);
+	m_rtcengine = RTCEngineFactory::createRtcEngine(RTC_CHANNELTYPE_UCLOUD);
+	m_rtcengine->InitRTCEngine(this->GetSafeHwnd());
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -235,16 +231,16 @@ void CSdkTestDemoDlg::OnClose()
 {
 	if (!m_leaveroom)
 	{
-		int ret = m_rtcengine->leaveChannel();
+		int ret = m_rtcengine->LeaveRoom(m_roomid);
 		if (ret != 0)
 		{
-			m_rtcengine->destroy();
+			m_rtcengine->UnInitRTCEngine();
 			CDialogEx::OnCancel();
 		}
 		m_isclose = true;
 	}
 	else {
-		m_rtcengine->destroy();
+		m_rtcengine->UnInitRTCEngine();
 		CDialogEx::OnCancel();
 	}
 }
@@ -332,9 +328,6 @@ void CSdkTestDemoDlg::OnBnClickedButtonJoin()
 	// TODO: Add your control notification handler code here
 	CString text;
 	GetDlgItemText(IDC_EDIT_ROOM, text);
-	//CString uid;
-	//GetDlgItemText(IDC_EDIT_USERID, uid);
-	//m_userid = WChatToUTF8Str(uid.GetBuffer());
 	m_roomid = WChatToUTF8Str(text.GetBuffer());
 	if (m_roomid.length() <= 0)
 	{
@@ -344,12 +337,11 @@ void CSdkTestDemoDlg::OnBnClickedButtonJoin()
 	}
 	if (m_rtcengine)
 	{
-		tUCloudRtcAuth auth;
-		auth.mAppId = TEST_APP_ID;
-		auth.mRoomId = m_roomid.data();
-		auth.mUserId = m_userid.data();
-		auth.mUserToken = "";
-		int ret = m_rtcengine->joinChannel(auth);
+		tRTCAuthInfo auth;
+		auth.mRoomid = m_roomid.data();
+		auth.mUserid = m_userid.data();
+		auth.mToken = "test";
+		int ret = m_rtcengine->JoinRoom(auth);
 	}
 }
 
@@ -364,19 +356,7 @@ void CSdkTestDemoDlg::OnJoinRoomHandler(std::string jsonmsg) {
 	{
 		GetDlgItem(IDC_BUTTON_JOIN)->EnableWindow(false);
 		GetDlgItem(IDC_BUTTON_LEAVEROOM)->EnableWindow(true);
-		if (!m_rtcengine->isAutoPublish() )
-		{
-			if (m_rtcengine->isLocalCameraPublishEnabled() || m_rtcengine->isLocalAudioPublishEnabled())
-			{
-				GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(true);
-			}
-			if (m_rtcengine->isLocalScreenPublishEnabled())
-			{
-				GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(true);
-			}
-
-		}
-
+		GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(false);
 		GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(true);
 		GetDlgItem(IDC_EDIT_ROOM)->EnableWindow(false);
 		OnMessageShow("加入房间成功");
@@ -408,59 +388,7 @@ void CSdkTestDemoDlg::OnReJoinRoomHandler(std::string jsonmsg) {
 	Json::Reader reader;
 	Json::Value retObj;
 	reader.parse(jsonmsg.c_str(), retObj, false);
-
-	//int code = retObj["code"].asInt();
-	//std::string msg = retObj["msg"].asString();
-	//if (code == 0)
-	//{
-	//	Json::Value users = retObj["data"]["users"];
-
-	//	for (int i = 0; i < users.size(); i++) {
-	//		std::string userid = users[i]["uid"].asString();
-	//		userit uit = m_hashSessions.find(userid);
-	//		tUserInfo* user = nullptr;
-	//		if (uit == m_hashSessions.end())
-	//		{
-	//			user = new tUserInfo;
-	//			user->mUserid = userid;
-	//			m_hashSessions.emplace(std::make_pair(userid, user));
-	//			m_users.AddString(Ansi2WChar(userid.data()).data());
-	//		}
-	//		else {
-	//			user = uit->second;
-	//		}
-
-
-	//		Json::Value streams = users[i]["streams"];
-	//		for (int i = 0; i < streams.size(); i++) {
-	//			std::string streamid = streams[i]["streamid"].asString();
-	//			streamit sit = m_streamsmap.find(streamid);
-	//			if (sit == m_streamsmap.end())
-	//			{
-	//				tStreamInfo * stream = new tStreamInfo;
-	//				//stream->mStreamid = streamid;
-	//				stream->mUserid = userid;
-	//				stream->mEnalbevideo = streams[i]["video"].asBool();
-	//				stream->mEnalbeaudio = streams[i]["audio"].asBool();
-	//				stream->mEnalbedata = streams[i]["data"].asBool();
-
-	//				m_streamsmap.emplace(std::make_pair(streamid, stream));
-	//			}
-
-	//			//user->mStreams.emplace(streamid);
-	//		}
-	//	}
-
-	//	SubscribeAllStream();
-		OnMessageShow("重连成功");
-	//}
-	//else {
-	//	char num[32] = { 0 };
-	//	sprintf_s(num, " err code = %d", code);
-	//	std::string errcode = num;
-	//	std::string desc = "重新加入房间失败 " + msg + " " + errcode;
-	//	OnMessageShow(desc);
-	//}
+	OnMessageShow("重连成功");
 }
 
 void CSdkTestDemoDlg::OnLeaveRoomHandler(std::string jsonmsg) {
@@ -529,13 +457,13 @@ void CSdkTestDemoDlg::OnPulibshCamStreamHandler(std::string jsonmsg) {
 	{
 		SetDlgItemText(IDC_BUTTON_PUBC, L"停止发布");
 		OnMessageShow("摄像头发布成功");
-		tUCloudRtcVideoCanvas canvas;
-		canvas.mVideoView = (int)m_localWnd->GetVideoHwnd();
+		tRTCRenderView canvas;
+		canvas.mVidoview = (int)m_localWnd->GetVideoHwnd();
 		canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
-		canvas.mUserId = "";
+		canvas.mUserid = m_userid;
 		canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
 
-		m_rtcengine->startPreview(canvas);
+		m_rtcengine->StartLocalRender(canvas);
 		m_localWnd->setUsed(true);
 		m_localWnd->setReady(true);
 		m_campub = true;
@@ -560,12 +488,11 @@ void CSdkTestDemoDlg::OnPulibshScreenStreamHandler(std::string jsonmsg) {
 	{
 		SetDlgItemText(IDC_BUTTON_PUBS, L"停止桌面");
 		OnMessageShow("桌面发布成功");
-		tUCloudRtcVideoCanvas canvas;
-		canvas.mVideoView = (int)m_localWnd->GetVideoHwnd();
+		tRTCRenderView canvas;
+		canvas.mVidoview = (int)m_screenWnd->GetVideoHwnd();
 		canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
-		canvas.mUserId = "";
+		canvas.mUserid = m_userid;
 		canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_SCREEN;
-		m_rtcengine->startPreview(canvas);
 		m_screenWnd->setUsed(true);
 		m_screenWnd->setReady(true);
 		m_screenpub = true;
@@ -695,12 +622,13 @@ void CSdkTestDemoDlg::OnSubStreamHandler(std::string jsonmsg) {
 		OnMessageShow(msg);
 		if (videoview)
 		{
-			tUCloudRtcVideoCanvas canvas;
-			canvas.mVideoView = (int)m_localWnd->GetVideoHwnd();
+
+			tRTCRenderView canvas;
+			canvas.mVidoview = (int)videoview->GetVideoHwnd();
 			canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
-			canvas.mUserId = const_cast<char*>(uid.data());
-			canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_SCREEN;
-			m_rtcengine->startRemoteView(canvas);
+			canvas.mUserid = m_userid;
+			canvas.mStreamMtype = mtype;
+			m_rtcengine->StartRemoteRender(canvas);
 		}
 
 	}
@@ -752,10 +680,6 @@ void CSdkTestDemoDlg::OnStreamStHandler(std::string jsonmsg) {
 		std::string mt = buf;
 		std::string streamdesc = "mediatype: " + mt;
 		OnMessageShow(streamdesc);
-		if (!m_rtcengine->isAutoSubscribe())
-		{
-			SubscribeStream(mtype, userid);
-		}
 	}else if (cmd == "remove")
 	{
 		UnSubscribeStream(mtype, userid);
@@ -1261,7 +1185,7 @@ void CSdkTestDemoDlg::UserLeave(std::string uid) {
 }
 
 void CSdkTestDemoDlg::OnLeaveRoom() {
-	m_rtcengine->destroy();
+	m_rtcengine->UnInitRTCEngine();
 	CDialogEx::OnCancel();
 }
 
@@ -1269,32 +1193,42 @@ void CSdkTestDemoDlg::OnBnClickedButtonPubC()
 {
 	if (m_campub)
 	{
-		m_rtcengine->unPublish(UCLOUD_RTC_MEDIATYPE_VIDEO);
+		tRTCStreamInfo info;
+		info.mEnableVideo = m_videocheck.GetCheck();
+		info.mEnableAudio = m_audiocheck.GetCheck();
+		info.mEnableData = false;
+		info.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
+		info.mUserid = m_userid;
+		m_rtcengine->UnPublishStream(info);
 		SetDlgItemText(IDC_BUTTON_PUBC, L"发布媒体");
 		m_campub = !m_campub;
 	}
 	else {
-		tUCloudRtcMediaConfig config;
-		config.mAudioEnable = m_audiocheck.GetCheck();
-		config.mVideoEnable = m_videocheck.GetCheck();
-		if (!config.mAudioEnable && !config.mVideoEnable)
+		bool audioEnable = m_audiocheck.GetCheck();
+		bool videoEnable = m_videocheck.GetCheck();
+		if (!audioEnable && !videoEnable)
 		{
 			AfxMessageBox(L"发布视频最少需要选择一种媒体");
 			return;
 		}
 		m_localWnd->SetUserId("camera");
-		int ret = m_rtcengine->publish(UCLOUD_RTC_MEDIATYPE_VIDEO, config.mVideoEnable,
-			config.mAudioEnable);
+		tRTCStreamInfo info;
+		info.mEnableVideo = videoEnable;
+		info.mEnableAudio = audioEnable;
+		info.mEnableData = false;
+		info.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
+		info.mUserid = m_userid;
+		int ret = m_rtcengine->PublishStream(info);
 	}
 }
 
 
 void CSdkTestDemoDlg::OnBnClickedButtonLeaveroom()
 {
-	int ret = m_rtcengine->leaveChannel();
+	int ret = m_rtcengine->LeaveRoom(m_roomid);
 	if (ret != 0)
 	{
-		m_rtcengine->destroy();
+		m_rtcengine->UnInitRTCEngine();
 		CDialogEx::OnCancel();
 	}
 	m_leaveroom = true;
@@ -1304,19 +1238,26 @@ void CSdkTestDemoDlg::OnBnClickedButtonPubs()
 {
 	if (m_screenpub)
 	{
-		m_rtcengine->unPublish(UCLOUD_RTC_MEDIATYPE_SCREEN);
+		tRTCStreamInfo info;
+		info.mEnableVideo = m_videocheck.GetCheck();
+		info.mEnableAudio = m_audiocheck.GetCheck();
+		info.mEnableData = false;
+		info.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
+		info.mUserid = m_userid;
+		m_rtcengine->UnPublishStream(info);
 		SetDlgItemText(IDC_BUTTON_PUBS, L"发布桌面");
 		m_screenpub = !m_screenpub;
 	}
 	else 
 	{
-		tUCloudRtcMediaConfig config;
-		config.mAudioEnable = false;
-		config.mVideoEnable = true;
+		tRTCStreamInfo info;
+		info.mEnableVideo = true;
+		info.mEnableAudio = false;
+		info.mEnableData = false;
+		info.mStreamMtype = UCLOUD_RTC_MEDIATYPE_SCREEN;
+		info.mUserid = m_userid;
+		int ret = m_rtcengine->PublishStream(info);
 		m_screenWnd->SetUserId("screen");
-		m_rtcengine->setDesktopProfile(UCLOUD_RTC_SCREEN_PROFILE_MIDDLE);
-		m_rtcengine->publish(UCLOUD_RTC_MEDIATYPE_SCREEN, config.mVideoEnable,
-			config.mAudioEnable);
 	}
 }
 

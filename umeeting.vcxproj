@@ -114,6 +114,8 @@
     <ClCompile Include="sdktestdemo\stdafx.cpp" />
     <ClCompile Include="sdktestdemo\VideoTips.cpp" />
     <ClCompile Include="sdktestdemo\VideoWnd.cpp" />
+    <ClCompile Include="urtcsdk\RTCEngineFactory.cpp" />
+    <ClCompile Include="urtcsdk\URTCEngineImpl.cc" />
     <ClCompile Include="urtcsdk\URTCEventHandler.cpp" />
     <ClCompile Include="utils\SdkUtil.cpp" />
   </ItemGroup>
@@ -127,9 +129,12 @@
     <ClInclude Include="sdktestdemo\targetver.h" />
     <ClInclude Include="sdktestdemo\VideoTips.h" />
     <ClInclude Include="sdktestdemo\VideoWnd.h" />
-    <ClInclude Include="urtcsdk\URTCDefine.h" />
+    <ClInclude Include="urtcsdk\RTCDefine.h" />
+    <ClInclude Include="urtcsdk\RTCEngineBase.h" />
+    <ClInclude Include="urtcsdk\RTCEngineFactory.h" />
+    <ClInclude Include="urtcsdk\RTCEventDefine.h" />
+    <ClInclude Include="urtcsdk\URTCEngineImpl.h" />
     <ClInclude Include="urtcsdk\URTCEventHandler.h" />
-    <ClInclude Include="urtcsdk\URTCEventmsg.h" />
     <ClInclude Include="utils\SdkUtil.h" />
   </ItemGroup>
   <ItemGroup>

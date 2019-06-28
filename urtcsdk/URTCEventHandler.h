@@ -2,8 +2,8 @@
 #define _UMEETING_URTCEVENTHANDLER_H_
 
 #include "UCloudRtcEngine.h"
-#include "URTCDefine.h"
-#include "URTCEventmsg.h"
+#include "RTCDefine.h"
+#include "RTCEventDefine.h"
 #include <string>
 
 class URTCEventHandler : public UCloudRtcEventListener {

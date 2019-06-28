@@ -13,8 +13,7 @@
 #include "VideoWnd.h"
 #include "afxwin.h"
 #include "afxcmn.h"
-#include "UCloudRtcEngine.h"
-#include "URTCEventHandler.h"
+#include "RTCEngineFactory.h"
 
 
 // CSdkTestDemoDlg 对话框
@@ -96,7 +95,7 @@ private:
 	void OnRemoteStHandler(std::string jsonmsg);
 	void OnSendStHandler(std::string jsonmsg);
 
-	// 用户离开 释放所有资源
+	//用户离开 释放所有资源
 	void ReleaseUserAllRes();
 	void SubscribeAllStream();
 	void SubscribeStream(int mediatype, std::string uid);
@@ -110,17 +109,15 @@ public:
 	CButton m_videocheck;
 	CButton m_audiocheck;
 
-	UCloudRtcEngine* m_rtcengine;
-	URTCEventHandler* m_eventhandler;
+	RTCEngineBase* m_rtcengine;
 
-	std::string m_userid; // 自己用户id
-	std::string m_roomid; // roomid
+	std::string m_userid;      // 自己用户id
+	std::string m_roomid;     // roomid
 	std::string m_roomtoken; //认证token
 
-						  //用户列表
-	std::map<std::string, tUserInfo*> m_hashSessions;//userid<---> userinfo
+	std::map<std::string, tUserInfo*>   m_hashSessions;//userid<---> userinfo
 	std::map<std::string, tStreamInfo*> m_streamsmap;//userid+mediatype<---> streaminfo 订阅列表对应
-	std::map<std::string, CVideoWnd*> m_mapRenders; //userid+mediatype<----> videorender
+	std::map<std::string, CVideoWnd*>   m_mapRenders; //userid+mediatype<----> videorender
 	CVideoWnd *m_localWnd;
 	CVideoWnd *m_screenWnd;
 	std::list<CVideoWnd*> m_remoteWnds; //所有wnd 预分配

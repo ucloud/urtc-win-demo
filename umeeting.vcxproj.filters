@@ -16,8 +16,11 @@
     <Filter Include="urtcengine">
       <UniqueIdentifier>{5568ce42-f335-4e32-9a40-27574dff846a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="utiles">
+    <Filter Include="utils">
       <UniqueIdentifier>{6d5ddb0c-0d18-40aa-8ea7-587f010f9c51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rtcengine">
+      <UniqueIdentifier>{b2d227ce-2f8d-4096-8867-3bd097b41219}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -43,7 +46,13 @@
       <Filter>urtcengine</Filter>
     </ClCompile>
     <ClCompile Include="utils\SdkUtil.cpp">
-      <Filter>utiles</Filter>
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="urtcsdk\RTCEngineFactory.cpp">
+      <Filter>rtcengine</Filter>
+    </ClCompile>
+    <ClCompile Include="urtcsdk\URTCEngineImpl.cc">
+      <Filter>urtcengine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -77,14 +86,23 @@
     <ClInclude Include="urtcsdk\URTCEventHandler.h">
       <Filter>urtcengine</Filter>
     </ClInclude>
-    <ClInclude Include="urtcsdk\URTCEventmsg.h">
-      <Filter>urtcengine</Filter>
-    </ClInclude>
-    <ClInclude Include="urtcsdk\URTCDefine.h">
-      <Filter>urtcengine</Filter>
-    </ClInclude>
     <ClInclude Include="utils\SdkUtil.h">
-      <Filter>utiles</Filter>
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="urtcsdk\RTCEngineBase.h">
+      <Filter>rtcengine</Filter>
+    </ClInclude>
+    <ClInclude Include="urtcsdk\RTCEngineFactory.h">
+      <Filter>rtcengine</Filter>
+    </ClInclude>
+    <ClInclude Include="urtcsdk\URTCEngineImpl.h">
+      <Filter>urtcengine</Filter>
+    </ClInclude>
+    <ClInclude Include="urtcsdk\RTCDefine.h">
+      <Filter>rtcengine</Filter>
+    </ClInclude>
+    <ClInclude Include="urtcsdk\RTCEventDefine.h">
+      <Filter>rtcengine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
