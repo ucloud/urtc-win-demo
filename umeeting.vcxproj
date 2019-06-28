@@ -112,7 +112,6 @@
     <ClCompile Include="sdktestdemo\SdkTestDemo.cpp" />
     <ClCompile Include="sdktestdemo\SdkTestDemoDlg.cpp" />
     <ClCompile Include="sdktestdemo\stdafx.cpp" />
-    <ClCompile Include="sdktestdemo\VideoTips.cpp" />
     <ClCompile Include="sdktestdemo\VideoWnd.cpp" />
     <ClCompile Include="urtcsdk\RTCEngineFactory.cpp" />
     <ClCompile Include="urtcsdk\URTCEngineImpl.cc" />
@@ -121,13 +120,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sdktestdemo\DeviceTestDlg.h" />
-    <ClInclude Include="sdktestdemo\minidump.h" />
     <ClInclude Include="sdktestdemo\resource.h" />
     <ClInclude Include="sdktestdemo\SdkTestDemo.h" />
     <ClInclude Include="sdktestdemo\SdkTestDemoDlg.h" />
     <ClInclude Include="sdktestdemo\stdafx.h" />
     <ClInclude Include="sdktestdemo\targetver.h" />
-    <ClInclude Include="sdktestdemo\VideoTips.h" />
     <ClInclude Include="sdktestdemo\VideoWnd.h" />
     <ClInclude Include="urtcsdk\RTCDefine.h" />
     <ClInclude Include="urtcsdk\RTCEngineBase.h" />

@@ -36,9 +36,6 @@
     <ClCompile Include="sdktestdemo\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sdktestdemo\VideoTips.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sdktestdemo\VideoWnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -59,9 +56,6 @@
     <ClInclude Include="sdktestdemo\DeviceTestDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sdktestdemo\minidump.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sdktestdemo\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -75,9 +69,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sdktestdemo\targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sdktestdemo\VideoTips.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sdktestdemo\VideoWnd.h">
