@@ -312,7 +312,7 @@ void URTCEventHandler::dispatchEvent(int eventid, std::string jsonmsg)
 		eventmsg->mJsonMsg = jsonmsg;
 
 		HWND msgwnd = (HWND)mCallback;
-		PostMessage(msgwnd, URTC_EVENT_MSG_BASE, (WPARAM)eventmsg, 0);
+		PostMessage(msgwnd, RTC_EVENT_UCLOUD, (WPARAM)eventmsg, 0);
 	}
 	
 }

@@ -118,7 +118,7 @@ BEGIN_MESSAGE_MAP(CSdkTestDemoDlg, CDialogEx)
 	ON_WM_CLOSE()
 	ON_BN_CLICKED(IDOK, &CSdkTestDemoDlg::OnBnClickedOk)
 	ON_BN_CLICKED(IDCANCEL, &CSdkTestDemoDlg::OnBnClickedCancel)
-	ON_MESSAGE(URTC_EVENT_MSG_BASE, &CSdkTestDemoDlg::OnCallBackMsg)
+	ON_MESSAGE(RTC_EVENT_UCLOUD, &CSdkTestDemoDlg::OnRTCUCloudMsg)
 	ON_BN_CLICKED(IDC_BUTTON_JOIN, &CSdkTestDemoDlg::OnBnClickedButtonJoin)
 	ON_BN_CLICKED(IDC_BUTTON_PUBC, &CSdkTestDemoDlg::OnBnClickedButtonPubC)
 	ON_BN_CLICKED(IDC_BUTTON_LEAVEROOM, &CSdkTestDemoDlg::OnBnClickedButtonLeaveroom)
@@ -246,7 +246,7 @@ void CSdkTestDemoDlg::OnClose()
 }
 
 
-HRESULT CSdkTestDemoDlg::OnCallBackMsg(WPARAM data, LPARAM lp)
+HRESULT CSdkTestDemoDlg::OnRTCUCloudMsg(WPARAM data, LPARAM lp)
 {
 	tEventMsg* callmsg = (tEventMsg*)data;
 	int eventid = callmsg->mEventid;
