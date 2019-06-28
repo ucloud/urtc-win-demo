@@ -56,3 +56,50 @@ URTCWin 是UCloud推出的一款适用于 Windows 平台的实时音视频 SDK�
 ## 4.5 在线客服
 线上开展音视频对话，对客户的资信情况进行审核，方便金融科技企业实现用户在线签约、视频开户验证以及呼叫中心等功能
 提供云端存储空间及海量数据的处理能力，提供高可用的技术和高稳定的平台
+# 5 接入使用
+你可以直接使用umeeting 下面封装的模块（工程目录下 urtcsdk）进行使用，或者自己按照下面步骤集成
+## 5.1 开发环境
+* Visual Studio 2015 及其它c++ 开发环境 
+* Win32 Platform
+## 5.2 导入 SDK
+* 将 include 文件添加到项目的 INCLUDE 目录下。
+* 将 lib 放入项目的 LIB 目录下。
+* 将 dll 下的 dll 文件复制到你的可执行文件所在的目录下。
+ 
+## 5.3 初始化
+    m_rtcengine = UCloudRtcEngine::sharedInstance(UCloudRtcEventListener实现类);
+    m_rtcengine->setSdkMode (1); // 1 testmode 0 normal
+    m_rtcengine->setTokenSecKey(TEST_SECKEY);//测试模式下设置自己的秘钥
+    m_rtcengine->setStreamRole(STREAM_BOTH);
+    m_rtcengine->setAudioOnlyMode(false);
+    m_rtcengine->setAutoPublishSubscribe(false, true);
+    m_rtcengine->configLocalAudioPublish(false)；
+    m_rtcengine->configLocalCameraPublish(true);
+    m_rtcengine->configLocalScreenPublish(false);
+    m_rtcengine->setVideoProfile(UCLOUD_RTC_VIDEO_PROFILE_640_360);
+## 5.4 加入房间
+    tUCloudRtcAuth auth;
+    auth.mAppId = appid;
+    auth.mRoomId = roomid;
+    auth.mUserId = userid;
+    auth.mUserToken = "1223222";
+    m_rtcengine->joinChannel(auth);
+## 5.5 发布流
+    tUCloudRtcMediaConfig config;
+    config.mAudioEnable = true;
+    config.mVideoEnable = true;
+    m_rtcengine->publish(UCLOUD_RTC_MEDIATYPE_VIDEO, config.mVideoEnable,config.mAudioEnable);
+## 5.6 取消发布
+    tUCloudRtcVideoCanvas view;
+    view.mVideoView = (int)m_localWnd->GetVideoHwnd();
+    view.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;		
+    m_rtcengine->stopPreview(view);
+    m_rtcengine->unPublish(UCLOUD_RTC_MEDIATYPE_VIDEO);
+## 5.6 订阅流
+    m_rtcengine->subscribe(tUCloudRtcStreamInfo & info)
+## 5.7 取消订阅：
+    m_rtcengine->unSubscribe(tUCloudRtcStreamInfo& info)
+## 5.8 离开房间
+    m_rtcengine->leaveChannel ()
+
+
