@@ -496,6 +496,7 @@ void CSdkTestDemoDlg::OnPulibshScreenStreamHandler(std::string jsonmsg) {
 		m_screenWnd->setUsed(true);
 		m_screenWnd->setReady(true);
 		m_screenpub = true;
+		m_rtcengine->StartLocalRender(canvas);
 	}
 	else {
 		char num[32] = { 0 };
@@ -1242,7 +1243,7 @@ void CSdkTestDemoDlg::OnBnClickedButtonPubs()
 		info.mEnableVideo = m_videocheck.GetCheck();
 		info.mEnableAudio = m_audiocheck.GetCheck();
 		info.mEnableData = false;
-		info.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
+		info.mStreamMtype = UCLOUD_RTC_MEDIATYPE_SCREEN;
 		info.mUserid = m_userid;
 		m_rtcengine->UnPublishStream(info);
 		SetDlgItemText(IDC_BUTTON_PUBS, L"·¢²¼×ÀÃæ");
