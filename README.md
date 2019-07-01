@@ -67,7 +67,7 @@ URTCWin 是UCloud推出的一款适用于 Windows 平台的实时音视频 SDK�
 * 将 dll 下的 dll 文件复制到你的可执行文件所在的目录下。
  
 ## 5.3 初始化
-    m_rtcengine = UCloudRtcEngine::sharedInstance(UCloudRtcEventListener实现类);
+    m_rtcengine = UCloudRtcEngine::sharedInstance(UCloudRtcEventListenerImpl);
     m_rtcengine->setSdkMode (1); // 1 testmode 0 normal
     m_rtcengine->setTokenSecKey(TEST_SECKEY);//测试模式下设置自己的秘钥
     m_rtcengine->setStreamRole(STREAM_BOTH);
