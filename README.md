@@ -67,39 +67,59 @@ URTCWin 是UCloud推出的一款适用于 Windows 平台的实时音视频 SDK�
 * 将 dll 下的 dll 文件复制到你的可执行文件所在的目录下。
  
 ## 5.3 初始化
-    m_rtcengine = UCloudRtcEngine::sharedInstance(UCloudRtcEventListenerImpl);
-    m_rtcengine->setSdkMode (1); // 1 testmode 0 normal
-    m_rtcengine->setTokenSecKey(TEST_SECKEY);//测试模式下设置自己的秘钥
-    m_rtcengine->setStreamRole(STREAM_BOTH);
-    m_rtcengine->setAudioOnlyMode(false);
-    m_rtcengine->setAutoPublishSubscribe(false, true);
-    m_rtcengine->configLocalAudioPublish(false)；
-    m_rtcengine->configLocalCameraPublish(true);
-    m_rtcengine->configLocalScreenPublish(false);
-    m_rtcengine->setVideoProfile(UCLOUD_RTC_VIDEO_PROFILE_640_360);
+``` c++
+m_rtcengine = UCloudRtcEngine::sharedInstance(UCloudRtcEventListenerImpl);
+m_rtcengine->setSdkMode (1); // 1 testmode 0 normal
+m_rtcengine->setTokenSecKey(TEST_SECKEY);//测试模式下设置自己的秘钥
+m_rtcengine->setStreamRole(STREAM_BOTH);
+m_rtcengine->setAudioOnlyMode(false);
+m_rtcengine->setAutoPublishSubscribe(false, true);
+m_rtcengine->configLocalAudioPublish(false)；
+m_rtcengine->configLocalCameraPublish(true);
+m_rtcengine->configLocalScreenPublish(false);
+m_rtcengine->setVideoProfile(UCLOUD_RTC_VIDEO_PROFILE_640_360);
+```
+
 ## 5.4 加入房间
-    tUCloudRtcAuth auth;
-    auth.mAppId = appid;
-    auth.mRoomId = roomid;
-    auth.mUserId = userid;
-    auth.mUserToken = "1223222";
-    m_rtcengine->joinChannel(auth);
+``` c++
+tUCloudRtcAuth auth;
+auth.mAppId = appid;
+auth.mRoomId = roomid;
+auth.mUserId = userid;
+auth.mUserToken = "1223222";
+m_rtcengine->joinChannel(auth);
+```
+
 ## 5.5 发布流
-    tUCloudRtcMediaConfig config;
-    config.mAudioEnable = true;
-    config.mVideoEnable = true;
-    m_rtcengine->publish(UCLOUD_RTC_MEDIATYPE_VIDEO, config.mVideoEnable,config.mAudioEnable);
+``` c++
+tUCloudRtcMediaConfig config;
+config.mAudioEnable = true;
+config.mVideoEnable = true;
+m_rtcengine->publish(UCLOUD_RTC_MEDIATYPE_VIDEO, config.mVideoEnable,config.mAudioEnable);
+```
+
 ## 5.6 取消发布
-    tUCloudRtcVideoCanvas view;
-    view.mVideoView = (int)m_localWnd->GetVideoHwnd();
-    view.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;		
-    m_rtcengine->stopPreview(view);
-    m_rtcengine->unPublish(UCLOUD_RTC_MEDIATYPE_VIDEO);
+``` c++
+tUCloudRtcVideoCanvas view;
+view.mVideoView = (int)m_localWnd->GetVideoHwnd();
+view.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;		
+m_rtcengine->stopPreview(view);
+m_rtcengine->unPublish(UCLOUD_RTC_MEDIATYPE_VIDEO);
+``` 
+
 ## 5.6 订阅流
-    m_rtcengine->subscribe(tUCloudRtcStreamInfo & info)
+``` c++
+m_rtcengine->subscribe(tUCloudRtcStreamInfo & info)
+```
+
 ## 5.7 取消订阅：
-    m_rtcengine->unSubscribe(tUCloudRtcStreamInfo& info)
+``` c++
+m_rtcengine->unSubscribe(tUCloudRtcStreamInfo& info)
+```
+
 ## 5.8 离开房间
-    m_rtcengine->leaveChannel ()
+``` c++
+m_rtcengine->leaveChannel ()
+```
 
 
