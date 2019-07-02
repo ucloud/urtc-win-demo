@@ -627,7 +627,7 @@ void CSdkTestDemoDlg::OnSubStreamHandler(std::string jsonmsg) {
 			tRTCRenderView canvas;
 			canvas.mVidoview = (int)videoview->GetVideoHwnd();
 			canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
-			canvas.mUserid = m_userid;
+			canvas.mUserid = uid.data();
 			canvas.mStreamMtype = mtype;
 			m_rtcengine->StartRemoteRender(canvas);
 		}
