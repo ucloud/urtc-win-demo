@@ -22,7 +22,7 @@ int URTCEngineImpl::InitRTCEngine(void* callback)
 	m_rtcengine->setStreamRole(UCLOUD_RTC_USER_STREAM_ROLE_BOTH);
 	m_rtcengine->setTokenSecKey(TEST_SECKEY);
 	m_rtcengine->setAudioOnlyMode(false);
-	m_rtcengine->setAutoPublishSubscribe(true, true);
+	m_rtcengine->setAutoPublishSubscribe(false, true);
 	m_rtcengine->configLocalAudioPublish(false);
 	m_rtcengine->configLocalCameraPublish(true);
 	m_rtcengine->configLocalScreenPublish(false);
