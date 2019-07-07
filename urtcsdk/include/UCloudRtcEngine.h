@@ -56,6 +56,7 @@ public:
 	static const char *getSdkVersion();
 
 	virtual int setSdkMode(eUCloudRtcSdkMode mode) = 0;
+	virtual int setChannelType(eUCloudRtcChannelType chtype) = 0;
 	virtual int setStreamRole(eUCloudRtcUserStreamRole role) = 0;
 	virtual void setLogLevel(eUCloudRtcLogLevel level) = 0;
 	virtual void setTokenSecKey(const char* seckey) = 0;

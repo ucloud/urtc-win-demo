@@ -118,7 +118,13 @@ typedef enum {
 	UCLOUD_RTC_SCREEN_PROFILE_HIGH = 3
 } eUCloudRtcScreenProfile;
 
-//stream role
+//roomtype
+typedef enum {
+	UCLOUD_RTC_CHANNEL_TYPE_COMMUNICATION, // small room 
+	UCLOUD_RTC_CHANNEL_TYPE_BROADCAST//big room
+}eUCloudRtcChannelType;
+
+//stream role when UCLOUD_RTC_ROOM_TYPE_BROADCAST  role only be up or down both will be down  
 typedef enum {
 	UCLOUD_RTC_USER_STREAM_ROLE_PUB, // up
 	UCLOUD_RTC_USER_STREAM_ROLE_SUB,// down

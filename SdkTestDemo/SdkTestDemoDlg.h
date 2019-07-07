@@ -51,14 +51,14 @@ public:
 
 	afx_msg HRESULT OnRTCUCloudMsg(WPARAM data, LPARAM lp);
 
-	afx_msg void OnBnClickedButtonJoin();
 	afx_msg void OnBnClickedButtonPubC();
 	afx_msg void OnBnClickedButtonLeaveroom();
 	afx_msg void OnBnClickedButtonPubs();
-	afx_msg void OnBnClickedButtonDeviceTest();
 
 private:
 	CVideoWnd* CreateVideoWindow(eUCloudRtcMeidaType type, int x, int y, int w, int h);
+
+	void InitURTCConfig();
 
 	void OnJoinRoomHandler(std::string jsonmsg);
 	void OnReJoinFailHandler(std::string jsonmsg);

@@ -51,6 +51,15 @@
     <ClCompile Include="urtcsdk\URTCEngineImpl.cc">
       <Filter>urtcengine</Filter>
     </ClCompile>
+    <ClCompile Include="urtcsdk\URTCConfig.cpp">
+      <Filter>urtcengine</Filter>
+    </ClCompile>
+    <ClCompile Include="SdkTestDemo\ConfigDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SdkTestDemo\LoginDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sdktestdemo\DeviceTestDlg.h">
@@ -94,6 +103,15 @@
     </ClInclude>
     <ClInclude Include="urtcsdk\RTCEventDefine.h">
       <Filter>rtcengine</Filter>
+    </ClInclude>
+    <ClInclude Include="urtcsdk\URTCConfig.h">
+      <Filter>urtcengine</Filter>
+    </ClInclude>
+    <ClInclude Include="SdkTestDemo\ConfigDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SdkTestDemo\LoginDlg.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

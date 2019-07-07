@@ -1,7 +1,5 @@
 #include "URTCEngineImpl.h"
-
-#define  TEST_APP_ID "URtc-h4r1txxy"
-#define  TEST_SECKEY "9129304dbf8c5c4bf68d70824462409f"
+#include "URTCConfig.h"
 
 URTCEngineImpl::URTCEngineImpl()
 {
@@ -17,17 +15,17 @@ int URTCEngineImpl::InitRTCEngine(void* callback)
 {
 	m_eventhandler->initEventHandler(callback);
 	m_rtcengine = UCloudRtcEngine::sharedInstance(m_eventhandler);
-
-	m_rtcengine = UCloudRtcEngine::sharedInstance(m_eventhandler);
-	m_rtcengine->setStreamRole(UCLOUD_RTC_USER_STREAM_ROLE_BOTH);
-	m_rtcengine->setTokenSecKey(TEST_SECKEY);
-	m_rtcengine->setAudioOnlyMode(false);
-	m_rtcengine->setAutoPublishSubscribe(false, true);
-	m_rtcengine->configLocalAudioPublish(false);
-	m_rtcengine->configLocalCameraPublish(true);
-	m_rtcengine->configLocalScreenPublish(false);
-	m_rtcengine->setVideoProfile(UCLOUD_RTC_VIDEO_PROFILE_640_360);
-	m_rtcengine->setSdkMode(UCLOUD_RTC_SDK_MODE_TRIVAL);
+	m_rtcengine->setChannelType(URTCConfig::getInstance()->getChannelType());
+	m_rtcengine->setStreamRole(URTCConfig::getInstance()->getStreamRole());
+	m_rtcengine->setTokenSecKey(URTCConfig::getInstance()->getSecKey().data());
+	m_rtcengine->setAudioOnlyMode(URTCConfig::getInstance()->isAudioOnly());
+	m_rtcengine->setAutoPublishSubscribe(URTCConfig::getInstance()->isAutoPublish(), 
+		URTCConfig::getInstance()->isAutoSubscribe());
+	m_rtcengine->configLocalAudioPublish(URTCConfig::getInstance()->isAutoPubAudio());
+	m_rtcengine->configLocalCameraPublish(URTCConfig::getInstance()->isAutoPubVideo());
+	m_rtcengine->configLocalScreenPublish(URTCConfig::getInstance()->isAutoPubScreen());
+	m_rtcengine->setVideoProfile(URTCConfig::getInstance()->getVideoProfile());
+	m_rtcengine->setSdkMode(URTCConfig::getInstance()->getSdkMode());
 	return 0;
 }
 
@@ -62,7 +60,7 @@ int URTCEngineImpl::JoinRoom(tRTCAuthInfo& auth)
 	if (m_rtcengine)
 	{
 		tUCloudRtcAuth uauth;
-		uauth.mAppId = TEST_APP_ID;
+		uauth.mAppId = auth.mAppid.data();
 		uauth.mUserId = auth.mUserid.data();
 		uauth.mRoomId = auth.mRoomid.data();
 		uauth.mUserToken = auth.mToken.data();

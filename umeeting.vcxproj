@@ -108,18 +108,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="SdkTestDemo\ConfigDlg.cpp" />
     <ClCompile Include="sdktestdemo\DeviceTestDlg.cpp" />
+    <ClCompile Include="SdkTestDemo\LoginDlg.cpp" />
     <ClCompile Include="sdktestdemo\SdkTestDemo.cpp" />
     <ClCompile Include="sdktestdemo\SdkTestDemoDlg.cpp" />
     <ClCompile Include="sdktestdemo\stdafx.cpp" />
     <ClCompile Include="sdktestdemo\VideoWnd.cpp" />
     <ClCompile Include="urtcsdk\RTCEngineFactory.cpp" />
+    <ClCompile Include="urtcsdk\URTCConfig.cpp" />
     <ClCompile Include="urtcsdk\URTCEngineImpl.cc" />
     <ClCompile Include="urtcsdk\URTCEventHandler.cpp" />
     <ClCompile Include="utils\SdkUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SdkTestDemo\ConfigDlg.h" />
     <ClInclude Include="sdktestdemo\DeviceTestDlg.h" />
+    <ClInclude Include="SdkTestDemo\LoginDlg.h" />
     <ClInclude Include="sdktestdemo\resource.h" />
     <ClInclude Include="sdktestdemo\SdkTestDemo.h" />
     <ClInclude Include="sdktestdemo\SdkTestDemoDlg.h" />
@@ -130,6 +135,7 @@
     <ClInclude Include="urtcsdk\RTCEngineBase.h" />
     <ClInclude Include="urtcsdk\RTCEngineFactory.h" />
     <ClInclude Include="urtcsdk\RTCEventDefine.h" />
+    <ClInclude Include="urtcsdk\URTCConfig.h" />
     <ClInclude Include="urtcsdk\URTCEngineImpl.h" />
     <ClInclude Include="urtcsdk\URTCEventHandler.h" />
     <ClInclude Include="utils\SdkUtil.h" />
@@ -146,4 +152,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="sdktestdemo\SdkTestDemo.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

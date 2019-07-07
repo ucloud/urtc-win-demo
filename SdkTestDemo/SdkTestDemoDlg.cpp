@@ -5,7 +5,7 @@
 #include "SdkTestDemo.h"
 #include "SdkTestDemoDlg.h"
 #include "afxdialogex.h"
-#include "DeviceTestDlg.h"
+#include "URTCConfig.h"
 #include "SdkUtil.h"
 #include "json/json.h"
 #include "RTCEventDefine.h"
@@ -24,7 +24,7 @@ CSdkTestDemoDlg::CSdkTestDemoDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_SFU, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-	m_userid = "win_"+ get_randrom_string(12);
+	m_userid = URTCConfig::getInstance()->getUserId();
 	m_campub = false;
 	m_screenpub = false;
 	m_leaveroom = false;
@@ -111,6 +111,41 @@ CVideoWnd* CSdkTestDemoDlg::CreateVideoWindow(eUCloudRtcMeidaType type, int x, i
 	return pWnd;
 }
 
+void CSdkTestDemoDlg::InitURTCConfig()
+{
+
+	if (URTCConfig::getInstance()->isAudioOnly())
+	{
+		m_videocheck.ShowWindow(FALSE);
+		m_audiocheck.SetCheck(1);
+		GetDlgItem(IDC_BUTTON_PUBS)->ShowWindow(FALSE);
+	}
+	else {
+		m_audiocheck.SetCheck(1);
+		m_videocheck.SetCheck(1);
+	}
+
+	if (URTCConfig::getInstance()->getStreamRole() == UCLOUD_RTC_USER_STREAM_ROLE_SUB)
+	{
+		GetDlgItem(IDC_BUTTON_PUBC)->ShowWindow(FALSE);
+	}
+
+	if (URTCConfig::getInstance()->isAutoPublish())
+	{
+		GetDlgItem(IDC_BUTTON_PUBC)->ShowWindow(FALSE);
+		GetDlgItem(IDC_BUTTON_PUBS)->ShowWindow(FALSE);
+	}
+
+	m_roomid = URTCConfig::getInstance()->getRoomId();
+
+	tRTCAuthInfo auth;
+	auth.mAppid = URTCConfig::getInstance()->getAppId();
+	auth.mRoomid = m_roomid.data();
+	auth.mUserid = m_userid.data();
+	auth.mToken = "test";
+	int ret = m_rtcengine->JoinRoom(auth);
+}
+
 
 BEGIN_MESSAGE_MAP(CSdkTestDemoDlg, CDialogEx)
 	ON_WM_PAINT()
@@ -119,11 +154,9 @@ BEGIN_MESSAGE_MAP(CSdkTestDemoDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &CSdkTestDemoDlg::OnBnClickedOk)
 	ON_BN_CLICKED(IDCANCEL, &CSdkTestDemoDlg::OnBnClickedCancel)
 	ON_MESSAGE(RTC_EVENT_UCLOUD, &CSdkTestDemoDlg::OnRTCUCloudMsg)
-	ON_BN_CLICKED(IDC_BUTTON_JOIN, &CSdkTestDemoDlg::OnBnClickedButtonJoin)
 	ON_BN_CLICKED(IDC_BUTTON_PUBC, &CSdkTestDemoDlg::OnBnClickedButtonPubC)
 	ON_BN_CLICKED(IDC_BUTTON_LEAVEROOM, &CSdkTestDemoDlg::OnBnClickedButtonLeaveroom)
 	ON_BN_CLICKED(IDC_BUTTON_PUBS, &CSdkTestDemoDlg::OnBnClickedButtonPubs)
-	ON_BN_CLICKED(IDC_BUTTON_DEVICE_TEST, &CSdkTestDemoDlg::OnBnClickedButtonDeviceTest)
 END_MESSAGE_MAP()
 
 
@@ -131,6 +164,8 @@ END_MESSAGE_MAP()
 BOOL CSdkTestDemoDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
+	std::string channel = "channel_" + URTCConfig::getInstance()->getRoomId();
+	this->SetWindowTextW(Ansi2WChar(channel.data()).data());
 	//InitMinDump();
 
 	// 设置此对话框的图标。  当应用程序主窗口不是对话框时，框架将自动
@@ -140,9 +175,6 @@ BOOL CSdkTestDemoDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 	SetDlgItemText(IDC_EDIT_USERID, Ansi2WChar(m_userid.data()).data());
-	SetDlgItemText(IDC_EDIT_ROOM, L"urtc1");
-	GetDlgItem(IDC_EDIT_ROOM)->EnableWindow(TRUE);
-	GetDlgItem(IDC_BUTTON_JOIN)->EnableWindow(TRUE);
 
 	CRect rcBtn;
 	GetDlgItem(IDC_EDIT_USERID)->GetWindowRect(&rcBtn);
@@ -174,10 +206,10 @@ BOOL CSdkTestDemoDlg::OnInitDialog()
 		pWnd->RegisterCallback(this);
 		m_remoteWnds.emplace_back(pWnd);
 	}
-	m_audiocheck.SetCheck(1);
-	m_videocheck.SetCheck(1);
 	m_rtcengine = RTCEngineFactory::createRtcEngine(RTC_CHANNELTYPE_UCLOUD);
 	m_rtcengine->InitRTCEngine(this->GetSafeHwnd());
+
+	InitURTCConfig();
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -244,7 +276,6 @@ void CSdkTestDemoDlg::OnClose()
 		CDialogEx::OnCancel();
 	}
 }
-
 
 HRESULT CSdkTestDemoDlg::OnRTCUCloudMsg(WPARAM data, LPARAM lp)
 {
@@ -323,27 +354,27 @@ HRESULT CSdkTestDemoDlg::OnRTCUCloudMsg(WPARAM data, LPARAM lp)
 	return 0;
 }
 
-void CSdkTestDemoDlg::OnBnClickedButtonJoin()
-{
-	// TODO: Add your control notification handler code here
-	CString text;
-	GetDlgItemText(IDC_EDIT_ROOM, text);
-	m_roomid = WChatToUTF8Str(text.GetBuffer());
-	if (m_roomid.length() <= 0)
-	{
-		m_roomid = "";
-		AfxMessageBox(L"请输入房间ID");
-		return;
-	}
-	if (m_rtcengine)
-	{
-		tRTCAuthInfo auth;
-		auth.mRoomid = m_roomid.data();
-		auth.mUserid = m_userid.data();
-		auth.mToken = "test";
-		int ret = m_rtcengine->JoinRoom(auth);
-	}
-}
+//void CSdkTestDemoDlg::OnBnClickedButtonJoin()
+//{
+//	// TODO: Add your control notification handler code here
+//	CString text;
+//	GetDlgItemText(IDC_EDIT_ROOM, text);
+//	m_roomid = WChatToUTF8Str(text.GetBuffer());
+//	if (m_roomid.length() <= 0)
+//	{
+//		m_roomid = "";
+//		AfxMessageBox(L"请输入房间ID");
+//		return;
+//	}
+//	if (m_rtcengine)
+//	{
+//		tRTCAuthInfo auth;
+//		auth.mRoomid = m_roomid.data();
+//		auth.mUserid = m_userid.data();
+//		auth.mToken = "test";
+//		int ret = m_rtcengine->JoinRoom(auth);
+//	}
+//}
 
 void CSdkTestDemoDlg::OnJoinRoomHandler(std::string jsonmsg) {
 	Json::Reader reader;
@@ -354,11 +385,9 @@ void CSdkTestDemoDlg::OnJoinRoomHandler(std::string jsonmsg) {
 	std::string msg = retObj["msg"].asString();
 	if (code == 0)
 	{
-		GetDlgItem(IDC_BUTTON_JOIN)->EnableWindow(false);
 		GetDlgItem(IDC_BUTTON_LEAVEROOM)->EnableWindow(true);
-		GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(false);
+		GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(true);
 		GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(true);
-		GetDlgItem(IDC_EDIT_ROOM)->EnableWindow(false);
 		OnMessageShow("加入房间成功");
 	}
 	else {
@@ -400,14 +429,11 @@ void CSdkTestDemoDlg::OnLeaveRoomHandler(std::string jsonmsg) {
 	std::string msg = retObj["msg"].asString();
 	if (code == 0)
 	{
-		GetDlgItem(IDC_BUTTON_CREATE)->EnableWindow(false);
-		GetDlgItem(IDC_BUTTON_JOIN)->EnableWindow(true);
 		GetDlgItem(IDC_BUTTON_LEAVEROOM)->EnableWindow(false);
 		SetDlgItemText(IDC_BUTTON_PUBC, L"发布媒体");
 		SetDlgItemText(IDC_BUTTON_PUBS, L"发布桌面");
 		GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(false);
 		GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(false);
-		GetDlgItem(IDC_EDIT_ROOM)->EnableWindow(TRUE);
 		OnMessageShow("退出房间成功");
 	}
 	else 
@@ -424,10 +450,7 @@ void CSdkTestDemoDlg::OnLeaveRoomHandler(std::string jsonmsg) {
 	ReleaseUserAllRes();
 
 	// 关闭窗口离开房间
-	if (m_isclose)
-	{
-		OnLeaveRoom();
-	}
+	OnLeaveRoom();
 }
 
 void CSdkTestDemoDlg::OnPulibshStreamHandler(std::string jsonmsg) {
@@ -724,17 +747,15 @@ void CSdkTestDemoDlg::OnUserStHandler(std::string jsonmsg) {
 }
 
 void  CSdkTestDemoDlg::OnServerReconnectingHandler(std::string jsonmsg) {
-	OnMessageShow(" 信令服务断开，正在尝试重连>>>>>>");
+	OnMessageShow(" 信令服务断开，正在尝试重连......");
 }
 
 void CSdkTestDemoDlg::OnServerDisconnectHandler(std::string jsonmsg) {
-	GetDlgItem(IDC_BUTTON_JOIN)->EnableWindow(TRUE);
 	GetDlgItem(IDC_BUTTON_LEAVEROOM)->EnableWindow(false);
 	SetDlgItemText(IDC_BUTTON_PUBC, L"发布媒体");
 	SetDlgItemText(IDC_BUTTON_PUBS, L"发布桌面");
 	GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(false);
 	GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(false);
-	GetDlgItem(IDC_EDIT_ROOM)->EnableWindow(TRUE);
 
 	m_localWnd->setUsed(false);
 	m_screenWnd->setUsed(false);
@@ -771,14 +792,11 @@ void CSdkTestDemoDlg::OnKickoffHandler(std::string jsonmsg) {
 	char num[32] = { 0 };
 	sprintf_s(num, " err code = %d", code);
 	std::string errcode = num;
-	GetDlgItem(IDC_BUTTON_CREATE)->EnableWindow(false);
-	GetDlgItem(IDC_BUTTON_JOIN)->EnableWindow(true);
 	GetDlgItem(IDC_BUTTON_LEAVEROOM)->EnableWindow(false);
 	SetDlgItemText(IDC_BUTTON_PUBC, L"发布媒体");
 	SetDlgItemText(IDC_BUTTON_PUBS, L"发布桌面");
 	GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(false);
 	GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(false);
-	GetDlgItem(IDC_EDIT_ROOM)->EnableWindow(TRUE);
 	m_campub = false;
 	m_screenpub = false;
 	m_localWnd->setUsed(false);
@@ -1260,13 +1278,6 @@ void CSdkTestDemoDlg::OnBnClickedButtonPubs()
 		int ret = m_rtcengine->PublishStream(info);
 		m_screenWnd->SetUserId("screen");
 	}
-}
-
-
-void CSdkTestDemoDlg::OnBnClickedButtonDeviceTest()
-{
-	CDeviceTestDlg devtestdlg;
-	devtestdlg.DoModal();
 }
 
 void CSdkTestDemoDlg::OnMessageShow(std::string msg) {

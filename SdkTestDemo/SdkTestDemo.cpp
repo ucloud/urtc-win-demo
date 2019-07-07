@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 #include "SdkTestDemo.h"
+#include "LoginDlg.h"
 #include "SdkTestDemoDlg.h"
 
 #ifdef _DEBUG
@@ -67,7 +68,9 @@ BOOL CSdkTestDemoApp::InitInstance()
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
-	CSdkTestDemoDlg dlg;
+	//CSdkTestDemoDlg dlg;
+	//m_pMainWnd = &dlg;
+	CLoginDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)

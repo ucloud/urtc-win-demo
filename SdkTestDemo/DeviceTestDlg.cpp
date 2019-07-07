@@ -16,7 +16,6 @@ IMPLEMENT_DYNAMIC(CDeviceTestDlg, CDialogEx)
 CDeviceTestDlg::CDeviceTestDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_SDKTESTDEMO_DIALOG, pParent)
 {
-
 }
 
 CDeviceTestDlg::~CDeviceTestDlg()
