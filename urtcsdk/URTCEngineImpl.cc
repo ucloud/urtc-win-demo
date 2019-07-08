@@ -15,7 +15,6 @@ int URTCEngineImpl::InitRTCEngine(void* callback)
 {
 	m_eventhandler->initEventHandler(callback);
 	m_rtcengine = UCloudRtcEngine::sharedInstance(m_eventhandler);
-	//channel must before streamrole
 	m_rtcengine->setChannelType(URTCConfig::getInstance()->getChannelType());
 	m_rtcengine->setStreamRole(URTCConfig::getInstance()->getStreamRole());
 	m_rtcengine->setTokenSecKey(URTCConfig::getInstance()->getSecKey().data());
