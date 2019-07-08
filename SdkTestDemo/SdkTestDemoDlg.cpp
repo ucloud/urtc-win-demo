@@ -118,6 +118,7 @@ void CSdkTestDemoDlg::InitURTCConfig()
 	{
 		m_videocheck.ShowWindow(FALSE);
 		m_audiocheck.SetCheck(1);
+		m_audiocheck.EnableWindow(FALSE);
 		GetDlgItem(IDC_BUTTON_PUBS)->ShowWindow(FALSE);
 	}
 	else {
@@ -128,13 +129,20 @@ void CSdkTestDemoDlg::InitURTCConfig()
 	if (URTCConfig::getInstance()->getStreamRole() == UCLOUD_RTC_USER_STREAM_ROLE_SUB)
 	{
 		GetDlgItem(IDC_BUTTON_PUBC)->ShowWindow(FALSE);
+		GetDlgItem(IDC_BUTTON_PUBS)->ShowWindow(FALSE);
+		m_audiocheck.ShowWindow(FALSE);
+		m_videocheck.ShowWindow(FALSE);
 	}
 
 	if (URTCConfig::getInstance()->isAutoPublish())
 	{
 		GetDlgItem(IDC_BUTTON_PUBC)->ShowWindow(FALSE);
 		GetDlgItem(IDC_BUTTON_PUBS)->ShowWindow(FALSE);
+		m_audiocheck.ShowWindow(FALSE);
+		m_videocheck.ShowWindow(FALSE);
 	}
+
+
 
 	m_roomid = URTCConfig::getInstance()->getRoomId();
 

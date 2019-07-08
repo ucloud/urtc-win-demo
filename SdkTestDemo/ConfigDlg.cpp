@@ -63,12 +63,12 @@ BOOL CConfigDlg::OnInitDialog()
 		m_sdkmode = 1;
 	}
 	CDialogEx::OnInitDialog();
-	m_videoprofile.AddString(L"320*180");
-	m_videoprofile.AddString(L"320*240");
-	m_videoprofile.AddString(L"640*360");
-	m_videoprofile.AddString(L"640*480");
-	m_videoprofile.AddString(L"1280*720");
-	m_videoprofile.AddString(L"1920*1080");
+	m_videoprofile.InsertString(0, L"320*180");
+	m_videoprofile.InsertString(1, L"320*240");
+	m_videoprofile.InsertString(2, L"640*360");
+	m_videoprofile.InsertString(3, L"640*480");
+	m_videoprofile.InsertString(4, L"1280*720");
+	m_videoprofile.InsertString(5, L"1920*1080");
 	int select = ((int)URTCConfig::getInstance()->getVideoProfile() ) -1;
 	if (select<0 || select>5)
 	{
