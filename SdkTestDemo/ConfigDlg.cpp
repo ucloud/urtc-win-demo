@@ -180,7 +180,7 @@ void CConfigDlg::OnBnClickedButtonSave()
 		}
 	}
 
-
+	URTCConfig::getInstance()->setVideoProfile((eUCloudRtcVideoProfile)(m_videoprofile.GetCurSel() +1) );
 
 	int pubrcheck = m_rolepub.GetCheck();
 	int subrcheck = m_rolesub.GetCheck();
