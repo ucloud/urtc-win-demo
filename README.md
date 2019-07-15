@@ -13,6 +13,7 @@ URTCWin 是UCloud推出的一款适用于 Windows 平台的实时音视频 SDK�
 * 支持获取视频房间统计信息（帧率、码率、丢包率等）	
 * 支持编码镜像功能		
 * 支持屏幕录制功能	
+* 支持RTC 直播模式
 ## 2.2 增值功能
 * 电子白板
 * 终端智能测试（摄像头、麦克风、网络、播放器）
@@ -26,6 +27,8 @@ URTCWin 是UCloud推出的一款适用于 Windows 平台的实时音视频 SDK�
 * 手势
 * 虚拟形象
 * 变声
+## 2.3 文档地址
+https://docs.ucloud.cn/video/urtc/index.html
 # 3 方案介绍
 ## 3.1 方案架构
 ![](http://urtcwater.cn-bj.ufileos.com/%E5%9B%BE%E7%89%871.png)
@@ -56,6 +59,8 @@ URTCWin 是UCloud推出的一款适用于 Windows 平台的实时音视频 SDK�
 ## 4.5 在线客服
 线上开展音视频对话，对客户的资信情况进行审核，方便金融科技企业实现用户在线签约、视频开户验证以及呼叫中心等功能
 提供云端存储空间及海量数据的处理能力，提供高可用的技术和高稳定的平台
+## 4.6 大班课低延时直播
+千人规模大班课直播，延时低于1s 极致直播体验
 # 5 接入使用
 你可以直接使用umeeting 下面封装的模块（工程目录下 urtcsdk）进行使用，或者自己按照下面步骤集成
 ## 5.1 开发环境
@@ -74,9 +79,10 @@ Class UcloudRtcEventListenerImpl ： public UcloudRtcEventListener {
 UcloudRtcEventListener* eventhandler = new UcloudRtcEventListenerImpl
 
 m_rtcengine = UCloudRtcEngine::sharedInstance(eventhandler);
-m_rtcengine->setSdkMode (1); // 1 testmode 0 normal
+m_rtcengine->setSdkMode(UCLOUD_RTC_SDK_MODE_TRIVAL);
+m_rtcengine->setChannelTy(UCLOUD_RTC_CHANNEL_TYPE_COMMUNICATION);
+m_rtcengine->setStreamRole(UCLOUD_RTC_USER_STREAM_ROLE_BOTH);
 m_rtcengine->setTokenSecKey(TEST_SECKEY);//测试模式下设置自己的秘钥
-m_rtcengine->setStreamRole(STREAM_BOTH);
 m_rtcengine->setAudioOnlyMode(false);
 m_rtcengine->setAutoPublishSubscribe(false, true);
 m_rtcengine->configLocalAudioPublish(false)；
@@ -126,5 +132,4 @@ m_rtcengine->unSubscribe(tUCloudRtcStreamInfo& info)
 ``` c++
 m_rtcengine->leaveChannel ()
 ```
-
 
