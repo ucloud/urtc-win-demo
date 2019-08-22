@@ -40,7 +40,9 @@ BOOL CDeviceTestDlg::OnInitDialog()
 	m_videotest = false;
 	CDialogEx::OnInitDialog();
 	m_mediacallback = new MediaCallback(this->GetSafeHwnd());
-	m_mediadevice = UCloudRtcMediaDevice::sharedInstance(m_mediacallback);
+	m_mediadevice = UCloudRtcMediaDevice::sharedInstance();
+	m_mediadevice->InitAudioMoudle();
+	m_mediadevice->InitVideoMoudle();
 	
 	int num = m_mediadevice->getCamNums();
 	for (int i=0; i<num; i++)
@@ -51,7 +53,6 @@ BOOL CDeviceTestDlg::OnInitDialog()
 		if (ret == 0)
 		{
 			m_videolist.push_back(info);
-			//std::string src = info.deviceName;
 			m_videocom.AddString(Utf8ToWide(info.mDeviceName).data());
 		}
 	}
@@ -153,7 +154,8 @@ void CDeviceTestDlg::OnBnClickedButtonOk()
 		tUCloudRtcDeviceInfo& infos = m_spkeakerlist[selects];
 		m_mediadevice->setPlayoutDevice(&infos);
 	}
-	
+	m_mediadevice->UnInitAudioMoudle();
+	m_mediadevice->UnInitVideoMoudle();
 	m_mediadevice->destory();
 	m_mediadevice = nullptr;
 }
@@ -194,7 +196,8 @@ void CDeviceTestDlg::OnBnClickedButtonMicTest()
 		SetDlgItemText(IDC_BUTTON_MIC_TEST, L"ø™ º≤‚ ‘");
 	}
 	else {
-		int ret = m_mediadevice->startRecordingDeviceTest(info.mDeviceId);
+
+		int ret = m_mediadevice->startRecordingDeviceTest(info.mDeviceId, m_mediacallback);
 		SetDlgItemText(IDC_BUTTON_MIC_TEST, L"Õ£÷π≤‚ ‘");
 	}
 	m_mictest = !m_mictest;

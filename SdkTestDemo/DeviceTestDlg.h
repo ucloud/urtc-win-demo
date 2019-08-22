@@ -9,9 +9,9 @@
 #include <vector>
 #include "afxwin.h"
 
-class MediaCallback : public UCloudRtcMediaListener {
+class MediaCallback : public UCloudRtcAudioLevelListener {
 public:
-	virtual void onMiceAudioLevel(int volume) {
+	virtual void onMicAudioLevel(int volume) {
 		::PostMessage(msgwnd, 10001, volume, 0);
 	}
 
