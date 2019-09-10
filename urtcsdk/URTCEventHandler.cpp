@@ -226,6 +226,8 @@ void URTCEventHandler::onStartRecord(const int code, const char* msg, const char
 	jsonmsg["msg"] = msg;
 	jsonmsg["data"]["recordid"] = recordid;
 
+	dispatchEvent(URTC_EVENT_MSG_ELEC_STARTRECORD, writer.write(jsonmsg));
+
 }
 
 void URTCEventHandler::onStopRecord(const int code, const char* msg, const char* recordid)
@@ -234,6 +236,8 @@ void URTCEventHandler::onStopRecord(const int code, const char* msg, const char*
 	Json::Value jsonmsg;
 	jsonmsg["code"] = code;
 	jsonmsg["msg"] = msg;
+
+	dispatchEvent(URTC_EVENT_MSG_ELEC_STOPRECORD, writer.write(jsonmsg));
 }
 
 

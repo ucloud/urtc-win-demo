@@ -31,7 +31,7 @@ public:
 	virtual int MuteRemoteCamAudio(tRTCStreamMute& mute) = 0;
 	virtual int MuteRemoteScreen(tRTCStreamMute& mute) = 0;
 
-	virtual int StartRecord() = 0;
+	virtual int StartRecord(tRecordConfig& config) = 0;
 	virtual int StopRecord() = 0;
 };
 

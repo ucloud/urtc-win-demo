@@ -29,6 +29,7 @@ CSdkTestDemoDlg::CSdkTestDemoDlg(CWnd* pParent /*=NULL*/)
 	m_screenpub = false;
 	m_leaveroom = false;
 	m_isclose = false;
+	m_startrecord = false;
 }
 
 void CSdkTestDemoDlg::OnMuteAudio(std::string userid, eUCloudRtcMeidaType mediatype, bool mute) {
@@ -85,7 +86,8 @@ void CSdkTestDemoDlg::OnMuteVideo(std::string userid, eUCloudRtcMeidaType mediat
 	}
 }
 
-void CSdkTestDemoDlg::OnCloseMedia(std::string type, std::string id) {
+void CSdkTestDemoDlg::OnCloseMedia(std::string type, std::string id) 
+{
 
 }
 
@@ -142,8 +144,6 @@ void CSdkTestDemoDlg::InitURTCConfig()
 		m_videocheck.ShowWindow(FALSE);
 	}
 
-
-
 	m_roomid = URTCConfig::getInstance()->getRoomId();
 
 	tRTCAuthInfo auth;
@@ -165,6 +165,7 @@ BEGIN_MESSAGE_MAP(CSdkTestDemoDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_PUBC, &CSdkTestDemoDlg::OnBnClickedButtonPubC)
 	ON_BN_CLICKED(IDC_BUTTON_LEAVEROOM, &CSdkTestDemoDlg::OnBnClickedButtonLeaveroom)
 	ON_BN_CLICKED(IDC_BUTTON_PUBS, &CSdkTestDemoDlg::OnBnClickedButtonPubs)
+	ON_BN_CLICKED(IDC_BUTTON_RECORD, &CSdkTestDemoDlg::OnBnClickedButtonRecord)
 END_MESSAGE_MAP()
 
 
@@ -352,6 +353,12 @@ HRESULT CSdkTestDemoDlg::OnRTCUCloudMsg(WPARAM data, LPARAM lp)
 	case URTC_EVENT_MSG_ONSERVERDIS :
 		OnServerDisconnectHandler("");
 		break;
+	case URTC_EVENT_MSG_ELEC_STARTRECORD :
+		OnStartRecord(callmsg->mJsonMsg);
+		break;
+	case URTC_EVENT_MSG_ELEC_STOPRECORD:
+		OnStopRecord(callmsg->mJsonMsg);
+		break;
 	default:
 		break;
 	}
@@ -396,6 +403,7 @@ void CSdkTestDemoDlg::OnJoinRoomHandler(std::string jsonmsg) {
 		GetDlgItem(IDC_BUTTON_LEAVEROOM)->EnableWindow(true);
 		GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(true);
 		GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(true);
+		GetDlgItem(IDC_BUTTON_RECORD)->EnableWindow(true);
 		OnMessageShow("加入房间成功");
 	}
 	else {
@@ -442,6 +450,7 @@ void CSdkTestDemoDlg::OnLeaveRoomHandler(std::string jsonmsg) {
 		SetDlgItemText(IDC_BUTTON_PUBS, L"发布桌面");
 		GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(false);
 		GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(false);
+		GetDlgItem(IDC_BUTTON_RECORD)->EnableWindow(false);
 		OnMessageShow("退出房间成功");
 	}
 	else 
@@ -1047,6 +1056,62 @@ void CSdkTestDemoDlg::OnSendStHandler(std::string jsonmsg)
 	}
 }
 
+void CSdkTestDemoDlg::OnStartRecord(std::string jsonmsg)
+{
+	Json::Reader reader;
+	Json::Value retObj;
+	reader.parse(jsonmsg.c_str(), retObj, false);
+	std::string desc = "";
+	int code = retObj["code"].asInt();
+	std::string msg = retObj["msg"].asString();
+	std::string recordid = retObj["data"]["recordid"].asString();
+	if (code == 0)
+	{
+		m_startrecord = true;
+		SetDlgItemText(IDC_BUTTON_RECORD, L"停止录制");
+		char mutecontent[128] = { 0 };
+		sprintf_s(mutecontent, " recordid ", recordid.data());
+		std::string content = mutecontent;
+		std::string desc = "开启录制成功 " + msg + " " + content;
+		OnMessageShow(desc);
+
+	}
+	else 
+	{
+		char mutecontent[128] = { 0 };
+		sprintf_s(mutecontent, " err code=%d", code);
+		std::string content = mutecontent;
+		std::string desc = "开启录制失败 " + msg + " " + content;
+		OnMessageShow(desc);
+	}
+}
+
+void CSdkTestDemoDlg::OnStopRecord(std::string jsonmsg)
+{
+	Json::Reader reader;
+	Json::Value retObj;
+	reader.parse(jsonmsg.c_str(), retObj, false);
+	std::string desc = "";
+	int code = retObj["code"].asInt();
+	std::string msg = retObj["msg"].asString();
+	if (code == 0)
+	{
+		m_startrecord = true;
+		SetDlgItemText(IDC_BUTTON_RECORD, L"开启录制");
+		std::string desc = "停止录制成功 ";
+		OnMessageShow(desc);
+
+	}
+	else
+	{
+		char mutecontent[128] = { 0 };
+		sprintf_s(mutecontent, " err code=%d", code);
+		std::string content = mutecontent;
+		std::string desc = "停止录制失败 " + msg + " " + content;
+		OnMessageShow(desc);
+	}
+}
+
 void CSdkTestDemoDlg::ReleaseUserAllRes() {
 	m_campub = false;
 	m_screenpub = false;
@@ -1294,4 +1359,27 @@ void CSdkTestDemoDlg::OnMessageShow(std::string msg) {
 		m_msglist.ResetContent();
 	}
 	m_msglist.AddString(Ansi2WChar(msg.data()).data());
+}
+
+void CSdkTestDemoDlg::OnBnClickedButtonRecord()
+{
+	if (m_rtcengine)
+	{
+		if (m_startrecord)
+		{
+			m_rtcengine->StopRecord();
+		}
+		else
+		{
+			tRecordConfig recordconfig;
+			recordconfig.mMainviewmediatype = 1;
+			recordconfig.mMainviewuid = m_userid.data();
+			recordconfig.mProfile = 1;
+			recordconfig.mRecordType = 2;
+			recordconfig.mWatermarkPos = 1;
+			recordconfig.mBucket = "urtc-test";
+			recordconfig.mBucketRegion = "cn-bj";
+			m_rtcengine->StartRecord(recordconfig);
+		}
+	}
 }

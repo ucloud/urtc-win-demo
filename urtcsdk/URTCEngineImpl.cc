@@ -240,17 +240,19 @@ int URTCEngineImpl::MuteRemoteScreen(tRTCStreamMute& mute)
 	return -1;
 }
 
-int URTCEngineImpl::StartRecord()
+int URTCEngineImpl::StartRecord(tRecordConfig& config)
 {
 	if (m_rtcengine)
 	{
-		tUCloudRtcRecordConfig config;
-		config.mMainviewmediatype = UCLOUD_RTC_MEDIATYPE_VIDEO;
-		config.mMainviewuid = "";
-		config.mProfile = UCLOUD_RTC_RECORDPROFILE_SD;
-		config.mRecordType = UCLOUD_RTC_RECORDTYPE_AUDIOONLY;
-		config.mWatermarkPos = UCLOUD_RTC_WATERMARKPOS_LEFTTOP;
-		return m_rtcengine->startRecord(config);
+		tUCloudRtcRecordConfig uconfig;
+		uconfig.mMainviewmediatype = (eUCloudRtcMeidaType)config.mMainviewmediatype;
+		uconfig.mMainviewuid = config.mMainviewuid;
+		uconfig.mProfile = (eUCloudRtcRecordProfile)config.mProfile;
+		uconfig.mRecordType = (eUCloudRtcRecordType)config.mRecordType;
+		uconfig.mWatermarkPos = (eUCloudRtcWaterMarkPos)config.mWatermarkPos;
+		uconfig.mBucket = config.mBucket;
+		uconfig.mBucketRegion = config.mBucketRegion;
+		return m_rtcengine->startRecord(uconfig);
 	}
 	return -1;
 }

@@ -66,6 +66,18 @@ struct tStreamInfo
 	bool mEnalbedata;
 };
 
+
+struct tRecordConfig
+{
+	const char* mMainviewuid;
+	const char* mBucket;
+	const char* mBucketRegion;
+	int mProfile;
+	int mRecordType;
+	int mWatermarkPos;
+	int mMainviewmediatype;
+};
+
 typedef std::map<std::string, tUserInfo*>::iterator userit;
 typedef std::map<std::string, tStreamInfo*>::iterator streamit;
 typedef std::map<std::string, CVideoWnd*>::iterator streamrenderit;

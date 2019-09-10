@@ -95,6 +95,9 @@ private:
 	void OnRemoteStHandler(std::string jsonmsg);
 	void OnSendStHandler(std::string jsonmsg);
 
+	void OnStartRecord(std::string jsonmsg);
+	void OnStopRecord(std::string jsonmsg);
+
 	//用户离开 释放所有资源
 	void ReleaseUserAllRes();
 	void SubscribeAllStream();
@@ -125,4 +128,6 @@ public:
 	bool m_screenpub;
 	bool m_leaveroom;
 	bool m_isclose;
+	bool m_startrecord;
+	afx_msg void OnBnClickedButtonRecord();
 };
