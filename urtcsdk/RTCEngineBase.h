@@ -33,6 +33,9 @@ public:
 
 	virtual int StartRecord(tRecordConfig& config) = 0;
 	virtual int StopRecord() = 0;
+
+	virtual int StartMixFile(const char* filepath, bool replace, bool loop, float musicvol) = 0;
+	virtual int StopMixFile() = 0;
 };
 
 #endif

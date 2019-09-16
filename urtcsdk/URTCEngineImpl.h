@@ -38,6 +38,9 @@ public:
 
 	virtual int StartRecord(tRecordConfig& config);
 	virtual int StopRecord() ;
+
+	virtual int StartMixFile(const char* filepath, bool replace, bool loop, float musicvol);
+	virtual int StopMixFile();
 private:
 
 	UCloudRtcEngine*   m_rtcengine;

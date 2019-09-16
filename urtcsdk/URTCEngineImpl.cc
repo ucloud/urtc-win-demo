@@ -265,3 +265,21 @@ int URTCEngineImpl::StopRecord()
 	}
 	return -1;
 }
+
+int URTCEngineImpl::StartMixFile(const char* filepath, bool replace, bool loop, float musicvol)
+{
+	if (m_rtcengine)
+	{
+		return m_rtcengine->startAudioMixing(filepath, replace, loop, musicvol);
+	}
+	return -1;
+}
+
+int URTCEngineImpl::StopMixFile()
+{
+	if (m_rtcengine)
+	{
+		return m_rtcengine->stopAudioMixing();
+	}
+	return -1;
+}

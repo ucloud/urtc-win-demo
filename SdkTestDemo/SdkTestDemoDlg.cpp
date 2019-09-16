@@ -30,6 +30,7 @@ CSdkTestDemoDlg::CSdkTestDemoDlg(CWnd* pParent /*=NULL*/)
 	m_leaveroom = false;
 	m_isclose = false;
 	m_startrecord = false;
+	m_startaudiomix = false;
 }
 
 void CSdkTestDemoDlg::OnMuteAudio(std::string userid, eUCloudRtcMeidaType mediatype, bool mute) {
@@ -166,6 +167,7 @@ BEGIN_MESSAGE_MAP(CSdkTestDemoDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_LEAVEROOM, &CSdkTestDemoDlg::OnBnClickedButtonLeaveroom)
 	ON_BN_CLICKED(IDC_BUTTON_PUBS, &CSdkTestDemoDlg::OnBnClickedButtonPubs)
 	ON_BN_CLICKED(IDC_BUTTON_RECORD, &CSdkTestDemoDlg::OnBnClickedButtonRecord)
+	ON_BN_CLICKED(IDC_BUTTON_MIXFILE, &CSdkTestDemoDlg::OnBnClickedButtonMixfile)
 END_MESSAGE_MAP()
 
 
@@ -404,6 +406,7 @@ void CSdkTestDemoDlg::OnJoinRoomHandler(std::string jsonmsg) {
 		GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(true);
 		GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(true);
 		GetDlgItem(IDC_BUTTON_RECORD)->EnableWindow(true);
+		GetDlgItem(IDC_BUTTON_MIXFILE)->EnableWindow(true);
 		OnMessageShow("加入房间成功");
 	}
 	else {
@@ -451,6 +454,7 @@ void CSdkTestDemoDlg::OnLeaveRoomHandler(std::string jsonmsg) {
 		GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(false);
 		GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(false);
 		GetDlgItem(IDC_BUTTON_RECORD)->EnableWindow(false);
+		GetDlgItem(IDC_BUTTON_MIXFILE)->EnableWindow(false);
 		OnMessageShow("退出房间成功");
 	}
 	else 
@@ -1116,6 +1120,8 @@ void CSdkTestDemoDlg::ReleaseUserAllRes() {
 	m_campub = false;
 	m_screenpub = false;
 	m_roomid = "";
+	m_startaudiomix = false;
+	m_startrecord = false;
 
 	streamrenderit srit = m_mapRenders.begin();
 	while (srit != m_mapRenders.end())
@@ -1381,5 +1387,45 @@ void CSdkTestDemoDlg::OnBnClickedButtonRecord()
 			recordconfig.mBucketRegion = "cn-bj";
 			m_rtcengine->StartRecord(recordconfig);
 		}
+	}
+}
+
+
+void CSdkTestDemoDlg::OnBnClickedButtonMixfile()
+{
+	if (m_startaudiomix)
+	{
+		if (m_rtcengine)
+		{
+			m_rtcengine->StopMixFile();
+			m_startaudiomix = false;
+		}
+		
+	}
+	else 
+	{
+		CString defaultDir = L"D://"; 
+		CString fileName = L"*.mp3";     
+		CString filter = L"File(*.mp3 |*.wav)";
+		CFileDialog openFileDlg(true, defaultDir, fileName, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT);
+		INT_PTR result = openFileDlg.DoModal();
+		CString filePath;
+		if (result == IDOK) 
+		{
+			filePath = openFileDlg.GetPathName();
+		}
+		if (filePath.GetLength() <=0)
+		{
+			return;
+		}
+		std::string temp = WChar2Ansi(filePath.GetBuffer());
+		filePath.ReleaseBuffer();
+		const char* filepathc = temp.data();
+		if (m_rtcengine)
+		{
+			m_rtcengine->StartMixFile(filepathc, false, true, 0.8f);
+			m_startaudiomix = true;
+		}
+		
 	}
 }

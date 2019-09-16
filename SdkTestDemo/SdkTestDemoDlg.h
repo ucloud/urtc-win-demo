@@ -129,5 +129,7 @@ public:
 	bool m_leaveroom;
 	bool m_isclose;
 	bool m_startrecord;
+	bool m_startaudiomix;
 	afx_msg void OnBnClickedButtonRecord();
+	afx_msg void OnBnClickedButtonMixfile();
 };
