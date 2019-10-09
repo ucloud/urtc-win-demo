@@ -501,7 +501,8 @@ void CSdkTestDemoDlg::OnPulibshCamStreamHandler(std::string jsonmsg) {
 		SetDlgItemText(IDC_BUTTON_PUBC, L"停止发布");
 		OnMessageShow("摄像头发布成功");
 		tRTCRenderView canvas;
-		canvas.mVidoview = (int)m_localWnd->GetVideoHwnd();
+		//canvas.mVidoview = (int)m_localWnd->GetVideoHwnd();
+		canvas.mVidoview = (int)GetSafeHwnd();
 		canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 		canvas.mUserid = m_userid;
 		canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
