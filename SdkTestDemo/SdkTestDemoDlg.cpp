@@ -67,7 +67,8 @@ void CSdkTestDemoDlg::OnMuteVideo(std::string userid, eUCloudRtcMeidaType mediat
 		mutest.mUserid = m_userid;
 		m_rtcengine->MuteLocalScreen(mutest);
 	}
-	else {
+	else 
+	{
 		if (mediatype == UCLOUD_RTC_MEDIATYPE_VIDEO)
 		{
 			tRTCStreamMute mutest;
@@ -82,8 +83,6 @@ void CSdkTestDemoDlg::OnMuteVideo(std::string userid, eUCloudRtcMeidaType mediat
 			mutest.mUserid = userid;
 			m_rtcengine->MuteRemoteScreen(mutest);
 		}
-		
-		
 	}
 }
 

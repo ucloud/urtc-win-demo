@@ -65,6 +65,7 @@ public:
 	virtual int setAutoPublishSubscribe(bool autoPub, bool autoSub) = 0;
 	virtual int setAudioOnlyMode(bool audioOnly) = 0;
 
+	virtual int enableExtendRtspVideocapture(bool enable, const char* rtspvideocapture) = 0;
 	virtual int enableExtendVideocapture(bool enable, UCloudRtcExtendVideoCaptureSource* videocapture) = 0;
 	virtual int startAudioMixing(const char* filepath, bool replace, bool loop,float musicvol) = 0;
 	virtual int stopAudioMixing() = 0;
