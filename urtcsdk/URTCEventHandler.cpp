@@ -123,7 +123,7 @@ void URTCEventHandler::onLocalPublish(const int code, const char* msg, tUCloudRt
 	jsonmsg["data"]["mtype"] = info.mStreamMtype;
 
 	dispatchEvent(URTC_EVENT_MSG_LOCALPUBLISH_RSP, writer.write(jsonmsg));
-	
+
 }
 
 void URTCEventHandler::onLocalUnPublish(const int code, const char* msg, tUCloudRtcStreamInfo& info)
