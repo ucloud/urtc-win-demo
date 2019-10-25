@@ -39,6 +39,7 @@ public:
 	CButton m_audioonly;
 
 	CComboBox m_videoprofile;
+	CComboBox m_codectype;
 	int m_sdkmode;
 	int m_chtype;
 	afx_msg void OnBnClickedRadioNormal();

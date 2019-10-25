@@ -134,6 +134,16 @@ eUCloudRtcSdkMode URTCConfig::getSdkMode()
 	return this->mSdkMode;
 }
 
+void URTCConfig::setCodecType(eUCloudRtcCodec codec)
+{
+	this->mCodec = codec;
+}
+
+eUCloudRtcCodec URTCConfig::getCodecType()
+{
+	return this->mCodec;
+}
+
 void URTCConfig::setAppId(std::string appid)
 {
 	this->mAppid = appid;

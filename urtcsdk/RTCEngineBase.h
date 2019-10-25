@@ -23,6 +23,8 @@ public:
 	virtual int MuteLocalCamAudio(tRTCStreamMute& mute) = 0;
 	virtual int MuteLocalScreen(tRTCStreamMute& mute) = 0;
 
+	virtual int SetCodecType(int codec) = 0;
+
 	virtual int SubRemoteStream(tRTCStreamInfo& streaminfo) = 0;
 	virtual int UnSubRemoteStream(tRTCStreamInfo& streaminfo) = 0;
 	virtual int StartRemoteRender(tRTCRenderView& renderview) = 0;

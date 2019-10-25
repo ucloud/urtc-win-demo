@@ -144,6 +144,8 @@ void CSdkTestDemoDlg::InitURTCConfig()
 		m_videocheck.ShowWindow(FALSE);
 	}
 
+	m_rtcengine->SetCodecType(URTCConfig::getInstance()->getCodecType());
+
 	m_roomid = URTCConfig::getInstance()->getRoomId();
 
 	tRTCAuthInfo auth;
@@ -484,6 +486,7 @@ void CSdkTestDemoDlg::OnPulibshCamStreamHandler(std::string jsonmsg) {
 		canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 		canvas.mUserid = m_userid;
 		canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
+		canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;
 
 		m_rtcengine->StartLocalRender(canvas);
 		m_localWnd->setUsed(true);
@@ -652,6 +655,7 @@ void CSdkTestDemoDlg::OnSubStreamHandler(std::string jsonmsg) {
 			canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 			canvas.mUserid = uid.data();
 			canvas.mStreamMtype = mtype;
+			canvas.mRenderType =  UCLOUD_RTC_RENDER_TYPE_D3D;
 			m_rtcengine->StartRemoteRender(canvas);
 		}
 
@@ -1078,6 +1082,7 @@ void CSdkTestDemoDlg::OnStopRecord(std::string jsonmsg)
 	std::string desc = "";
 	int code = retObj["code"].asInt();
 	std::string msg = retObj["msg"].asString();
+	std::string filename = retObj["data"]["filename"].asString();
 	if (code == 0)
 	{
 		m_startrecord = true;

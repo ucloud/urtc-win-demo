@@ -94,6 +94,12 @@ typedef enum {
 	UCLOUD_RTC_RENDER_MODE_FILL = 2 
 } eUCloudRtcRenderMode;
 
+//render type
+typedef enum {
+	UCLOUD_RTC_RENDER_TYPE_GDI = 1,
+	UCLOUD_RTC_RENDER_TYPE_D3D = 2
+} eUCloudRtcRenderType;
+
 /**
 *  log level
 */
@@ -128,12 +134,6 @@ typedef enum {
 	UCLOUD_RTC_CHANNEL_TYPE_COMMUNICATION
 }eUCloudRtcChannelType;
 
-//qos
-typedef enum {
-	UCLOUD_RTC_QOS_BANLANCE,
-	UCLOUD_RTC_QOS_AUDIO_FIRST,
-	UCLOUD_RTC_QOS_VIDEO_FIRST,
-}eUCloudRtcQos;
 
 //stream role 
 typedef enum {
@@ -148,6 +148,11 @@ typedef enum {
 	UCLOUD_RTC_SDK_MODE_TRIVAL, // 有期限限制测试
 } eUCloudRtcSdkMode;
 
+typedef enum {
+	UCLOUD_RTC_CODEC_VP8 = 1, //default
+	UCLOUD_RTC_CODEC_H264
+} eUCloudRtcCodec;
+
 // render view
 typedef struct
 {
@@ -156,6 +161,7 @@ typedef struct
 	const char* mStreamId;
 	eUCloudRtcMeidaType mStreamMtype;
 	eUCloudRtcRenderMode mRenderMode;
+	eUCloudRtcRenderType mRenderType;
 }tUCloudRtcVideoCanvas;
 
 
@@ -179,6 +185,14 @@ typedef struct {
 	int mVideoFrameRate = 0;     // video frames per secon
 	float mPacketLostRate = 0.0f;
 }tUCloudRtcStreamStats;
+
+typedef struct {
+	const char* mRecordId;
+	const char* mFileName;
+	const char* mRegion;
+	const char* mBucket;
+	const char* mRoomid;
+}tUCloudRtcRecordInfo;
 
 
 typedef struct {

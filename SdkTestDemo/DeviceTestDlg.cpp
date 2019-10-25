@@ -65,6 +65,10 @@ BOOL CDeviceTestDlg::OnInitDialog()
 		int ret = m_mediadevice->getRecordDevInfo(i, &info);
 		if (ret == 0)
 		{
+			if (i == 0)
+			{
+				m_mediadevice->setRecordDevice(&info);
+			}
 			m_miclist.push_back(info) ;
 			m_miccom.AddString(Utf8ToWide(info.mDeviceName).data());
 		}
@@ -78,6 +82,10 @@ BOOL CDeviceTestDlg::OnInitDialog()
 		int ret = m_mediadevice->getPlayoutDevInfo(i, &info);
 		if (ret == 0)
 		{
+			if (i == 0)
+			{
+				m_mediadevice->setPlayoutDevice(&info);
+			}
 			m_spkeakerlist.push_back(info);
 			m_speaker.AddString(Utf8ToWide(info.mDeviceName).data());
 		}
@@ -197,7 +205,7 @@ void CDeviceTestDlg::OnBnClickedButtonMicTest()
 	}
 	else {
 
-		int ret = m_mediadevice->startRecordingDeviceTest(info.mDeviceId, m_mediacallback);
+		int ret = m_mediadevice->startRecordingDeviceTest(m_mediacallback);
 		SetDlgItemText(IDC_BUTTON_MIC_TEST, L"Õ£÷π≤‚ ‘");
 	}
 	m_mictest = !m_mictest;
@@ -220,7 +228,7 @@ void CDeviceTestDlg::OnBnClickedButtonSpeakerTest()
 		SetDlgItemText(IDC_BUTTON_SPEAKER_TEST, L"ø™ º≤‚ ‘");
 	}
 	else {
-		int ret = m_mediadevice->startPlaybackDeviceTest(info.mDeviceId, "d:/test.WAV");
+		int ret = m_mediadevice->startPlaybackDeviceTest( "d:/test.WAV");
 		SetDlgItemText(IDC_BUTTON_SPEAKER_TEST, L"Õ£÷π≤‚ ‘");
 	}
 	m_speakertest = !m_speakertest;
