@@ -123,7 +123,7 @@ void URTCEventHandler::onLocalPublish(const int code, const char* msg, tUCloudRt
 	jsonmsg["data"]["mtype"] = info.mStreamMtype;
 
 	dispatchEvent(URTC_EVENT_MSG_LOCALPUBLISH_RSP, writer.write(jsonmsg));
-	
+
 }
 
 void URTCEventHandler::onLocalUnPublish(const int code, const char* msg, tUCloudRtcStreamInfo& info)
@@ -218,13 +218,17 @@ void URTCEventHandler::onKickoff(int code)
 
 	dispatchEvent(URTC_EVENT_MSG_KICKOFF, writer.write(jsonmsg));
 }
-void URTCEventHandler::onStartRecord(const int code, const char* msg, const char* recordid)
+void URTCEventHandler::onStartRecord(const int code, const char* msg, tUCloudRtcRecordInfo& info)
 {
 	Json::StyledWriter writer;
 	Json::Value jsonmsg;
 	jsonmsg["code"] = code;
 	jsonmsg["msg"] = msg;
-	jsonmsg["data"]["recordid"] = recordid;
+	jsonmsg["data"]["recordid"] = info.mRecordId;
+	jsonmsg["data"]["filename"] = info.mFileName;
+	jsonmsg["data"]["bucket"] = info.mBucket;
+	jsonmsg["data"]["region"] = info.mRegion;
+	jsonmsg["data"]["roomid"] = info.mRoomid;
 
 	dispatchEvent(URTC_EVENT_MSG_ELEC_STARTRECORD, writer.write(jsonmsg));
 

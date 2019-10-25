@@ -8,6 +8,7 @@
 #include "VideoWnd.h"
 #include <vector>
 #include "afxwin.h"
+#include "afxcmn.h"
 
 class MediaCallback : public UCloudRtcAudioLevelListener {
 public:
@@ -39,6 +40,7 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	virtual BOOL OnInitDialog();
+	virtual void  OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	DECLARE_MESSAGE_MAP()
 
 	std::vector<tUCloudRtcDeviceInfo> m_videolist;
@@ -68,4 +70,6 @@ public:
 	UCloudRtcMediaDevice* m_mediadevice;
 	
 	CComboBox m_speaker;
+	CSliderCtrl m_micvol;
+	CSliderCtrl m_speakervol;
 };

@@ -80,6 +80,33 @@ int URTCEngineImpl::LeaveRoom(std::string& roomid)
 	return -1;
 }
 
+int URTCEngineImpl::SetCodecType(int codec)
+{
+	if (m_rtcengine)
+	{
+		return m_rtcengine->setVideoCodec((eUCloudRtcCodec)codec);
+	}
+	return -1;
+}
+
+int URTCEngineImpl::MuteCamBeforeJoin(bool mute)
+{
+	if (m_rtcengine)
+	{
+		return m_rtcengine->muteCamBeforeJoin(mute);
+	}
+	return -1;
+}
+
+int URTCEngineImpl::MuteMicBeforeJoin(bool mute)
+{
+	if (m_rtcengine)
+	{
+		return m_rtcengine->muteMicBeforeJoin(mute);
+	}
+	return -1;
+}
+
 int URTCEngineImpl::PublishStream(tRTCStreamInfo& streaminfo)
 {
 	if (m_rtcengine)
@@ -105,6 +132,7 @@ int URTCEngineImpl::StartLocalRender(tRTCRenderView& renderview)
 		canvas.mStreamMtype = (eUCloudRtcMeidaType)renderview.mStreamMtype;
 		canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 		canvas.mVideoView = renderview.mVidoview;
+		canvas.mRenderType = (eUCloudRtcRenderType)renderview.mRenderType;
 		return m_rtcengine->startPreview(canvas);
 	}
 	return -1;
@@ -185,6 +213,7 @@ int URTCEngineImpl::StartRemoteRender(tRTCRenderView& renderview)
 		canvas.mStreamMtype = (eUCloudRtcMeidaType)renderview.mStreamMtype;
 		canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 		canvas.mVideoView = renderview.mVidoview;
+		canvas.mRenderType = (eUCloudRtcRenderType)renderview.mRenderType;
 		return m_rtcengine->startRemoteView(canvas);
 	}
 	return -1;

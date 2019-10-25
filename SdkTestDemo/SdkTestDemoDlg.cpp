@@ -144,7 +144,11 @@ void CSdkTestDemoDlg::InitURTCConfig()
 		m_videocheck.ShowWindow(FALSE);
 	}
 
+	m_rtcengine->SetCodecType(URTCConfig::getInstance()->getCodecType());
 	m_roomid = URTCConfig::getInstance()->getRoomId();
+
+	m_rtcengine->MuteCamBeforeJoin(URTCConfig::getInstance()->getMuteCamBeforeJoin());
+	m_rtcengine->MuteMicBeforeJoin(URTCConfig::getInstance()->getMuteMicBeforeJoin());
 
 	tRTCAuthInfo auth;
 	auth.mAppid = URTCConfig::getInstance()->getAppId();
@@ -370,28 +374,6 @@ HRESULT CSdkTestDemoDlg::OnRTCUCloudMsg(WPARAM data, LPARAM lp)
 	return 0;
 }
 
-//void CSdkTestDemoDlg::OnBnClickedButtonJoin()
-//{
-//	// TODO: Add your control notification handler code here
-//	CString text;
-//	GetDlgItemText(IDC_EDIT_ROOM, text);
-//	m_roomid = WChatToUTF8Str(text.GetBuffer());
-//	if (m_roomid.length() <= 0)
-//	{
-//		m_roomid = "";
-//		AfxMessageBox(L"请输入房间ID");
-//		return;
-//	}
-//	if (m_rtcengine)
-//	{
-//		tRTCAuthInfo auth;
-//		auth.mRoomid = m_roomid.data();
-//		auth.mUserid = m_userid.data();
-//		auth.mToken = "test";
-//		int ret = m_rtcengine->JoinRoom(auth);
-//	}
-//}
-
 void CSdkTestDemoDlg::OnJoinRoomHandler(std::string jsonmsg) {
 	Json::Reader reader;
 	Json::Value retObj;
@@ -412,7 +394,7 @@ void CSdkTestDemoDlg::OnJoinRoomHandler(std::string jsonmsg) {
 		char num[32] = { 0 };
 		sprintf_s(num, " err code = %d", code);
 		std::string errcode = num;
-		std::string desc = "加入房间失败 " + msg + " "+ errcode;
+		std::string desc = "加入房间失败 " + msg + " " + errcode;
 		OnMessageShow(desc);
 	}
 }
@@ -477,7 +459,7 @@ void CSdkTestDemoDlg::OnPulibshStreamHandler(std::string jsonmsg) {
 	Json::Reader reader;
 	Json::Value retObj;
 	reader.parse(jsonmsg.c_str(), retObj, false);
-	
+
 	int mtype = retObj["data"]["mtype"].asInt();
 	if (mtype == UCLOUD_RTC_MEDIATYPE_VIDEO)
 	{
@@ -501,15 +483,18 @@ void CSdkTestDemoDlg::OnPulibshCamStreamHandler(std::string jsonmsg) {
 		SetDlgItemText(IDC_BUTTON_PUBC, L"停止发布");
 		OnMessageShow("摄像头发布成功");
 		tRTCRenderView canvas;
-		//canvas.mVidoview = (int)m_localWnd->GetVideoHwnd();
-		canvas.mVidoview = (int)GetSafeHwnd();
+		canvas.mVidoview = (int)m_localWnd->GetVideoHwnd();
 		canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 		canvas.mUserid = m_userid;
 		canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
+		canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;
 
 		m_rtcengine->StartLocalRender(canvas);
 		m_localWnd->setUsed(true);
 		m_localWnd->setReady(true);
+
+		m_localWnd->muteVideo(URTCConfig::getInstance()->getMuteCamBeforeJoin());
+		m_localWnd->muteAudio(URTCConfig::getInstance()->getMuteMicBeforeJoin());
 		m_campub = true;
 	}
 	else {
@@ -582,7 +567,7 @@ void CSdkTestDemoDlg::OnUnPulibshStreamScreenHandler(std::string jsonmsg) {
 		sprintf_s(num, " err code = %d", code);
 		std::string errcode = num;
 
-		std::string desc = "取消发布失败 "+ msg+ " "+errcode;
+		std::string desc = "取消发布失败 " + msg + " " + errcode;
 		OnMessageShow(desc);
 	}
 
@@ -607,7 +592,7 @@ void CSdkTestDemoDlg::OnUnPulibshStreamCamHandler(std::string jsonmsg) {
 		char num[32] = { 0 };
 		sprintf_s(num, " err code = %d", code);
 		std::string errcode = num;
-		std::string desc = "取消发布失败 "+ msg+ " "+ errcode;
+		std::string desc = "取消发布失败 " + msg + " " + errcode;
 		OnMessageShow(desc);
 	}
 
@@ -627,12 +612,12 @@ void CSdkTestDemoDlg::OnSubStreamHandler(std::string jsonmsg) {
 	std::string msg = retObj["msg"].asString();
 	int mtype = retObj["data"]["mtype"].asInt();
 	std::string uid = retObj["data"]["uid"].asString();
-	char buf[32] = {0};
+	char buf[32] = { 0 };
 	sprintf_s(buf, "%d", mtype);
 	eUCloudRtcMeidaType type = (mtype == 1) ? UCLOUD_RTC_MEDIATYPE_VIDEO : UCLOUD_RTC_MEDIATYPE_SCREEN;
 	if (code == 0)
 	{
-		std::string msg = "订阅 "+ uid + buf + "成功";
+		std::string msg = "订阅 " + uid + buf + "成功";
 		streamrenderit srit = m_mapRenders.find(uid + buf);
 		CVideoWnd* videoview = nullptr;
 		if (srit != m_mapRenders.end())
@@ -673,6 +658,7 @@ void CSdkTestDemoDlg::OnSubStreamHandler(std::string jsonmsg) {
 			canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 			canvas.mUserid = uid.data();
 			canvas.mStreamMtype = mtype;
+			canvas.mRenderType =  UCLOUD_RTC_RENDER_TYPE_D3D;
 			m_rtcengine->StartRemoteRender(canvas);
 		}
 
@@ -681,7 +667,7 @@ void CSdkTestDemoDlg::OnSubStreamHandler(std::string jsonmsg) {
 		char num[32] = { 0 };
 		sprintf_s(num, " err code = %d", code);
 		std::string errcode = num;
-		std::string msg = "订阅 " + uid + buf + " 失败 "+ errcode;
+		std::string msg = "订阅 " + uid + buf + " 失败 " + errcode;
 		OnMessageShow(msg);
 	}
 	
@@ -715,22 +701,23 @@ void CSdkTestDemoDlg::OnStreamStHandler(std::string jsonmsg) {
 		stream->mEnalbevideo = retObj["data"]["video"].asBool();
 		stream->mEnalbedata = retObj["data"]["data"].asBool();
 
-		char buf[8] = {0};
+		char buf[8] = { 0 };
 		sprintf_s(buf, "%d", stream->mStreamMtype);
-		m_streamsmap.insert( std::make_pair(stream->mUserid+ buf, stream) );
+		m_streamsmap.insert(std::make_pair(stream->mUserid + buf, stream));
 		std::string desc = "流加入：";
 		OnMessageShow(desc);
-		std::string msg = "userid: " + userid ;
+		std::string msg = "userid: " + userid;
 		OnMessageShow(msg);
 		std::string mt = buf;
 		std::string streamdesc = "mediatype: " + mt;
 		OnMessageShow(streamdesc);
-	}else if (cmd == "remove")
+	}
+	else if (cmd == "remove")
 	{
 		UnSubscribeStream(mtype, userid);
 		std::string desc = "流移除：";
 		OnMessageShow(desc);
-		std::string msg =  "userid: " + userid;
+		std::string msg = "userid: " + userid;
 		OnMessageShow(msg);
 		char buf[32] = { 0 };
 		sprintf_s(buf, "%d", mtype);
@@ -851,17 +838,17 @@ void CSdkTestDemoDlg::OnLocalStreamMuteHandler(std::string jsonmsg) {
 				m_localWnd->muteVideo(mute);
 			}
 		}
-		else 
+		else
 		{
 			m_screenWnd->muteVideo(mute);
 		}
 
 		char mutecontent[128] = { 0 };
-		sprintf_s(mutecontent, " mtype=%d&&ttype=%d&&op=%d",mediatype, trackype, mute);
+		sprintf_s(mutecontent, " mtype=%d&&ttype=%d&&op=%d", mediatype, trackype, mute);
 		std::string content = mutecontent;
 		std::string desc = "操作成功" + msg + " " + content;
 		OnMessageShow(desc);
-		
+
 	}
 	else {
 		char mutecontent[128] = { 0 };
@@ -1098,6 +1085,7 @@ void CSdkTestDemoDlg::OnStopRecord(std::string jsonmsg)
 	std::string desc = "";
 	int code = retObj["code"].asInt();
 	std::string msg = retObj["msg"].asString();
+	std::string filename = retObj["data"]["filename"].asString();
 	if (code == 0)
 	{
 		m_startrecord = true;

@@ -53,6 +53,26 @@ std::string URTCConfig::getSecKey()
 	return this->mSeckey;
 }
 
+void URTCConfig::setMuteCamBeforeJoin(bool mute)
+{
+	this->mMuteCamBeforeJoin = mute;
+}
+
+bool URTCConfig::getMuteCamBeforeJoin()
+{
+	return this->mMuteCamBeforeJoin ;
+}
+
+void URTCConfig::setMuteMicBeforeJoin(bool mute)
+{
+	this->mMuteMicBeforeJoin = mute;
+}
+
+bool URTCConfig::getMuteMicBeforeJoin()
+{
+	return this->mMuteMicBeforeJoin;
+}
+
 void URTCConfig::setAutoPublish(bool isauto)
 {
 	this->mAutoPub = isauto;
@@ -132,6 +152,16 @@ void URTCConfig::setSdkMode(eUCloudRtcSdkMode mode)
 eUCloudRtcSdkMode URTCConfig::getSdkMode()
 {
 	return this->mSdkMode;
+}
+
+void URTCConfig::setCodecType(eUCloudRtcCodec codec)
+{
+	this->mCodec = codec;
+}
+
+eUCloudRtcCodec URTCConfig::getCodecType()
+{
+	return this->mCodec;
 }
 
 void URTCConfig::setAppId(std::string appid)

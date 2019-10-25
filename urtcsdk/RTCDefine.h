@@ -25,6 +25,7 @@ struct tRTCRenderView
 	int mStreamMtype;//1 camera 2 screen
 	int mVidoview;
 	int mRenderMode;
+	int mRenderType; //1 gdi 2 dx 
 };
 
 struct tRTCStreamInfo

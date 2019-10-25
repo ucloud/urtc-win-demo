@@ -39,6 +39,7 @@ void CConfigDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Radio(pDX, IDC_RADIO_NORMAL, m_sdkmode);
 	DDX_Radio(pDX, IDC_RADIO_CH_C, m_chtype);
 	DDX_Control(pDX, IDC_SEC_KEY, m_sectxt);
+	DDX_Control(pDX, IDC_COM_CODEC, m_codectype);
 }
 
 BOOL CConfigDlg::OnInitDialog()
@@ -137,6 +138,11 @@ BOOL CConfigDlg::OnInitDialog()
 		m_sectxt.ShowWindow(TRUE);
 		m_seckey.ShowWindow(TRUE);
 	}
+
+	m_codectype.InsertString(0, L"VP8");
+	m_codectype.InsertString(1, L"H264");
+
+	m_codectype.SetCurSel(1);
 	return TRUE;
 }
 
@@ -180,7 +186,8 @@ void CConfigDlg::OnBnClickedButtonSave()
 		}
 	}
 
-	URTCConfig::getInstance()->setVideoProfile((eUCloudRtcVideoProfile)(m_videoprofile.GetCurSel() +1) );
+	URTCConfig::getInstance()->setVideoProfile((eUCloudRtcVideoProfile)
+		(m_videoprofile.GetCurSel() +1) );
 
 	int pubrcheck = m_rolepub.GetCheck();
 	int subrcheck = m_rolesub.GetCheck();
@@ -275,6 +282,9 @@ void CConfigDlg::OnBnClickedButtonSave()
 	else {
 		URTCConfig::getInstance()->setAutoPubScreen(false);
 	}
+
+	URTCConfig::getInstance()->setCodecType((eUCloudRtcCodec)
+		(m_codectype.GetCurSel() + 1));
 	
 	CDialogEx::OnOK();
 }

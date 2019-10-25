@@ -32,7 +32,7 @@ public:
 		eUCloudRtcMeidaType mediatype, eUCloudRtcTrackType tracktype, bool mute);
 	virtual void onError(int code);
 	virtual void onKickoff(int code);
-	virtual void onStartRecord(const int code, const char* msg, const char* recordid);
+	virtual void onStartRecord(const int code, const char* msg, tUCloudRtcRecordInfo& info);
 	virtual void onStopRecord(const int code, const char* msg, const char* recordid);
 	virtual void onRemoteAudioLevel(const char* uid, int volume);
 	virtual void onLocalAudioLevel(int volume);

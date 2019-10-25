@@ -18,6 +18,12 @@ public:
 	void setSecKey(std::string key);
 	std::string getSecKey();
 
+	void setMuteCamBeforeJoin(bool mute);
+	bool getMuteCamBeforeJoin();
+
+	void setMuteMicBeforeJoin(bool mute);
+	bool getMuteMicBeforeJoin();
+
 	void setAutoPublish(bool isauto);
 	bool isAutoPublish();
 
@@ -45,6 +51,9 @@ public:
 	void setSdkMode(eUCloudRtcSdkMode mode);
 	eUCloudRtcSdkMode getSdkMode();
 
+	void setCodecType(eUCloudRtcCodec codec);
+	eUCloudRtcCodec getCodecType();
+
 	void setAppId(std::string appid);
 	std::string getAppId();
 
@@ -69,13 +78,16 @@ private:
 	bool mPubAudio;
 	bool mPubScreen;
 
+	bool mMuteCamBeforeJoin;
+	bool mMuteMicBeforeJoin;
+
 	bool mAudioOnly;
 
 	eUCloudRtcUserStreamRole mRole;
 	eUCloudRtcSdkMode mSdkMode;
 
 	eUCloudRtcChannelType mChannelType;
-
+	eUCloudRtcCodec mCodec;
 	std::string mAppid;
 
 	std::string mUserid;
