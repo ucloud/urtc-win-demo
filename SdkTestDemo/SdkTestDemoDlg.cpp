@@ -145,8 +145,10 @@ void CSdkTestDemoDlg::InitURTCConfig()
 	}
 
 	m_rtcengine->SetCodecType(URTCConfig::getInstance()->getCodecType());
-
 	m_roomid = URTCConfig::getInstance()->getRoomId();
+
+	m_rtcengine->MuteCamBeforeJoin(URTCConfig::getInstance()->getMuteCamBeforeJoin());
+	m_rtcengine->MuteMicBeforeJoin(URTCConfig::getInstance()->getMuteMicBeforeJoin());
 
 	tRTCAuthInfo auth;
 	auth.mAppid = URTCConfig::getInstance()->getAppId();
@@ -481,8 +483,7 @@ void CSdkTestDemoDlg::OnPulibshCamStreamHandler(std::string jsonmsg) {
 		SetDlgItemText(IDC_BUTTON_PUBC, L"停止发布");
 		OnMessageShow("摄像头发布成功");
 		tRTCRenderView canvas;
-		//canvas.mVidoview = (int)m_localWnd->GetVideoHwnd();
-		canvas.mVidoview = (int)GetSafeHwnd();
+		canvas.mVidoview = (int)m_localWnd->GetVideoHwnd();
 		canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 		canvas.mUserid = m_userid;
 		canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
@@ -491,6 +492,9 @@ void CSdkTestDemoDlg::OnPulibshCamStreamHandler(std::string jsonmsg) {
 		m_rtcengine->StartLocalRender(canvas);
 		m_localWnd->setUsed(true);
 		m_localWnd->setReady(true);
+
+		m_localWnd->muteVideo(URTCConfig::getInstance()->getMuteCamBeforeJoin());
+		m_localWnd->muteAudio(URTCConfig::getInstance()->getMuteMicBeforeJoin());
 		m_campub = true;
 	}
 	else {
@@ -514,8 +518,7 @@ void CSdkTestDemoDlg::OnPulibshScreenStreamHandler(std::string jsonmsg) {
 		SetDlgItemText(IDC_BUTTON_PUBS, L"停止桌面");
 		OnMessageShow("桌面发布成功");
 		tRTCRenderView canvas;
-		//canvas.mVidoview = (int)m_screenWnd->GetVideoHwnd();
-		canvas.mVidoview = (int)GetSafeHwnd();
+		canvas.mVidoview = (int)m_screenWnd->GetVideoHwnd();
 		canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 		canvas.mUserid = m_userid;
 		canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_SCREEN;

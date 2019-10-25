@@ -31,6 +31,8 @@ void CDeviceTestDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_MIC_ENY, m_micenypro);
 	DDX_Control(pDX, IDC_STATIC_VIEW, m_videoview);
 	DDX_Control(pDX, IDC_COMBO_SPEAKER, m_speaker);
+	DDX_Control(pDX, IDC_SLIDER_MIC_VOL, m_micvol);
+	DDX_Control(pDX, IDC_SLIDER_SPEAKER_VOL, m_speakervol);
 }
 
 BOOL CDeviceTestDlg::OnInitDialog()
@@ -39,8 +41,10 @@ BOOL CDeviceTestDlg::OnInitDialog()
 	m_speakertest = false;
 	m_videotest = false;
 	CDialogEx::OnInitDialog();
+
 	m_mediacallback = new MediaCallback(this->GetSafeHwnd());
 	m_mediadevice = UCloudRtcMediaDevice::sharedInstance();
+
 	m_mediadevice->InitAudioMoudle();
 	m_mediadevice->InitVideoMoudle();
 	
@@ -98,6 +102,24 @@ BOOL CDeviceTestDlg::OnInitDialog()
 	m_speaker.UpdateData();
 	m_speaker.SetCurSel(0);
 
+
+	m_micvol.SetRange(0, 255);//设置范围
+	m_micvol.SetTicFreq(5);//设置显示刻度的间隔
+	m_micvol.SetPos(0);//当前停留的位置
+	m_micvol.SetLineSize(5);//一行的大小，对应键盘的方向键
+	m_speakervol.SetRange(0, 255);//设置范围
+	m_speakervol.SetTicFreq(5);//设置显示刻度的间隔
+	m_speakervol.SetPos(0);//当前停留的位置
+	m_speakervol.SetLineSize(5);//一行的大小，对应键盘的方向键
+
+	int micvol = 0;
+	int ret = m_mediadevice->getRecordingDeviceVolume(&micvol);
+	m_micvol.SetPos(micvol);
+
+	int playvol = 0;
+	ret = m_mediadevice->getPlaybackDeviceVolume(&playvol);
+	m_speakervol.SetPos(playvol);
+
 	CRect comboxrect;
 	GetDlgItem(IDC_COMBO1)->GetWindowRect(&comboxrect);
 	ScreenToClient(comboxrect);
@@ -115,9 +137,29 @@ BOOL CDeviceTestDlg::OnInitDialog()
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
+void  CDeviceTestDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	if (pScrollBar)
+	{
+		if (pScrollBar->GetDlgCtrlID() == IDC_SLIDER_SPEAKER_VOL)
+		{
+			int res = m_speakervol.GetPos();
+			m_mediadevice->setPlaybackDeviceVolume(res);
+		}
+		else if (pScrollBar->GetDlgCtrlID() == IDC_SLIDER_MIC_VOL)
+		{
+			int res = m_micvol.GetPos();
+			m_mediadevice->setRecordingDeviceVolume(res);
+		}
+	}
+
+	CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
+}
+
 
 BEGIN_MESSAGE_MAP(CDeviceTestDlg, CDialogEx)
 	ON_WM_PAINT()
+	ON_WM_HSCROLL()
 	ON_MESSAGE(10001, &CDeviceTestDlg::OnAudioVol)
 	ON_BN_CLICKED(IDC_BUTTON_OK, &CDeviceTestDlg::OnBnClickedButtonOk)
 	ON_BN_CLICKED(IDC_BUTTON_CAM_TEST, &CDeviceTestDlg::OnBnClickedButtonCamTest)
@@ -233,3 +275,4 @@ void CDeviceTestDlg::OnBnClickedButtonSpeakerTest()
 	}
 	m_speakertest = !m_speakertest;
 }
+

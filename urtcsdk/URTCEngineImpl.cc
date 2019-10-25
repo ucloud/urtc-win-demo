@@ -89,6 +89,24 @@ int URTCEngineImpl::SetCodecType(int codec)
 	return -1;
 }
 
+int URTCEngineImpl::MuteCamBeforeJoin(bool mute)
+{
+	if (m_rtcengine)
+	{
+		return m_rtcengine->muteCamBeforeJoin(mute);
+	}
+	return -1;
+}
+
+int URTCEngineImpl::MuteMicBeforeJoin(bool mute)
+{
+	if (m_rtcengine)
+	{
+		return m_rtcengine->muteMicBeforeJoin(mute);
+	}
+	return -1;
+}
+
 int URTCEngineImpl::PublishStream(tRTCStreamInfo& streaminfo)
 {
 	if (m_rtcengine)

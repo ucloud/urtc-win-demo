@@ -141,6 +141,8 @@ BOOL CConfigDlg::OnInitDialog()
 
 	m_codectype.InsertString(0, L"VP8");
 	m_codectype.InsertString(1, L"H264");
+
+	m_codectype.SetCurSel(1);
 	return TRUE;
 }
 

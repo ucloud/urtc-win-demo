@@ -18,6 +18,12 @@ public:
 	void setSecKey(std::string key);
 	std::string getSecKey();
 
+	void setMuteCamBeforeJoin(bool mute);
+	bool getMuteCamBeforeJoin();
+
+	void setMuteMicBeforeJoin(bool mute);
+	bool getMuteMicBeforeJoin();
+
 	void setAutoPublish(bool isauto);
 	bool isAutoPublish();
 
@@ -71,6 +77,9 @@ private:
 	bool mPubVideo;
 	bool mPubAudio;
 	bool mPubScreen;
+
+	bool mMuteCamBeforeJoin;
+	bool mMuteMicBeforeJoin;
 
 	bool mAudioOnly;
 

@@ -29,4 +29,6 @@ public:
 	afx_msg void OnBnClickedButtonLogin();
 	afx_msg void OnBnClickedButtonDeviceTest();
 	afx_msg void OnBnClickedButtonSetting();
+	CButton m_mutecambefore;
+	CButton m_mutemicbefore;
 };

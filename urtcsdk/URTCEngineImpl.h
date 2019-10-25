@@ -21,6 +21,9 @@ public:
 	virtual int LeaveRoom(std::string& roomid);
 	virtual int SetCodecType(int codec);
 
+	virtual int MuteCamBeforeJoin(bool mute);
+	virtual int MuteMicBeforeJoin(bool mute);
+
 	virtual int PublishStream(tRTCStreamInfo& streaminfo) ;
 	virtual int UnPublishStream(tRTCStreamInfo& streaminfo) ;
 	virtual int StartLocalRender(tRTCRenderView& renderview);

@@ -32,6 +32,8 @@ void CLoginDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_SETTING, m_setting);
 	DDX_Control(pDX, IDC_EDIT_USERID, m_userid);
 	DDX_Control(pDX, IDC_EDIT_ROOMID, m_roomid);
+	DDX_Control(pDX, IDC_MUTE_CAM_BEFOREJOIN, m_mutecambefore);
+	DDX_Control(pDX, IDC_MUTE_MIC_BEFOREJOIN, m_mutemicbefore);
 }
 
 BOOL CLoginDlg::OnInitDialog()
@@ -76,6 +78,9 @@ void CLoginDlg::OnBnClickedButtonLogin()
 
 	URTCConfig::getInstance()->setUserId(userid);
 	URTCConfig::getInstance()->setRoomId(roomid);
+
+	URTCConfig::getInstance()->setMuteCamBeforeJoin(m_mutecambefore.GetCheck());
+	URTCConfig::getInstance()->setMuteMicBeforeJoin(m_mutemicbefore.GetCheck());
 
 	CSdkTestDemoDlg sdkdlg;
 	sdkdlg.DoModal();

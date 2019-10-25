@@ -15,6 +15,9 @@ public:
 	virtual int JoinRoom(tRTCAuthInfo& auth) = 0;
 	virtual int LeaveRoom(std::string& roomid) = 0;
 
+	virtual int MuteCamBeforeJoin(bool mute) = 0;
+	virtual int MuteMicBeforeJoin(bool mute) = 0;
+
 	virtual int PublishStream(tRTCStreamInfo& streaminfo) = 0;
 	virtual int UnPublishStream(tRTCStreamInfo& streaminfo) = 0;
 	virtual int StartLocalRender(tRTCRenderView& renderview) = 0;
