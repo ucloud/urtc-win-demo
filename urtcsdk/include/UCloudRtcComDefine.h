@@ -134,7 +134,6 @@ typedef enum {
 	UCLOUD_RTC_CHANNEL_TYPE_COMMUNICATION
 }eUCloudRtcChannelType;
 
-
 //stream role 
 typedef enum {
 	UCLOUD_RTC_USER_STREAM_ROLE_PUB, // up
@@ -151,7 +150,7 @@ typedef enum {
 typedef enum {
 	UCLOUD_RTC_CODEC_VP8 = 1, //default
 	UCLOUD_RTC_CODEC_H264
-} eUCloudRtcCodec;
+} eUCloudRtcVideoCodec;
 
 // render view
 typedef struct
@@ -230,15 +229,6 @@ class _EXPORT_API UCloudRtcVideoFrameObserver
 {
 public:
 	virtual  void onCaptureFrame(unsigned char* videoframe, int buflen) = 0;
-};
-
-class  _EXPORT_API UCloudRtcVideoExtendRender
-{
-public:
-	virtual void onLocalVideoFrame(const char* uid, eUCloudRtcMeidaType mtype,
-		tUCloudRtcI420VideoFrame* videoframe) {}
-	virtual void onRemoteVideoFrame(const char* uid, eUCloudRtcMeidaType mtype, 
-		tUCloudRtcI420VideoFrame* videoframe) {}
 };
 
 #endif

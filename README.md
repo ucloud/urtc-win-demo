@@ -14,6 +14,8 @@ URTCWin 是UCloud推出的一款适用于 Windows 平台的实时音视频 SDK�
 * 支持编码镜像功能		
 * 支持屏幕录制功能	
 * 支持RTC 直播模式
+* 支持同时拉两路rtsp 视频流 替换 摄像头和桌面采集
+* 支持设置编码格式（编码支持 vp8 h264）
 ## 2.2 增值功能
 * 电子白板
 * 终端智能测试（摄像头、麦克风、网络、播放器）
@@ -80,7 +82,7 @@ UcloudRtcEventListener* eventhandler = new UcloudRtcEventListenerImpl
 
 m_rtcengine = UCloudRtcEngine::sharedInstance(eventhandler);
 m_rtcengine->setSdkMode(UCLOUD_RTC_SDK_MODE_TRIVAL);
-m_rtcengine->setChannelTy(UCLOUD_RTC_CHANNEL_TYPE_COMMUNICATION);
+m_rtcengine->setChannelTye(UCLOUD_RTC_CHANNEL_TYPE_COMMUNICATION);
 m_rtcengine->setStreamRole(UCLOUD_RTC_USER_STREAM_ROLE_BOTH);
 m_rtcengine->setTokenSecKey(TEST_SECKEY);//测试模式下设置自己的秘钥
 m_rtcengine->setAudioOnlyMode(false);

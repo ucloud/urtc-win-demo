@@ -48,3 +48,122 @@ m_mediadevice->InitVideoMoudle();
 ``` c++
 UCloudRtcEngine *sharedInstance(UCloudRtcEventListener* listener)更改为 UCloudRtcEngine *sharedInstance() 事件监听通过regRtcEventListener(UCloudRtcEventListener* listener)进行注册 
 ``` 
+# 1.4 版本
+## 功能更新
+* 1 优化抗丢包能力，减少卡顿率
+* 2 完善日志上报，提供更完善的监控指标查看
+* 3 桌面采集和摄像头采集 支持rtsp 视频输入替换
+调用如下：
+``` c++  
+type 表示替换摄像头还是摄像头  enable true 代表启用功能 rtspurl：要输入的url 地址  支持（vp8 h264编码格式）
+virtual int enableExtendRtspVideocapture(eUCloudRtcMeidaType type, bool enable, const char* rtspurl) = 0;
+``` 
+* 4 增加入会前mute 摄像头和麦克风入会，适应更多场景需求
+接口如下：
+``` c++  
+virtual int muteCamBeforeJoin(bool mute) = 0; // mute 摄像头
+virtual int muteMicBeforeJoin(bool mute) = 0; // mute 麦克风
+``` 
+* 5 增加静音接口 以及会中切换摄像头功能
+``` c++  
+virtual int enableAllAudioPlay(bool enable) = 0; // 关闭应用声音
+virtual int switchCamera(tUCloudRtcDeviceInfo& info) = 0; // 切换摄像头
+``` 
+* 6 增加编码格式设置支持 vp8 h264 下个版本计划支持hevc 编码
+``` c++  
+virtual int setVideoCodec(eUCloudRtcCodec codec) = 0; // 初始化后调用
+``` 
+* 7 增加渲染方式渲染  支持 gdi directx 渲染方式
+通过view 里面的 mRenderType设置
+``` c++  
+virtual int startPreview(tUCloudRtcVideoCanvas& view) = 0;
+virtual int startRemoteView(tUCloudRtcVideoCanvas& view) = 0;
+``` 
+* 8 录制接口 支持设置自己的 bucket region  
+``` c++ 
+调用如下： 
+tUCloudRtcRecordConfig recordconfig;
+recordconfig.mMainviewmediatype = UCLOUD_RTC_MEDIATYPE_VIDEO; // 主画面类型
+recordconfig.mMainviewuid = m_userid.data(); // 主画面
+recordconfig.mProfile = UCLOUD_RTC_RECORDPROFILE_SD; // 录制等级
+recordconfig.mRecordType = UCLOUD_RTC_RECORDTYPE_AUDIOVIDEO;
+recordconfig.mWatermarkPos = UCLOUD_RTC_WATERMARKPOS_LEFTTOP;
+recordconfig.mBucket = "your bucket";
+recordconfig.mBucketRegion = "your region";
+m_rtcengine->startRecord(recordconfig);
+``` 
+## 接口变更
+* 1 开始录制回调接口  回调增加录制文件名 bucket region 参数方便用户保持录制信息到自己的业务服务器
+``` c++ 
+virtual void onStartRecord(const int code, const char* msg, const char* recordid) {}
+变更为
+virtual void onStartRecord(const int code, const char* msg, tUCloudRtcRecordInfo& info) {}
+``` 
+* 2 设备测试模块 
+``` c++ 
+增加接口
+virtual int setVideoDevice(tUCloudRtcDeviceInfo* info) = 0;
+virtual int setRecordDevice(tUCloudRtcDeviceInfo* info) = 0;
+virtual int setPlayoutDevice(tUCloudRtcDeviceInfo* info) = 0;
+音频测试接口去掉了 id 设置  前提通过上面接口进行设备设置 然后调用测试接口
+virtual int startRecordingDeviceTest(UCloudRtcAudioLevelListener* audiolevel) = 0;
+virtual int startPlaybackDeviceTest(const char* testAudioFilePath) = 0;
+``` 
+``` c++ 
+设备初始化大体流程如下
+m_mediacallback = new MediaCallback(this->GetSafeHwnd());
+m_mediadevice = UCloudRtcMediaDevice::sharedInstance();
+
+m_mediadevice->InitAudioMoudle();
+m_mediadevice->InitVideoMoudle();
+
+int num = m_mediadevice->getCamNums();
+for (int i=0; i<num; i++)
+{
+    tUCloudRtcDeviceInfo info;
+    memset(&info, 0, sizeof(tUCloudRtcDeviceInfo));
+    int ret = m_mediadevice->getVideoDevInfo(i, &info);
+    if (ret == 0)
+    {
+        m_videolist.push_back(info);
+        m_videocom.AddString(Utf8ToWide(info.mDeviceName).data());
+    }
+}
+int audionum = m_mediadevice->getRecordDevNums();
+for (int i = 0; i < audionum; i++)
+{
+    tUCloudRtcDeviceInfo info;
+    memset(&info, 0, sizeof(tUCloudRtcDeviceInfo));
+    int ret = m_mediadevice->getRecordDevInfo(i, &info);
+    if (ret == 0)
+    {
+        if (i == 0)
+        {
+            m_mediadevice->setRecordDevice(&info);
+        }
+    }
+}
+
+int speakernum = m_mediadevice->getPlayoutDevNums();
+for (int i = 0; i < audionum; i++)
+{
+    tUCloudRtcDeviceInfo info;
+    memset(&info, 0, sizeof(tUCloudRtcDeviceInfo));
+    int ret = m_mediadevice->getPlayoutDevInfo(i, &info);
+    if (ret == 0)
+    {
+        if (i == 0)
+        {
+            m_mediadevice->setPlayoutDevice(&info);
+        }
+    }
+}
+
+int micvol = 0;
+int ret = m_mediadevice->getRecordingDeviceVolume(&micvol);
+m_micvol.SetPos(micvol);
+
+int playvol = 0;
+ret = m_mediadevice->getPlaybackDeviceVolume(&playvol);
+m_speakervol.SetPos(playvol);
+``` 

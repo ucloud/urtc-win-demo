@@ -62,7 +62,7 @@ public:
 	virtual void setTokenSecKey(const char* seckey) = 0;
 	virtual int setAutoPublishSubscribe(bool autoPub, bool autoSub) = 0;
 	virtual int setAudioOnlyMode(bool audioOnly) = 0;
-	virtual int setVideoCodec(eUCloudRtcCodec codec) = 0;
+	virtual int setVideoCodec(eUCloudRtcVideoCodec codec) = 0;
 
 	virtual int switchCamera(tUCloudRtcDeviceInfo& info) = 0;
 	virtual int enableExtendRtspVideocapture(eUCloudRtcMeidaType type, bool enable, const char* rtspurl) = 0;
