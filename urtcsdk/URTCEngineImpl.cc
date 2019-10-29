@@ -142,10 +142,7 @@ int URTCEngineImpl::StopLocalRender(tRTCRenderView& renderview)
 	if (m_rtcengine)
 	{
 		tUCloudRtcVideoCanvas canvas;
-		canvas.mUserId = renderview.mUserid.data();
 		canvas.mStreamMtype = (eUCloudRtcMeidaType)renderview.mStreamMtype;
-		canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
-		canvas.mVideoView = renderview.mVidoview;
 		return m_rtcengine->stopPreview(canvas);
 	}
 	return -1;

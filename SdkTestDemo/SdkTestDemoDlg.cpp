@@ -1357,25 +1357,99 @@ void CSdkTestDemoDlg::OnMessageShow(std::string msg) {
 
 void CSdkTestDemoDlg::OnBnClickedButtonRecord()
 {
-	if (m_rtcengine)
+	tRTCRenderView canvas;
+	canvas.mVidoview = (int)m_localWnd->GetVideoHwnd();
+	canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
+	canvas.mUserid = m_userid;
+	canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
+	canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;
+	m_rtcengine->StopLocalRender(canvas);
+
+	CVideoWnd* videoview = nullptr;
+	videowndit wnit = m_remoteWnds.begin();
+	if (wnit != m_remoteWnds.end() )
 	{
-		if (m_startrecord)
-		{
-			m_rtcengine->StopRecord();
-		}
-		else
-		{
-			tRecordConfig recordconfig;
-			recordconfig.mMainviewmediatype = 1;
-			recordconfig.mMainviewuid = m_userid.data();
-			recordconfig.mProfile = 1;
-			recordconfig.mRecordType = 2;
-			recordconfig.mWatermarkPos = 1;
-			recordconfig.mBucket = "urtc-test";
-			recordconfig.mBucketRegion = "cn-bj";
-			m_rtcengine->StartRecord(recordconfig);
-		}
+		videoview = *wnit;
+
+		tRTCRenderView rcanvas;
+		rcanvas.mVidoview = (int)videoview->GetVideoHwnd();
+		rcanvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
+		rcanvas.mUserid = videoview->GetUserId();
+		rcanvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
+		rcanvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;
+		m_rtcengine->StopRemoteRender(rcanvas);
 	}
+
+	/*tRTCRenderView ccanvas;
+	ccanvas.mVidoview = (int)videoview->GetSafeHwnd();
+	ccanvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
+	ccanvas.mUserid = m_userid;
+	ccanvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
+	ccanvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;
+	m_rtcengine->StartLocalRender(ccanvas);
+
+	tRTCRenderView nscanvas;
+	nscanvas.mVidoview = (int)m_localWnd->GetSafeHwnd();
+	nscanvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
+	nscanvas.mUserid = videoview->GetUserId();
+	nscanvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
+	nscanvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;
+	m_rtcengine->StartLocalRender(nscanvas);*/
+	
+
+	/*tRTCRenderView scanvas;
+	scanvas.mVidoview = (int)m_screenWnd->GetVideoHwnd();
+	scanvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
+	scanvas.mUserid = m_userid;
+	scanvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_SCREEN;
+	scanvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;
+	m_rtcengine->StopLocalRender(scanvas);
+
+	tRTCRenderView ncanvas;
+	ncanvas.mVidoview = (int)m_screenWnd->GetVideoHwnd();
+	ncanvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
+	ncanvas.mUserid = m_userid;
+	ncanvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
+	ncanvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;
+	m_rtcengine->StartLocalRender(ncanvas);
+
+	tRTCRenderView nscanvas;
+	nscanvas.mVidoview = (int)m_localWnd->GetVideoHwnd();
+	nscanvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
+	nscanvas.mUserid = m_userid;
+	nscanvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_SCREEN;
+	nscanvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;
+	m_rtcengine->StartLocalRender(nscanvas);*/
+
+	/*tRTCRenderView canvas;
+	canvas.mVidoview = (int)GetSafeHwnd();
+	canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
+	canvas.mUserid = m_userid;
+	canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
+	canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;*/
+
+	//m_rtcengine->StartLocalRender(canvas);
+
+
+	//if (m_rtcengine)
+	//{
+	//	if (m_startrecord)
+	//	{
+	//		m_rtcengine->StopRecord();
+	//	}
+	//	else
+	//	{
+	//		tRecordConfig recordconfig;
+	//		recordconfig.mMainviewmediatype = 1;
+	//		recordconfig.mMainviewuid = m_userid.data();
+	//		recordconfig.mProfile = 1;
+	//		recordconfig.mRecordType = 2;
+	//		recordconfig.mWatermarkPos = 1;
+	//		recordconfig.mBucket = "urtc-test";
+	//		recordconfig.mBucketRegion = "cn-bj";
+	//		m_rtcengine->StartRecord(recordconfig);
+	//	}
+	//}
 }
 
 
