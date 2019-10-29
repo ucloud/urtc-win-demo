@@ -33,6 +33,18 @@ typedef struct
 }tUCloudRtcScreenPargram;
 
 typedef enum {
+	UCLOUD_RTC_DESKTOPTYPE_SCREEN = 1,
+	UCLOUD_RTC_DESKTOPTYPE_WINDOW
+}eUCloudRtcDesktopType;
+
+typedef struct
+{
+	eUCloudRtcDesktopType mType;
+	int mDesktopId;
+	char mDesktopTitle[MAX_WINDOWS_TILE_LEN];
+}tUCloudRtcDeskTopInfo;
+
+typedef enum {
 	UCLOUD_RTC_TRACKTYPE_AUDIO = 0,
 	UCLOUD_RTC_TRACKTYPE_VIDEO = 1
 }eUCloudRtcTrackType;

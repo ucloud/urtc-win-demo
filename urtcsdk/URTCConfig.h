@@ -51,8 +51,8 @@ public:
 	void setSdkMode(eUCloudRtcSdkMode mode);
 	eUCloudRtcSdkMode getSdkMode();
 
-	void setCodecType(eUCloudRtcCodec codec);
-	eUCloudRtcCodec getCodecType();
+	void setCodecType(eUCloudRtcVideoCodec codec);
+	eUCloudRtcVideoCodec getCodecType();
 
 	void setAppId(std::string appid);
 	std::string getAppId();
@@ -87,7 +87,7 @@ private:
 	eUCloudRtcSdkMode mSdkMode;
 
 	eUCloudRtcChannelType mChannelType;
-	eUCloudRtcCodec mCodec;
+	eUCloudRtcVideoCodec mCodec;
 	std::string mAppid;
 
 	std::string mUserid;

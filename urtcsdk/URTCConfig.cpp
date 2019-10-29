@@ -154,12 +154,12 @@ eUCloudRtcSdkMode URTCConfig::getSdkMode()
 	return this->mSdkMode;
 }
 
-void URTCConfig::setCodecType(eUCloudRtcCodec codec)
+void URTCConfig::setCodecType(eUCloudRtcVideoCodec codec)
 {
 	this->mCodec = codec;
 }
 
-eUCloudRtcCodec URTCConfig::getCodecType()
+eUCloudRtcVideoCodec URTCConfig::getCodecType()
 {
 	return this->mCodec;
 }

@@ -64,7 +64,6 @@ public:
 	virtual int setAudioOnlyMode(bool audioOnly) = 0;
 	virtual int setVideoCodec(eUCloudRtcVideoCodec codec) = 0;
 
-	virtual int switchCamera(tUCloudRtcDeviceInfo& info) = 0;
 	virtual int enableExtendRtspVideocapture(eUCloudRtcMeidaType type, bool enable, const char* rtspurl) = 0;
 	virtual int enableExtendVideocapture(bool enable, UCloudRtcExtendVideoCaptureSource* videocapture) = 0;
 	virtual int startAudioMixing(const char* filepath, bool replace, bool loop,float musicvol) = 0;
@@ -74,13 +73,18 @@ public:
 	virtual int joinChannel(tUCloudRtcAuth& auth) = 0;
 	virtual int leaveChannel() = 0;
 
-	virtual void setVideoProfile(eUCloudRtcVideoProfile profile) = 0;
-	virtual int  getDesktopNums() = 0;
-	virtual void setCaptureScreenPagrams(tUCloudRtcScreenPargram& pgram) = 0;
+	virtual int getDesktopNums() = 0;
+	virtual int getDesktopInfo(int pos, tUCloudRtcDeskTopInfo& info) = 0;
+	virtual int getWindowNums() = 0;
+	virtual int getWindowInfo(int pos, tUCloudRtcDeskTopInfo& info) = 0;
+	virtual int setUseDesktopCapture(eUCloudRtcDesktopType desktoptype) = 0;
 	virtual void setDesktopProfile(eUCloudRtcScreenProfile profile) = 0;
+	virtual void setCaptureScreenPagrams(tUCloudRtcScreenPargram& pgram) = 0;
 
 	virtual int muteCamBeforeJoin(bool mute) = 0;
 	virtual int muteMicBeforeJoin(bool mute) = 0;
+	virtual void setVideoProfile(eUCloudRtcVideoProfile profile) = 0;
+	virtual int switchCamera(tUCloudRtcDeviceInfo& info) = 0;
 	virtual int publish(eUCloudRtcMeidaType type, bool hasvideo, bool hasaudio) = 0; 
 	virtual int unPublish(eUCloudRtcMeidaType type) = 0;
 	virtual int startPreview(tUCloudRtcVideoCanvas& view) = 0;

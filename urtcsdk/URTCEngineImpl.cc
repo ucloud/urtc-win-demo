@@ -84,7 +84,7 @@ int URTCEngineImpl::SetCodecType(int codec)
 {
 	if (m_rtcengine)
 	{
-		return m_rtcengine->setVideoCodec((eUCloudRtcCodec)codec);
+		return m_rtcengine->setVideoCodec((eUCloudRtcVideoCodec)codec);
 	}
 	return -1;
 }

@@ -283,7 +283,7 @@ void CConfigDlg::OnBnClickedButtonSave()
 		URTCConfig::getInstance()->setAutoPubScreen(false);
 	}
 
-	URTCConfig::getInstance()->setCodecType((eUCloudRtcCodec)
+	URTCConfig::getInstance()->setCodecType((eUCloudRtcVideoCodec)
 		(m_codectype.GetCurSel() + 1));
 	
 	CDialogEx::OnOK();
