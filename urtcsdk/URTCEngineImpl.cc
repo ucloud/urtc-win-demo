@@ -56,6 +56,15 @@ std::string URTCEngineImpl::getSdkVersion()
 	return "";
 }
 
+int URTCEngineImpl::EnableRtspSource(int mediatype, bool enable, std::string rtspurl)
+{
+	if (m_rtcengine)
+	{
+		return m_rtcengine->enableExtendRtspVideocapture((eUCloudRtcMeidaType)mediatype,
+			enable, rtspurl.data());
+	}
+	return -1;
+}
 
 int URTCEngineImpl::JoinRoom(tRTCAuthInfo& auth)
 {

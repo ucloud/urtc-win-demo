@@ -132,4 +132,6 @@ public:
 	bool m_startaudiomix;
 	afx_msg void OnBnClickedButtonRecord();
 	afx_msg void OnBnClickedButtonMixfile();
+	CEdit m_rtsp1;
+	CEdit m_rtsp2;
 };

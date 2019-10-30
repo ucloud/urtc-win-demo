@@ -15,7 +15,7 @@ public:
 	virtual int UnInitRTCEngine() ;
 
 	virtual std::string getSdkVersion();
-
+	virtual int EnableRtspSource(int mediatype, bool enable, std::string rtspurl);
 
 	virtual int JoinRoom(tRTCAuthInfo& auth);
 	virtual int LeaveRoom(std::string& roomid);

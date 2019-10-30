@@ -97,6 +97,8 @@ void CSdkTestDemoDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST2, m_msglist);
 	DDX_Control(pDX, IDC_CHECK_VIDEO, m_videocheck);
 	DDX_Control(pDX, IDC_CHECK_AUDIO, m_audiocheck);
+	DDX_Control(pDX, IDC_EDIT_RTSP1, m_rtsp1);
+	DDX_Control(pDX, IDC_EDIT_RTSP2, m_rtsp2);
 }
 
 CVideoWnd* CSdkTestDemoDlg::CreateVideoWindow(eUCloudRtcMeidaType type, int x, int y, int w, int h) {
@@ -178,7 +180,7 @@ END_MESSAGE_MAP()
 BOOL CSdkTestDemoDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	std::string channel = "channel_" + URTCConfig::getInstance()->getRoomId();
+	std::string channel = "userid_" + m_userid+ "@channel_" + URTCConfig::getInstance()->getRoomId();
 	this->SetWindowTextW(Ansi2WChar(channel.data()).data());
 	//InitMinDump();
 
@@ -187,11 +189,8 @@ BOOL CSdkTestDemoDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
-	// TODO: 在此添加额外的初始化代码
-	SetDlgItemText(IDC_EDIT_USERID, Ansi2WChar(m_userid.data()).data());
-
 	CRect rcBtn;
-	GetDlgItem(IDC_EDIT_USERID)->GetWindowRect(&rcBtn);
+	GetDlgItem(IDC_BUTTON_LEAVEROOM)->GetWindowRect(&rcBtn);
 	ScreenToClient(rcBtn);
 	int y = rcBtn.bottom + 2;
 
@@ -1304,6 +1303,18 @@ void CSdkTestDemoDlg::OnBnClickedButtonPubC()
 		info.mEnableData = false;
 		info.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
 		info.mUserid = m_userid;
+		CString text;
+		GetDlgItemText(IDC_EDIT_RTSP1, text);
+		std::string utf8name = WChatToUTF8Str(text.GetBuffer());
+		char* rtspurl = const_cast<char*> (utf8name.data());
+		if (strlen(rtspurl) > 0)
+		{
+			m_rtcengine->EnableRtspSource(UCLOUD_RTC_MEDIATYPE_VIDEO, true, rtspurl);
+		}
+		else 
+		{
+			m_rtcengine->EnableRtspSource(UCLOUD_RTC_MEDIATYPE_VIDEO, false, "");
+		}
 		int ret = m_rtcengine->PublishStream(info);
 	}
 }
@@ -1342,6 +1353,18 @@ void CSdkTestDemoDlg::OnBnClickedButtonPubs()
 		info.mEnableData = false;
 		info.mStreamMtype = UCLOUD_RTC_MEDIATYPE_SCREEN;
 		info.mUserid = m_userid;
+		CString text;
+		GetDlgItemText(IDC_EDIT_RTSP2, text);
+		std::string utf8name = WChatToUTF8Str(text.GetBuffer());
+		char* rtspurl = const_cast<char*> (utf8name.data());
+		if (strlen(rtspurl) > 0)
+		{
+			m_rtcengine->EnableRtspSource(UCLOUD_RTC_MEDIATYPE_SCREEN, true, rtspurl);
+		}
+		else
+		{
+			m_rtcengine->EnableRtspSource(UCLOUD_RTC_MEDIATYPE_SCREEN, false, "");
+		}
 		int ret = m_rtcengine->PublishStream(info);
 		m_screenWnd->SetUserId("screen");
 	}
@@ -1388,7 +1411,6 @@ void CSdkTestDemoDlg::OnBnClickedButtonMixfile()
 			m_rtcengine->StopMixFile();
 			m_startaudiomix = false;
 		}
-		
 	}
 	else 
 	{
