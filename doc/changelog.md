@@ -201,5 +201,5 @@ pgram.mWidth = 0;
 pgram.mHeight = 0;
 m_rtcengine->setCaptureScreenPagrams(pgram);
 ``` 
-* 10 声音采集添加3通道支持 通道支持个数包括 1 2 3 4 播放支持 1 2 通道
+* 11 声音采集添加3通道支持 通道支持个数包括 1 2 3 4 播放支持 1 2 通道
 
