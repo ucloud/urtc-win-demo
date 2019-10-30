@@ -69,7 +69,7 @@ virtual int muteMicBeforeJoin(bool mute) = 0; // mute 麦克风
 virtual int enableAllAudioPlay(bool enable) = 0; // 关闭应用声音
 virtual int switchCamera(tUCloudRtcDeviceInfo& info) = 0; // 切换摄像头
 ``` 
-* 6 增加编码格式设置支持 vp8 h264 下个版本计划支持hevc 编码
+* 6 增加编码格式设置支持 vp8 h264（264支持硬编解码  1080p25帧编码只需 15%CPU， 满足同时两路1080p 上传）
 ``` c++  
 virtual int setVideoCodec(eUCloudRtcCodec codec) = 0; // 初始化后调用
 ``` 
@@ -167,3 +167,39 @@ int playvol = 0;
 ret = m_mediadevice->getPlaybackDeviceVolume(&playvol);
 m_speakervol.SetPos(playvol);
 ``` 
+* 9 桌面采集增加窗口采集功能，调用用下
+``` c++ 
+m_rtcengine->setUseDesktopCapture(UCLOUD_RTC_DESKTOPTYPE_SCREEN); // 必须先调用 决定采集窗口还是桌面
+int num = m_rtcengine->getWindowNums();// 获取窗口数量
+for(int i=0; i<num; i++)
+{
+    //m_rtcengine->getWindowInfo(i, info); 
+}
+m_rtcengine->getWindowInfo(0, info); 
+tUCloudRtcScreenPargram pgram;
+pgram.mScreenindex = info.mDesktopId; //窗口标识  
+pgram.mXpos = 0;
+pgram.mYpos = 0;
+pgram.mWidth = 0;
+pgram.mHeight = 0;
+m_rtcengine->setCaptureScreenPagrams(pgram);
+``` 
+* 10 桌面采集增加获取信息功能
+``` c++ 
+m_rtcengine->setUseDesktopCapture(UCLOUD_RTC_DESKTOPTYPE_SCREEN); // 必须先调用 决定采集窗口还是桌面
+int num = m_rtcengine->getDesktopNums();// 获取桌面数量
+for(int i=0; i<num; i++)
+{
+   // m_rtcengine->getDesktopInfo(i, info);
+}
+m_rtcengine->getDesktopInfo(0, info); 
+tUCloudRtcScreenPargram pgram;
+pgram.mScreenindex = info.mDesktopId; //桌面标识  
+pgram.mXpos = 0;
+pgram.mYpos = 0;
+pgram.mWidth = 0;
+pgram.mHeight = 0;
+m_rtcengine->setCaptureScreenPagrams(pgram);
+``` 
+* 10 声音采集添加3通道支持 通道支持个数包括 1 2 3 4 播放支持 1 2 通道
+

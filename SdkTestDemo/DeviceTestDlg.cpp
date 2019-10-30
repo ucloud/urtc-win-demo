@@ -57,7 +57,7 @@ BOOL CDeviceTestDlg::OnInitDialog()
 		if (ret == 0)
 		{
 			m_videolist.push_back(info);
-			m_videocom.AddString(Utf8ToWide(info.mDeviceName).data());
+			m_videocom.InsertString(i,Utf8ToWide(info.mDeviceName).data());
 		}
 	}
 
@@ -74,7 +74,7 @@ BOOL CDeviceTestDlg::OnInitDialog()
 				m_mediadevice->setRecordDevice(&info);
 			}
 			m_miclist.push_back(info) ;
-			m_miccom.AddString(Utf8ToWide(info.mDeviceName).data());
+			m_miccom.InsertString(i, Utf8ToWide(info.mDeviceName).data());
 		}
 	}
 
@@ -91,7 +91,7 @@ BOOL CDeviceTestDlg::OnInitDialog()
 				m_mediadevice->setPlayoutDevice(&info);
 			}
 			m_spkeakerlist.push_back(info);
-			m_speaker.AddString(Utf8ToWide(info.mDeviceName).data());
+			m_speaker.InsertString(i,Utf8ToWide(info.mDeviceName).data());
 		}
 	}
 	m_micenypro.SetRange(0, 255);

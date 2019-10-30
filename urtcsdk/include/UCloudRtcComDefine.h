@@ -45,8 +45,8 @@ typedef struct
 }tUCloudRtcDeskTopInfo;
 
 typedef enum {
-	UCLOUD_RTC_TRACKTYPE_AUDIO = 0,
-	UCLOUD_RTC_TRACKTYPE_VIDEO = 1
+	UCLOUD_RTC_TRACKTYPE_AUDIO = 1,
+	UCLOUD_RTC_TRACKTYPE_VIDEO 
 }eUCloudRtcTrackType;
 
 typedef enum {
