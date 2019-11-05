@@ -130,7 +130,31 @@ m_rtcengine->subscribe(tUCloudRtcStreamInfo & info)
 m_rtcengine->unSubscribe(tUCloudRtcStreamInfo& info)
 ```
 
-## 5.8 离开房间
+### 5.8 录制视频
+
+```c++
+tUCloudRtcRecordConfig recordconfig;
+recordconfig.mMainviewmediatype = UCLOUD_RTC_MEDIATYPE_VIDEO; // 主画面类型
+recordconfig.mMainviewuid = m_userid.data(); // 主画面
+recordconfig.mProfile = UCLOUD_RTC_RECORDPROFILE_SD; // 录制等级
+recordconfig.mRecordType = UCLOUD_RTC_RECORDTYPE_AUDIOVIDEO;
+recordconfig.mWatermarkPos = UCLOUD_RTC_WATERMARKPOS_LEFTTOP;
+recordconfig.mBucket = "your bucket";
+recordconfig.mBucketRegion = "your bucket region";
+m_rtcengine->startRecord(recordconfig);
+
+消息回调
+//开启录制回调
+virtual void onStartRecord (const int code, const char* msg, tUCloudRtcRecordInfo& info) {}
+``` 
+
+### 5.9 添加背景音（mp3 wav 格式）
+
+```c++
+m_rtcengine->startAudioMixing(const char* filepath(本地文件), bool replace（是否取代麦克风输入）, bool loop（是否循环播放）,float musicvol（音乐音量 0.0 -- 1.0）)
+``` 
+
+## 5.10 离开房间
 ``` c++
 m_rtcengine->leaveChannel ()
 ```
