@@ -1,7 +1,6 @@
 #include"SdkUtil.h"
 #include <windows.h>
 #include <time.h>
-#include "json/json.h"
 
 std::string get_randrom_string(int length)
 {

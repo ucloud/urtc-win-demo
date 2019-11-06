@@ -7,8 +7,12 @@
 #include "afxdialogex.h"
 #include "URTCConfig.h"
 #include "SdkUtil.h"
-#include "json/json.h"
 #include "RTCEventDefine.h"
+
+#include "rapidjson/document.h"
+#include "rapidjson/prettywriter.h"  
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -362,383 +366,405 @@ HRESULT CSdkTestDemoDlg::OnRTCUCloudMsg(WPARAM data, LPARAM lp)
 }
 
 void CSdkTestDemoDlg::OnJoinRoomHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	int code = retObj["code"].asInt();
-	std::string msg = retObj["msg"].asString();
-	if (code == 0)
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		GetDlgItem(IDC_BUTTON_LEAVEROOM)->EnableWindow(true);
-		GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(true);
-		GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(true);
-		GetDlgItem(IDC_BUTTON_RECORD)->EnableWindow(true);
-		GetDlgItem(IDC_BUTTON_MIXFILE)->EnableWindow(true);
-		OnMessageShow("加入房间成功");
-	}
-	else {
-		char num[32] = { 0 };
-		sprintf_s(num, " err code = %d", code);
-		std::string errcode = num;
-		std::string desc = "加入房间失败 " + msg + " " + errcode;
-		OnMessageShow(desc);
+		int code = doc["code"].GetInt();
+		std::string msg = doc["msg"].GetString();
+		if (code == 0)
+		{
+			GetDlgItem(IDC_BUTTON_LEAVEROOM)->EnableWindow(true);
+			GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(true);
+			GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(true);
+			GetDlgItem(IDC_BUTTON_RECORD)->EnableWindow(true);
+			GetDlgItem(IDC_BUTTON_MIXFILE)->EnableWindow(true);
+			OnMessageShow("加入房间成功");
+		}
+		else {
+			char num[32] = { 0 };
+			sprintf_s(num, " err code = %d", code);
+			std::string errcode = num;
+			std::string desc = "加入房间失败 " + msg + " " + errcode;
+			OnMessageShow(desc);
+		}
 	}
 }
 
 void CSdkTestDemoDlg::OnReJoinFailHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
-	int code = retObj["code"].asInt();
-	std::string msg = retObj["msg"].asString();
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
+	{
+		int code = doc["code"].GetInt();
+		std::string msg = doc["msg"].GetString();
 
-	char num[32] = { 0 };
-	sprintf_s(num, " err code = %d", code);
-	std::string errcode = num;
-	std::string desc = "重新加入房间失败 " + msg + " " + errcode;
-	OnMessageShow(desc);
+		char num[32] = { 0 };
+		sprintf_s(num, " err code = %d", code);
+		std::string errcode = num;
+		std::string desc = "重新加入房间失败 " + msg + " " + errcode;
+		OnMessageShow(desc);
+	}
 }
 
 void CSdkTestDemoDlg::OnReJoinRoomHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 	OnMessageShow("重连成功");
 }
 
 void CSdkTestDemoDlg::OnLeaveRoomHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	int code = retObj["code"].asInt();
-	std::string msg = retObj["msg"].asString();
-	if (code == 0)
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		GetDlgItem(IDC_BUTTON_LEAVEROOM)->EnableWindow(false);
-		SetDlgItemText(IDC_BUTTON_PUBC, L"发布媒体");
-		SetDlgItemText(IDC_BUTTON_PUBS, L"发布桌面");
-		GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(false);
-		GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(false);
-		GetDlgItem(IDC_BUTTON_RECORD)->EnableWindow(false);
-		GetDlgItem(IDC_BUTTON_MIXFILE)->EnableWindow(false);
-		OnMessageShow("退出房间成功");
-	}
-	else 
-	{
-		char num[32] = { 0 };
-		sprintf_s(num, " err code = %d", code);
-		std::string errcode = num;
-		std::string desc = "退出房间失败 " + msg + " " + errcode;
-		OnMessageShow(desc);
-	}
-	// 释放所有资源
-	m_localWnd->setUsed(false);
-	m_screenWnd->setUsed(false);
-	ReleaseUserAllRes();
+		int code = doc["code"].GetInt();
+		std::string msg = doc["msg"].GetString();
 
-	// 关闭窗口离开房间
-	OnLeaveRoom();
+		if (code == 0)
+		{
+			GetDlgItem(IDC_BUTTON_LEAVEROOM)->EnableWindow(false);
+			SetDlgItemText(IDC_BUTTON_PUBC, L"发布媒体");
+			SetDlgItemText(IDC_BUTTON_PUBS, L"发布桌面");
+			GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(false);
+			GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(false);
+			GetDlgItem(IDC_BUTTON_RECORD)->EnableWindow(false);
+			GetDlgItem(IDC_BUTTON_MIXFILE)->EnableWindow(false);
+			OnMessageShow("退出房间成功");
+		}
+		else
+		{
+			char num[32] = { 0 };
+			sprintf_s(num, " err code = %d", code);
+			std::string errcode = num;
+			std::string desc = "退出房间失败 " + msg + " " + errcode;
+			OnMessageShow(desc);
+		}
+		// 释放所有资源
+		m_localWnd->setUsed(false);
+		m_screenWnd->setUsed(false);
+		ReleaseUserAllRes();
+
+		// 关闭窗口离开房间
+		OnLeaveRoom();
+	}
 }
 
 void CSdkTestDemoDlg::OnPulibshStreamHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	int mtype = retObj["data"]["mtype"].asInt();
-	if (mtype == UCLOUD_RTC_MEDIATYPE_VIDEO)
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		OnPulibshCamStreamHandler(jsonmsg);
+		const rapidjson::Value& object = doc["data"];
+		int mtype = object["mtype"].GetInt();
+		if (mtype == UCLOUD_RTC_MEDIATYPE_VIDEO)
+		{
+			OnPulibshCamStreamHandler(jsonmsg);
+		}
+		else {
+			OnPulibshScreenStreamHandler(jsonmsg);
+		}
 	}
-	else {
-		OnPulibshScreenStreamHandler(jsonmsg);
-	}
-
 }
 
 void CSdkTestDemoDlg::OnPulibshCamStreamHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	int code = retObj["code"].asInt();
-	std::string msg = retObj["msg"].asString();
-	if (code == 0)
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		SetDlgItemText(IDC_BUTTON_PUBC, L"停止发布");
-		OnMessageShow("摄像头发布成功");
-		tRTCRenderView canvas;
-		canvas.mVidoview = (int)m_localWnd->GetVideoHwnd();
-		canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
-		canvas.mUserid = m_userid;
-		canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
-		canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_GDI;
+		int code = doc["code"].GetInt();
+		std::string msg = doc["msg"].GetString();
 
-		m_rtcengine->StartLocalRender(canvas);
-		m_localWnd->setUsed(true);
-		m_localWnd->setReady(true);
+		if (code == 0)
+		{
+			SetDlgItemText(IDC_BUTTON_PUBC, L"停止发布");
+			OnMessageShow("摄像头发布成功");
+			tRTCRenderView canvas;
+			canvas.mVidoview = (int)m_localWnd->GetVideoHwnd();
+			canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
+			canvas.mUserid = m_userid;
+			canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
+			canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_GDI;
 
-		m_localWnd->muteVideo(URTCConfig::getInstance()->getMuteCamBeforeJoin());
-		m_localWnd->muteAudio(URTCConfig::getInstance()->getMuteMicBeforeJoin());
-		m_campub = true;
-	}
-	else {
-		char num[32] = { 0 };
-		sprintf_s(num, " err code = %d", code);
-		std::string errcode = num;
-		std::string desc = "摄像头发布失败 " + msg+ " "+errcode;
-		OnMessageShow(desc);
+			m_rtcengine->StartLocalRender(canvas);
+			m_localWnd->setUsed(true);
+			m_localWnd->setReady(true);
+
+			m_localWnd->muteVideo(URTCConfig::getInstance()->getMuteCamBeforeJoin());
+			m_localWnd->muteAudio(URTCConfig::getInstance()->getMuteMicBeforeJoin());
+			m_campub = true;
+		}
+		else {
+			char num[32] = { 0 };
+			sprintf_s(num, " err code = %d", code);
+			std::string errcode = num;
+			std::string desc = "摄像头发布失败 " + msg + " " + errcode;
+			OnMessageShow(desc);
+		}
+
 	}
 }
 
 void CSdkTestDemoDlg::OnPulibshScreenStreamHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	int code = retObj["code"].asInt();
-	std::string msg = retObj["msg"].asString();
-	if (code == 0)
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		SetDlgItemText(IDC_BUTTON_PUBS, L"停止桌面");
-		OnMessageShow("桌面发布成功");
-		tRTCRenderView canvas;
-		canvas.mVidoview = (int)m_screenWnd->GetVideoHwnd();
-		canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
-		canvas.mUserid = m_userid;
-		canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_SCREEN;
-		canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_GDI;
-		m_screenWnd->setUsed(true);
-		m_screenWnd->setReady(true);
-		m_screenpub = true;
-		m_rtcengine->StartLocalRender(canvas);
-	}
-	else {
-		char num[32] = { 0 };
-		sprintf_s(num, " err code = %d", code);
-		std::string errcode = num;
-		std::string desc = "桌面发布失败 " + msg + " " + errcode;
-		OnMessageShow(desc);
+		int code = doc["code"].GetInt();
+		std::string msg = doc["msg"].GetString();
+
+		if (code == 0)
+		{
+			SetDlgItemText(IDC_BUTTON_PUBS, L"停止桌面");
+			OnMessageShow("桌面发布成功");
+			tRTCRenderView canvas;
+			canvas.mVidoview = (int)m_screenWnd->GetVideoHwnd();
+			canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
+			canvas.mUserid = m_userid;
+			canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_SCREEN;
+			canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_GDI;
+			m_screenWnd->setUsed(true);
+			m_screenWnd->setReady(true);
+			m_screenpub = true;
+			m_rtcengine->StartLocalRender(canvas);
+		}
+		else {
+			char num[32] = { 0 };
+			sprintf_s(num, " err code = %d", code);
+			std::string errcode = num;
+			std::string desc = "桌面发布失败 " + msg + " " + errcode;
+			OnMessageShow(desc);
+		}
+
 	}
 }
 
 void CSdkTestDemoDlg::OnUnPulibshStreamHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	int mtype = retObj["data"]["mtype"].asInt();
-	if (mtype == UCLOUD_RTC_MEDIATYPE_VIDEO)
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		OnUnPulibshStreamCamHandler(jsonmsg);
-	}
-	else {
-		OnUnPulibshStreamScreenHandler(jsonmsg);
+		const rapidjson::Value& object = doc["data"];
+		int mtype = object["mtype"].GetInt();
+		if (mtype == UCLOUD_RTC_MEDIATYPE_VIDEO)
+		{
+			OnUnPulibshStreamCamHandler(jsonmsg);
+		}
+		else {
+			OnUnPulibshStreamScreenHandler(jsonmsg);
+		}
 	}
 }
 
 void CSdkTestDemoDlg::OnUnPulibshStreamScreenHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	int code = retObj["code"].asInt();
-	std::string msg = retObj["msg"].asString();
-	if (code == 0)
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		OnMessageShow("桌面已取消发布");
-	}
-	else {
-		char num[32] = { 0 };
-		sprintf_s(num, " err code = %d", code);
-		std::string errcode = num;
+		int code = doc["code"].GetInt();
+		std::string msg = doc["msg"].GetString();
+		if (code == 0)
+		{
+			OnMessageShow("桌面已取消发布");
+		}
+		else {
+			char num[32] = { 0 };
+			sprintf_s(num, " err code = %d", code);
+			std::string errcode = num;
 
-		std::string desc = "取消发布失败 " + msg + " " + errcode;
-		OnMessageShow(desc);
-	}
+			std::string desc = "取消发布失败 " + msg + " " + errcode;
+			OnMessageShow(desc);
+		}
 
-	SetDlgItemText(IDC_BUTTON_PUBS, L"发布桌面");
-	m_screenpub = false;
-	GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(true);
-	m_screenWnd->setUsed(false);
+		SetDlgItemText(IDC_BUTTON_PUBS, L"发布桌面");
+		m_screenpub = false;
+		GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(true);
+		m_screenWnd->setUsed(false);
+
+	}
 }
 
 void CSdkTestDemoDlg::OnUnPulibshStreamCamHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	int code = retObj["code"].asInt();
-	std::string msg = retObj["msg"].asString();
-	if (code == 0)
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		OnMessageShow("摄像头已取消发布");
-	}
-	else {
-		char num[32] = { 0 };
-		sprintf_s(num, " err code = %d", code);
-		std::string errcode = num;
-		std::string desc = "取消发布失败 " + msg + " " + errcode;
-		OnMessageShow(desc);
-	}
+		int code = doc["code"].GetInt();
+		std::string msg = doc["msg"].GetString();
+		if (code == 0)
+		{
+			OnMessageShow("摄像头已取消发布");
+		}
+		else {
+			char num[32] = { 0 };
+			sprintf_s(num, " err code = %d", code);
+			std::string errcode = num;
+			std::string desc = "取消发布失败 " + msg + " " + errcode;
+			OnMessageShow(desc);
+		}
 
-	SetDlgItemText(IDC_BUTTON_PUBC, L"发布媒体");
-	GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(true);
-	m_campub = false;
-	m_localWnd->setUsed(false);
+		SetDlgItemText(IDC_BUTTON_PUBC, L"发布媒体");
+		GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(true);
+		m_campub = false;
+		m_localWnd->setUsed(false);
+
+	}
 }
 
 void CSdkTestDemoDlg::OnSubStreamHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	int code = retObj["code"].asInt();
-
-	std::string msg = retObj["msg"].asString();
-	int mtype = retObj["data"]["mtype"].asInt();
-	std::string uid = retObj["data"]["uid"].asString();
-	char buf[32] = { 0 };
-	sprintf_s(buf, "%d", mtype);
-	eUCloudRtcMeidaType type = (mtype == 1) ? UCLOUD_RTC_MEDIATYPE_VIDEO : UCLOUD_RTC_MEDIATYPE_SCREEN;
-	if (code == 0)
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		std::string msg = "订阅 " + uid + buf + "成功";
-		streamrenderit srit = m_mapRenders.find(uid + buf);
-		CVideoWnd* videoview = nullptr;
-		if (srit != m_mapRenders.end())
+		int code = doc["code"].GetInt();
+		const rapidjson::Value& object = doc["data"];
+		int mtype = object["mtype"].GetInt();
+		std::string uid = object["uid"].GetString();
+
+		char buf[32] = { 0 };
+		sprintf_s(buf, "%d", mtype);
+		eUCloudRtcMeidaType type = (mtype == 1) ? UCLOUD_RTC_MEDIATYPE_VIDEO : UCLOUD_RTC_MEDIATYPE_SCREEN;
+		if (code == 0)
 		{
-			CVideoWnd* videoview = srit->second;
+			std::string msg = "订阅 " + uid + buf + "成功";
+			streamrenderit srit = m_mapRenders.find(uid + buf);
+			CVideoWnd* videoview = nullptr;
+			if (srit != m_mapRenders.end())
+			{
+				CVideoWnd* videoview = srit->second;
+				if (videoview)
+				{
+					videoview->setUsed(true);
+					videoview->SetUserId(uid);
+					videoview->SetType(type);
+					videoview->setReady(true);
+				}
+			}
+			else {
+				videowndit wnit = m_remoteWnds.begin();
+				while (wnit != m_remoteWnds.end())
+				{
+					if (!(*wnit)->isUsed())
+					{
+						videoview = *wnit;
+						videoview->setUsed(true);
+						videoview->setReady(true);
+						videoview->SetTitle(Ansi2WChar(uid.data()));
+						videoview->SetType(type);
+						videoview->SetUserId(uid);
+						m_mapRenders.emplace(std::make_pair(uid + buf, videoview));
+						break;
+					}
+					wnit++;
+				}
+			}
+			OnMessageShow(msg);
 			if (videoview)
 			{
-				videoview->setUsed(true);
-				videoview->SetUserId(uid);
-				videoview->SetType(type);
-				videoview->setReady(true);
+
+				tRTCRenderView canvas;
+				canvas.mVidoview = (int)videoview->GetVideoHwnd();
+				canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
+				canvas.mUserid = uid.data();
+				canvas.mStreamMtype = mtype;
+				canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_GDI;
+				m_rtcengine->StartRemoteRender(canvas);
 			}
+
 		}
 		else {
-			videowndit wnit = m_remoteWnds.begin();
-			while (wnit != m_remoteWnds.end())
-			{
-				if (!(*wnit)->isUsed())
-				{
-					videoview = *wnit;
-					videoview->setUsed(true);
-					videoview->setReady(true);
-					videoview->SetTitle(Ansi2WChar(uid.data()));
-					videoview->SetType(type);
-					videoview->SetUserId(uid);
-					m_mapRenders.emplace(std::make_pair(uid + buf, videoview));
-					break;
-				}
-				wnit++;
-			}
+			char num[32] = { 0 };
+			sprintf_s(num, " err code = %d", code);
+			std::string errcode = num;
+			std::string msg = "订阅 " + uid + buf + " 失败 " + errcode;
+			OnMessageShow(msg);
 		}
-		OnMessageShow(msg);
-		if (videoview)
-		{
-
-			tRTCRenderView canvas;
-			canvas.mVidoview = (int)videoview->GetVideoHwnd();
-			canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
-			canvas.mUserid = uid.data();
-			canvas.mStreamMtype = mtype;
-			canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_GDI;
-			m_rtcengine->StartRemoteRender(canvas);
-		}
-
-	}
-	else {
-		char num[32] = { 0 };
-		sprintf_s(num, " err code = %d", code);
-		std::string errcode = num;
-		std::string msg = "订阅 " + uid + buf + " 失败 " + errcode;
-		OnMessageShow(msg);
 	}
 	
 }
 
 void CSdkTestDemoDlg::OnUnSubStreamHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	std::string msg = retObj["msg"].asString();
-	int mtype = retObj["data"]["mtype"].asInt();
-	std::string uid = retObj["data"]["uid"].asString();
-	UnSubscribeStream(mtype, uid);
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
+	{
+		std::string msg = doc["msg"].GetString();
+		const rapidjson::Value& object = doc["data"];
+		int mtype = object["mtype"].GetInt();
+		std::string uid = object["uid"].GetString();
+
+		UnSubscribeStream(mtype, uid);
+	}
 }
 
 void CSdkTestDemoDlg::OnStreamStHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
-
-	std::string cmd = retObj["data"]["cmd"].asString();
-	std::string userid = retObj["data"]["uid"].asString();
-	int mtype = retObj["data"]["mtype"].asInt();
-	if (cmd == "add")
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		tStreamInfo* stream = new tStreamInfo;
-		stream->mStreamMtype = mtype;
-		stream->mUserid = userid;
-		stream->mEnalbeaudio = retObj["data"]["audio"].asBool();
-		stream->mEnalbevideo = retObj["data"]["video"].asBool();
-		stream->mEnalbedata = retObj["data"]["data"].asBool();
+		const rapidjson::Value& object = doc["data"];
+		std::string cmd = object["cmd"].GetString();
+		int mtype = object["mtype"].GetInt();
+		std::string userid = object["uid"].GetString();
 
-		char buf[8] = { 0 };
-		sprintf_s(buf, "%d", stream->mStreamMtype);
-		m_streamsmap.insert(std::make_pair(stream->mUserid + buf, stream));
-		std::string desc = "流加入：";
-		OnMessageShow(desc);
-		std::string msg = "userid: " + userid;
-		OnMessageShow(msg);
-		std::string mt = buf;
-		std::string streamdesc = "mediatype: " + mt;
-		OnMessageShow(streamdesc);
-	}
-	else if (cmd == "remove")
-	{
-		UnSubscribeStream(mtype, userid);
-		std::string desc = "流移除：";
-		OnMessageShow(desc);
-		std::string msg = "userid: " + userid;
-		OnMessageShow(msg);
-		char buf[32] = { 0 };
-		sprintf_s(buf, "%d", mtype);
-		std::string mt = buf;
-		std::string streamdesc = "mediatype: " + mt;
-		OnMessageShow(streamdesc);
+		if (cmd == "add")
+		{
+			tStreamInfo* stream = new tStreamInfo;
+			stream->mStreamMtype = mtype;
+			stream->mUserid = userid;
+			stream->mEnalbeaudio = object["audio"].GetBool();
+			stream->mEnalbevideo = object["video"].GetBool();
+			stream->mEnalbedata = object["data"].GetBool();
+
+			char buf[8] = { 0 };
+			sprintf_s(buf, "%d", stream->mStreamMtype);
+			m_streamsmap.insert(std::make_pair(stream->mUserid + buf, stream));
+			std::string desc = "流加入：";
+			OnMessageShow(desc);
+			std::string msg = "userid: " + userid;
+			OnMessageShow(msg);
+			std::string mt = buf;
+			std::string streamdesc = "mediatype: " + mt;
+			OnMessageShow(streamdesc);
+		}
+		else if (cmd == "remove")
+		{
+			UnSubscribeStream(mtype, userid);
+			std::string desc = "流移除：";
+			OnMessageShow(desc);
+			std::string msg = "userid: " + userid;
+			OnMessageShow(msg);
+			char buf[32] = { 0 };
+			sprintf_s(buf, "%d", mtype);
+			std::string mt = buf;
+			std::string streamdesc = "mediatype: " + mt;
+			OnMessageShow(streamdesc);
+		}
 	}
 }
 
 void CSdkTestDemoDlg::OnUserStHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	std::string cmd = retObj["data"]["cmd"].asString();
-	std::string userid = retObj["data"]["uid"].asString();
-
-	if (cmd == "join")
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		userit uit = m_hashSessions.find(userid);
-		if (uit == m_hashSessions.end())
+		const rapidjson::Value& object = doc["data"];
+		std::string cmd = object["cmd"].GetString();
+		std::string userid = object["uid"].GetString();
+
+		if (cmd == "join")
 		{
-			tUserInfo* user = new tUserInfo;
-			user->mUserid = userid;
-			m_hashSessions.emplace(std::make_pair(userid, user));
-		}
+			userit uit = m_hashSessions.find(userid);
+			if (uit == m_hashSessions.end())
+			{
+				tUserInfo* user = new tUserInfo;
+				user->mUserid = userid;
+				m_hashSessions.emplace(std::make_pair(userid, user));
+			}
 
-		OnMessageShow("userid: " + userid + " 加入房间");
-	}
-	else if (cmd == "leave")
-	{
-		UserLeave(userid);
-		OnMessageShow("userid: " + userid + " 离开房间");
+			OnMessageShow("userid: " + userid + " 加入房间");
+		}
+		else if (cmd == "leave")
+		{
+			UserLeave(userid);
+			OnMessageShow("userid: " + userid + " 离开房间");
+		}
 	}
 }
 
@@ -764,331 +790,349 @@ void CSdkTestDemoDlg::OnServerDisconnectHandler(std::string jsonmsg) {
 }
 
 void CSdkTestDemoDlg::OnSdkErrorHandler(std::string jsonmsg) {
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
+	{
+		int code = doc["code"].GetInt();
+		std::string msg = doc["msg"].GetString();
+		char num[32] = { 0 };
+		sprintf_s(num, " err code = %d", code);
+		std::string errcode = num;
 
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
-
-	int code = retObj["code"].asInt();
-	std::string msg = retObj["msg"].asString();
-	char num[32] = { 0 };
-	sprintf_s(num, " err code = %d", code);
-	std::string errcode = num;
-
-	OnMessageShow("sdkerror: " + errcode);
+		OnMessageShow("sdkerror: " + errcode);
+	}
 }
 
 void CSdkTestDemoDlg::OnKickoffHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	int code = retObj["code"].asInt();
-	std::string msg = retObj["msg"].asString();
-	char num[32] = { 0 };
-	sprintf_s(num, " err code = %d", code);
-	std::string errcode = num;
-	GetDlgItem(IDC_BUTTON_LEAVEROOM)->EnableWindow(false);
-	SetDlgItemText(IDC_BUTTON_PUBC, L"发布媒体");
-	SetDlgItemText(IDC_BUTTON_PUBS, L"发布桌面");
-	GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(false);
-	GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(false);
-	m_campub = false;
-	m_screenpub = false;
-	m_localWnd->setUsed(false);
-	m_screenWnd->setUsed(false);
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
+	{
+		int code = doc["code"].GetInt();
+		std::string msg = doc["msg"].GetString();
+		char num[32] = { 0 };
+		sprintf_s(num, " err code = %d", code);
+		std::string errcode = num;
+		GetDlgItem(IDC_BUTTON_LEAVEROOM)->EnableWindow(false);
+		SetDlgItemText(IDC_BUTTON_PUBC, L"发布媒体");
+		SetDlgItemText(IDC_BUTTON_PUBS, L"发布桌面");
+		GetDlgItem(IDC_BUTTON_PUBC)->EnableWindow(false);
+		GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(false);
+		m_campub = false;
+		m_screenpub = false;
+		m_localWnd->setUsed(false);
+		m_screenWnd->setUsed(false);
 
-	ReleaseUserAllRes();
-	OnMessageShow("kick off : " + errcode);
+		ReleaseUserAllRes();
+		OnMessageShow("kick off : " + errcode);
+	}
+	
 }
 
 void CSdkTestDemoDlg::OnLocalStreamMuteHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	int code = retObj["code"].asInt();
-	std::string msg = retObj["msg"].asString();
-	int mediatype = retObj["data"]["mtype"].asInt();
-	int trackype = retObj["data"]["ttype"].asInt();
-	int mute = retObj["data"]["mute"].asInt();
-	std::string desc = "";
-	if (code == 0)
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		if (mediatype == UCLOUD_RTC_MEDIATYPE_VIDEO)
+		int code = doc["code"].GetInt();
+		std::string msg = doc["msg"].GetString();
+	
+		const rapidjson::Value& object = doc["data"];
+		int mediatype = object["mtype"].GetInt();
+		int trackype = object["ttype"].GetInt();
+		bool mute = object["mute"].GetBool();
+
+		std::string desc = "";
+		if (code == 0)
 		{
-			if (trackype == UCLOUD_RTC_TRACKTYPE_AUDIO)
+			if (mediatype == UCLOUD_RTC_MEDIATYPE_VIDEO)
 			{
-				m_localWnd->muteAudio(mute);
+				if (trackype == UCLOUD_RTC_TRACKTYPE_AUDIO)
+				{
+					m_localWnd->muteAudio(mute);
+				}
+				else {
+					m_localWnd->muteVideo(mute);
+					m_localWnd->muteVideo(mute);
+				}
 			}
-			else {
-				m_localWnd->muteVideo(mute);
-				m_localWnd->muteVideo(mute);
+			else
+			{
+				m_screenWnd->muteVideo(mute);
 			}
-		}
-		else
-		{
-			m_screenWnd->muteVideo(mute);
-		}
 
-		char mutecontent[128] = { 0 };
-		sprintf_s(mutecontent, " mtype=%d&&ttype=%d&&op=%d", mediatype, trackype, mute);
-		std::string content = mutecontent;
-		std::string desc = "操作成功" + msg + " " + content;
-		OnMessageShow(desc);
+			char mutecontent[128] = { 0 };
+			sprintf_s(mutecontent, " mtype=%d&&ttype=%d&&op=%d", mediatype, trackype, mute);
+			std::string content = mutecontent;
+			std::string desc = "操作成功" + msg + " " + content;
+			OnMessageShow(desc);
 
-	}
-	else {
-		char mutecontent[128] = { 0 };
-		sprintf_s(mutecontent, " err code=%d&&mtype=%d&&ttype=%d&&op=%d", code, mediatype, trackype, mute);
-		std::string content = mutecontent;
-		std::string desc = "mute 远端 " + msg + " " + content;
-		OnMessageShow(desc);
+		}
+		else {
+			char mutecontent[128] = { 0 };
+			sprintf_s(mutecontent, " err code=%d&&mtype=%d&&ttype=%d&&op=%d", code, mediatype, trackype, mute);
+			std::string content = mutecontent;
+			std::string desc = "mute 远端 " + msg + " " + content;
+			OnMessageShow(desc);
+		}
 	}
 }
 
 void CSdkTestDemoDlg::OnRemoteStreamMuteHandler(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	int code = retObj["code"].asInt();
-	std::string msg = retObj["msg"].asString();
-	std::string uid = retObj["data"]["uid"].asString();
-	int mediatype = retObj["data"]["mtype"].asInt();
-	int trackype = retObj["data"]["ttype"].asInt();
-	int mute = retObj["data"]["mute"].asInt();
-	std::string desc = "";
-	if (code == 0)
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
+		int code = doc["code"].GetInt();
+		std::string msg = doc["msg"].GetString();
 
-		char buf[32] = { 0 };
-		sprintf_s(buf, "%d", mediatype);
-		std::string mediakey = uid + buf;
-		streamrenderit srit = m_mapRenders.find(mediakey);
-		CVideoWnd* videoview = nullptr;
-		if (srit != m_mapRenders.end())
+		const rapidjson::Value& object = doc["data"];
+		std::string uid = object["uid"].GetString();
+		int mediatype = object["mtype"].GetInt();
+		int trackype = object["ttype"].GetInt();
+		bool mute = object["mute"].GetBool();
+		std::string desc = "";
+		if (code == 0)
 		{
-			videoview = srit->second;
-		}
 
-		if (mediatype == UCLOUD_RTC_MEDIATYPE_VIDEO)
-		{
-			if (trackype == UCLOUD_RTC_TRACKTYPE_AUDIO)
+			char buf[32] = { 0 };
+			sprintf_s(buf, "%d", mediatype);
+			std::string mediakey = uid + buf;
+			streamrenderit srit = m_mapRenders.find(mediakey);
+			CVideoWnd* videoview = nullptr;
+			if (srit != m_mapRenders.end())
 			{
-				videoview->muteAudio(mute);
+				videoview = srit->second;
 			}
-			else {
+
+			if (mediatype == UCLOUD_RTC_MEDIATYPE_VIDEO)
+			{
+				if (trackype == UCLOUD_RTC_TRACKTYPE_AUDIO)
+				{
+					videoview->muteAudio(mute);
+				}
+				else {
+					videoview->muteVideo(mute);
+				}
+			}
+			else
+			{
 				videoview->muteVideo(mute);
 			}
-		}
-		else
-		{
-			videoview->muteVideo(mute);
-		}
 
-		char mutecontent[128] = { 0 };
-		sprintf_s(mutecontent, "uid=%s mtype=%d&&ttype=%d&&op=%d", uid.data(), 
-			mediatype, trackype, mute);
-		std::string content = mutecontent;
-		std::string desc = "操作成功" + msg + " " + content;
-		OnMessageShow(desc);
+			char mutecontent[128] = { 0 };
+			sprintf_s(mutecontent, "uid=%s mtype=%d&&ttype=%d&&op=%d", uid.data(),
+				mediatype, trackype, mute);
+			std::string content = mutecontent;
+			std::string desc = "操作成功" + msg + " " + content;
+			OnMessageShow(desc);
 
+		}
+		else {
+			char mutecontent[128] = { 0 };
+			sprintf_s(mutecontent, "err code=%d&&uid=%s mtype=%d&&ttype=%d&&op=%d", code,
+				uid.data(), mediatype, trackype, mute);
+			std::string content = mutecontent;
+			std::string desc = "mute 远端 " + msg + " " + content;
+			OnMessageShow(desc);
+		}
 	}
-	else {
-		char mutecontent[128] = { 0 };
-		sprintf_s(mutecontent, "err code=%d&&uid=%s mtype=%d&&ttype=%d&&op=%d", code, 
-			uid.data(), mediatype, trackype, mute);
-		std::string content = mutecontent;
-		std::string desc = "mute 远端 " + msg + " " + content;
-		OnMessageShow(desc);
-	}
+	
 }
 
 void CSdkTestDemoDlg::OnRemoteTrackStNotify(std::string jsonmsg) {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	std::string uid = retObj["data"]["uid"].asString();
-	int mtype = retObj["data"]["mtype"].asInt();
-	int ttype = retObj["data"]["ttype"].asInt();
-	bool mute = retObj["data"]["mute"].asBool();
-
-	if (mtype == UCLOUD_RTC_MEDIATYPE_SCREEN)
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		std::string desc = mute ? "关闭" : "打开";
-		OnMessageShow(uid + " " + desc+ " "+ "桌面");
-	}
-	else {
-		if (ttype == UCLOUD_RTC_TRACKTYPE_AUDIO)
-		{
-			std::string desc = mute ? "关闭" : "打开";
-			OnMessageShow(uid + " " + desc + " " + "麦克风");
-		}
-		else 
-		{
-			std::string desc = mute ? "关闭" : "打开";
-			OnMessageShow(uid + " " + desc + " " + "摄像头");
-		}
-	
-	}
+		int code = doc["code"].GetInt();
+		std::string msg = doc["msg"].GetString();
 
+		const rapidjson::Value& object = doc["data"];
+		std::string uid = object["uid"].GetString();
+		int mtype = object["mtype"].GetInt();
+		int ttype = object["ttype"].GetInt();
+		bool mute = object["mute"].GetBool();
+		if (mtype == UCLOUD_RTC_MEDIATYPE_SCREEN)
+		{
+			std::string desc = mute ? "关闭" : "打开";
+			OnMessageShow(uid + " " + desc + " " + "桌面");
+		}
+		else {
+			if (ttype == UCLOUD_RTC_TRACKTYPE_AUDIO)
+			{
+				std::string desc = mute ? "关闭" : "打开";
+				OnMessageShow(uid + " " + desc + " " + "麦克风");
+			}
+			else
+			{
+				std::string desc = mute ? "关闭" : "打开";
+				OnMessageShow(uid + " " + desc + " " + "摄像头");
+			}
+
+		}
+	}
 }
 
 void CSdkTestDemoDlg::OnRemoteAudioVolHandler(std::string jsonmsg)
 {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	std::string uid = retObj["data"]["uid"].asString();
-	int vol = retObj["data"]["vol"].asInt();
-
-	char buf[8] = { 0 };
-	sprintf_s(buf, "%d", UCLOUD_RTC_MEDIATYPE_VIDEO);
-	std::string mediakey = uid + buf;
-	streamrenderit srit = m_mapRenders.find(mediakey);
-	if (srit != m_mapRenders.end())
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		if (srit->second)
+		const rapidjson::Value& object = doc["data"];
+		std::string uid = object["uid"].GetString();
+		int vol = object["vol"].GetInt();
+		char buf[8] = { 0 };
+		sprintf_s(buf, "%d", UCLOUD_RTC_MEDIATYPE_VIDEO);
+		std::string mediakey = uid + buf;
+		streamrenderit srit = m_mapRenders.find(mediakey);
+		if (srit != m_mapRenders.end())
 		{
-			srit->second->setVol(vol);
+			if (srit->second)
+			{
+				srit->second->setVol(vol);
+			}
 		}
 	}
+	
 }
 
 void CSdkTestDemoDlg::OnLocalAudioVolHandler(std::string jsonmsg)
 {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
-	std::string uid = retObj["data"]["uid"].asString();
-	int vol = retObj["data"]["vol"].asInt();
-	m_localWnd->setVol(vol);
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
+	{
+		const rapidjson::Value& object = doc["data"];
+		int vol = object["vol"].GetInt();
+		m_localWnd->setVol(vol);
+	}
 }
 
 void CSdkTestDemoDlg::OnRemoteStHandler(std::string jsonmsg)
 {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
 
-	std::string uid = retObj["data"]["uid"].asString();
-	int mediatype = retObj["data"]["mtype"].asInt();
-	int tracktype = retObj["data"]["ttype"].asInt();
-
-	int bitrate = retObj["data"]["bitrate"].asInt();
-	float lostrate = retObj["data"]["lostrate"].asFloat();
-
-	if (tracktype == UCLOUD_RTC_MEDIATYPE_VIDEO)
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		char buf[256] = { 0 };
-		int height = retObj["data"]["height"].asInt();
-		int width = retObj["data"]["width"].asInt();
-		int framerate = retObj["data"]["framerate"].asInt();
-		sprintf_s(buf, "%s mtype:%d %d %0.2f height:%d width:%d framerate:%d",
-			uid.data(), mediatype, bitrate, lostrate, height, width, framerate);
-		std::string info = buf;
-		//OnMessageShow("远端视频: " + info);
-	}
-	else
-	{
-		char buf[256] = { 0 };
-		sprintf_s(buf, "%s mtype:%d %d %0.2f ",
-			uid.data() ,mediatype, bitrate, lostrate);
-		std::string info = buf;
-		//OnMessageShow("远端音频: " + info);
+		const rapidjson::Value& object = doc["data"];
+		std::string uid = object["uid"].GetString();
+		int mediatype = object["mtype"].GetInt();
+		int tracktype = object["ttype"].GetInt();
+		int bitrate = object["bitrate"].GetInt();
+		float lostrate = object["lostrate"].GetInt();
+
+		if (tracktype == UCLOUD_RTC_MEDIATYPE_VIDEO)
+		{
+			char buf[256] = { 0 };
+			int height = object["height"].GetInt();
+			int width = object["width"].GetInt();
+			int framerate = object["framerate"].GetInt();
+			sprintf_s(buf, "%s mtype:%d %d %0.2f height:%d width:%d framerate:%d",
+				uid.data(), mediatype, bitrate, lostrate, height, width, framerate);
+			std::string info = buf;
+			//OnMessageShow("远端视频: " + info);
+		}
+		else
+		{
+			char buf[256] = { 0 };
+			sprintf_s(buf, "%s mtype:%d %d %0.2f ",
+				uid.data(), mediatype, bitrate, lostrate);
+			std::string info = buf;
+			//OnMessageShow("远端音频: " + info);
+		}
 	}
 }
 
 void CSdkTestDemoDlg::OnSendStHandler(std::string jsonmsg)
 {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
-
-	int mediatype = retObj["data"]["mtype"].asInt();
-	int tracktype = retObj["data"]["ttype"].asInt();
-
-	int bitrate = retObj["data"]["bitrate"].asInt();
-	float lostrate = retObj["data"]["lostrate"].asFloat();
-
-	if (tracktype == UCLOUD_RTC_MEDIATYPE_VIDEO)
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		char buf[256] = {0};
-		int height = retObj["data"]["height"].asInt();
-		int width = retObj["data"]["width"].asInt();
-		int framerate = retObj["data"]["framerate"].asInt();
-		sprintf_s(buf, "mtype:%d %d %0.2f height:%d*width:%d*framerate:%d",
-			mediatype, bitrate, lostrate, height, width, framerate) ;
-		std::string info = buf;
-		//OnMessageShow("本地视频: " + info);
-	}
-	else
-	{
-		char buf[256] = { 0 };
-		sprintf_s(buf, "mtype:%d %d %0.2f ",
-			mediatype, bitrate, lostrate);
-		std::string info = buf;
-		//OnMessageShow("本地音频: " + info);
+		const rapidjson::Value& object = doc["data"];
+		int mediatype = object["mtype"].GetInt();
+		int tracktype = object["ttype"].GetInt();
+		int bitrate = object["bitrate"].GetInt();
+		float lostrate = object["lostrate"].GetInt();
+
+		if (tracktype == UCLOUD_RTC_MEDIATYPE_VIDEO)
+		{
+			char buf[256] = { 0 };
+			int height = object["height"].GetInt();
+			int width = object["width"].GetInt();
+			int framerate = object["framerate"].GetInt();
+			sprintf_s(buf, "mtype:%d %d %0.2f height:%d*width:%d*framerate:%d",
+				mediatype, bitrate, lostrate, height, width, framerate);
+			//OnMessageShow("本地视频: " + info);
+		}
+		else
+		{
+			char buf[256] = { 0 };
+			sprintf_s(buf, "mtype:%d %d %0.2f ",
+				mediatype, bitrate, lostrate);
+			std::string info = buf;
+			//OnMessageShow("本地音频: " + info);
+		}
 	}
 }
 
 void CSdkTestDemoDlg::OnStartRecord(std::string jsonmsg)
 {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
-	std::string desc = "";
-	int code = retObj["code"].asInt();
-	std::string msg = retObj["msg"].asString();
-	std::string recordid = retObj["data"]["recordid"].asString();
-	if (code == 0)
-	{
-		m_startrecord = true;
-		SetDlgItemText(IDC_BUTTON_RECORD, L"停止录制");
-		char mutecontent[128] = { 0 };
-		sprintf_s(mutecontent, " recordid ", recordid.data());
-		std::string content = mutecontent;
-		std::string desc = "开启录制成功 " + msg + " " + content;
-		OnMessageShow(desc);
 
-	}
-	else 
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		char mutecontent[128] = { 0 };
-		sprintf_s(mutecontent, " err code=%d", code);
-		std::string content = mutecontent;
-		std::string desc = "开启录制失败 " + msg + " " + content;
-		OnMessageShow(desc);
+		int code = doc["code"].GetInt();
+		std::string msg = doc["msg"].GetString();
+
+		const rapidjson::Value& object = doc["data"];
+		std::string recordid = object["recordid"].GetString();
+		if (code == 0)
+		{
+			m_startrecord = true;
+			SetDlgItemText(IDC_BUTTON_RECORD, L"停止录制");
+			char mutecontent[128] = { 0 };
+			sprintf_s(mutecontent, "recordid:%s ", recordid.data());
+			std::string content = mutecontent;
+			std::string desc = "开启录制成功 " + msg + " " + content;
+			OnMessageShow(desc);
+
+		}
+		else
+		{
+			char mutecontent[128] = { 0 };
+			sprintf_s(mutecontent, " err code=%d", code);
+			std::string content = mutecontent;
+			std::string desc = "开启录制失败 " + msg + " " + content;
+			OnMessageShow(desc);
+		}
 	}
 }
 
 void CSdkTestDemoDlg::OnStopRecord(std::string jsonmsg)
 {
-	Json::Reader reader;
-	Json::Value retObj;
-	reader.parse(jsonmsg.c_str(), retObj, false);
-	std::string desc = "";
-	int code = retObj["code"].asInt();
-	std::string msg = retObj["msg"].asString();
-	std::string filename = retObj["data"]["filename"].asString();
-	if (code == 0)
-	{
-		m_startrecord = true;
-		SetDlgItemText(IDC_BUTTON_RECORD, L"开启录制");
-		std::string desc = "停止录制成功 ";
-		OnMessageShow(desc);
 
-	}
-	else
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		char mutecontent[128] = { 0 };
-		sprintf_s(mutecontent, " err code=%d", code);
-		std::string content = mutecontent;
-		std::string desc = "停止录制失败 " + msg + " " + content;
-		OnMessageShow(desc);
+		int code = doc["code"].GetInt();
+		std::string msg = doc["msg"].GetString();
+		if (code == 0)
+		{
+			m_startrecord = true;
+			SetDlgItemText(IDC_BUTTON_RECORD, L"开启录制");
+			std::string desc = "停止录制成功 ";
+			OnMessageShow(desc);
+
+		}
+		else
+		{
+			char mutecontent[128] = { 0 };
+			sprintf_s(mutecontent, " err code=%d", code);
+			std::string content = mutecontent;
+			std::string desc = "停止录制失败 " + msg + " " + content;
+			OnMessageShow(desc);
+		}
 	}
 }
 
