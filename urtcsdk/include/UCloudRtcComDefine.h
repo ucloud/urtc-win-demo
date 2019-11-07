@@ -109,7 +109,8 @@ typedef enum {
 //render type
 typedef enum {
 	UCLOUD_RTC_RENDER_TYPE_GDI = 1,
-	UCLOUD_RTC_RENDER_TYPE_D3D = 2
+	UCLOUD_RTC_RENDER_TYPE_D3D = 2,
+	UCLOUD_RTC_RENDER_TYPE_EXTEND = 3,
 } eUCloudRtcRenderType;
 
 /**
@@ -131,7 +132,8 @@ typedef enum {
 	UCLOUD_RTC_VIDEO_PROFILE_640_360 = 3,
 	UCLOUD_RTC_VIDEO_PROFILE_640_480 = 4,
 	UCLOUD_RTC_VIDEO_PROFILE_1280_720 = 5,
-	UCLOUD_RTC_VIDEO_PROFILE_1920_1080 = 6
+	UCLOUD_RTC_VIDEO_PROFILE_1920_1080 = 6,
+	UCLOUD_RTC_VIDEO_PROFILE_1920_1080_PLUS = 7
 } eUCloudRtcVideoProfile;
 
 typedef enum {
@@ -167,7 +169,7 @@ typedef enum {
 // render view
 typedef struct
 {
-	int mVideoView;
+	void* mVideoView;
 	const char* mUserId;
 	const char* mStreamId;
 	eUCloudRtcMeidaType mStreamMtype;
@@ -216,13 +218,19 @@ typedef struct {
 	int mNumSimples;
 }tUCloudRtcAudioFrame;
 
+typedef enum {
+	UCLOUD_RTC_VIDEO_FRAME_TYPE_I420 = 1,
+	UCLOUD_RTC_VIDEO_FRAME_TYPE_RGB24,
+	UCLOUD_RTC_VIDEO_FRAME_TYPE_RGBA,
+	UCLOUD_RTC_VIDEO_FRAME_TYPE_ARGB,
+}eUCloudRtcVideoFrameType;
+
 typedef struct {
-	unsigned char* mYbuf;
-	unsigned char* mUbuf;
-	unsigned char* mVbuf;
+	unsigned char* mDataBuf;
 	int mWidth;
 	int mHeight;
-}tUCloudRtcI420VideoFrame;
+	eUCloudRtcVideoFrameType mVideoType;
+}tUCloudRtcVideoFrame;
 
 class  _EXPORT_API UCloudRtcAudioFrameCallback
 {
@@ -234,13 +242,19 @@ public:
 class  _EXPORT_API UCloudRtcExtendVideoCaptureSource
 {
 public:
-	virtual  bool doCaptureFrame(tUCloudRtcI420VideoFrame* videoframe) = 0;
+	virtual  bool doCaptureFrame(tUCloudRtcVideoFrame* videoframe) = 0;
 };
 
 class _EXPORT_API UCloudRtcVideoFrameObserver 
 {
 public:
 	virtual  void onCaptureFrame(unsigned char* videoframe, int buflen) = 0;
+};
+
+class _EXPORT_API UCloudRtcExtendVideoRender
+{
+public:
+	virtual  void onRemoteFrame(const tUCloudRtcVideoFrame* videoframe) = 0;
 };
 
 #endif

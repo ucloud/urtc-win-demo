@@ -49,7 +49,7 @@ public:
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnBnClickedCancel();
 
-	afx_msg HRESULT OnRTCUCloudMsg(WPARAM data, LPARAM lp);
+	afx_msg LRESULT OnRTCUCloudMsg(WPARAM data, LPARAM lp);
 
 	afx_msg void OnBnClickedButtonPubC();
 	afx_msg void OnBnClickedButtonLeaveroom();

@@ -282,7 +282,7 @@ void CSdkTestDemoDlg::OnClose()
 	CDialogEx::OnCancel();
 }
 
-HRESULT CSdkTestDemoDlg::OnRTCUCloudMsg(WPARAM data, LPARAM lp)
+LRESULT CSdkTestDemoDlg::OnRTCUCloudMsg(WPARAM data, LPARAM lp)
 {
 	tEventMsg* callmsg = (tEventMsg*)data;
 	int eventid = callmsg->mEventid;
@@ -477,7 +477,7 @@ void CSdkTestDemoDlg::OnPulibshCamStreamHandler(std::string jsonmsg) {
 			SetDlgItemText(IDC_BUTTON_PUBC, L"停止发布");
 			OnMessageShow("摄像头发布成功");
 			tRTCRenderView canvas;
-			canvas.mVidoview = (int)m_localWnd->GetVideoHwnd();
+			canvas.mVidoview = (void*)m_localWnd->GetVideoHwnd();
 			canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 			canvas.mUserid = m_userid;
 			canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
@@ -515,7 +515,7 @@ void CSdkTestDemoDlg::OnPulibshScreenStreamHandler(std::string jsonmsg) {
 			SetDlgItemText(IDC_BUTTON_PUBS, L"停止桌面");
 			OnMessageShow("桌面发布成功");
 			tRTCRenderView canvas;
-			canvas.mVidoview = (int)m_screenWnd->GetVideoHwnd();
+			canvas.mVidoview = (void*)m_screenWnd->GetVideoHwnd();
 			canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 			canvas.mUserid = m_userid;
 			canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_SCREEN;
@@ -660,7 +660,7 @@ void CSdkTestDemoDlg::OnSubStreamHandler(std::string jsonmsg) {
 			{
 
 				tRTCRenderView canvas;
-				canvas.mVidoview = (int)videoview->GetVideoHwnd();
+				canvas.mVidoview = (void*)videoview->GetVideoHwnd();
 				canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 				canvas.mUserid = uid.data();
 				canvas.mStreamMtype = mtype;
@@ -1022,7 +1022,7 @@ void CSdkTestDemoDlg::OnRemoteStHandler(std::string jsonmsg)
 		int bitrate = object["bitrate"].GetInt();
 		float lostrate = object["lostrate"].GetInt();
 
-		if (tracktype == UCLOUD_RTC_MEDIATYPE_VIDEO)
+		if (tracktype == UCLOUD_RTC_TRACKTYPE_VIDEO)
 		{
 			char buf[256] = { 0 };
 			int height = object["height"].GetInt();
@@ -1055,7 +1055,7 @@ void CSdkTestDemoDlg::OnSendStHandler(std::string jsonmsg)
 		int bitrate = object["bitrate"].GetInt();
 		float lostrate = object["lostrate"].GetInt();
 
-		if (tracktype == UCLOUD_RTC_MEDIATYPE_VIDEO)
+		if (tracktype == UCLOUD_RTC_TRACKTYPE_VIDEO)
 		{
 			char buf[256] = { 0 };
 			int height = object["height"].GetInt();

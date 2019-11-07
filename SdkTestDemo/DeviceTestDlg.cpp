@@ -253,10 +253,11 @@ void CDeviceTestDlg::OnBnClickedButtonMicTest()
 	m_mictest = !m_mictest;
 }
 
-HRESULT CDeviceTestDlg::OnAudioVol(WPARAM data, LPARAM lp) {
+LRESULT CDeviceTestDlg::OnAudioVol(WPARAM data, LPARAM lp) {
 	m_micenypro.SetPos(data);
 	return 0;
 }
+
 
 void CDeviceTestDlg::OnBnClickedButtonSpeakerTest()
 

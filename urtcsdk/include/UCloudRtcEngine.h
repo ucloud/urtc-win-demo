@@ -41,7 +41,6 @@ public:
 	virtual void onRemoteRTCStats(tUCloudRtcStreamStats rtstats) {}
 	virtual void onRemoteAudioLevel(const char* uid, int volume) {}
 
-	//common
 	virtual void onLocalAudioLevel(int volume) {}
 	virtual void onKickoff(int code) {}
 	virtual void onWarning(int warn) {}
