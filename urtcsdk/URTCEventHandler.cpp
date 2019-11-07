@@ -531,8 +531,6 @@ void URTCEventHandler::onSendRTCStats(tUCloudRtcStreamStats& rtstats)
 
 void URTCEventHandler::onRemoteRTCStats(tUCloudRtcStreamStats rtstats)
 {
-
-
 	rapidjson::StringBuffer strBuf;
 	rapidjson::Writer<rapidjson::StringBuffer> writer(strBuf);
 	writer.StartObject();
