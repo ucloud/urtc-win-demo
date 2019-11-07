@@ -1022,7 +1022,7 @@ void CSdkTestDemoDlg::OnRemoteStHandler(std::string jsonmsg)
 		int bitrate = object["bitrate"].GetInt();
 		float lostrate = object["lostrate"].GetInt();
 
-		if (tracktype == UCLOUD_RTC_MEDIATYPE_VIDEO)
+		if (tracktype == UCLOUD_RTC_TRACKTYPE_VIDEO)
 		{
 			char buf[256] = { 0 };
 			int height = object["height"].GetInt();
@@ -1055,7 +1055,7 @@ void CSdkTestDemoDlg::OnSendStHandler(std::string jsonmsg)
 		int bitrate = object["bitrate"].GetInt();
 		float lostrate = object["lostrate"].GetInt();
 
-		if (tracktype == UCLOUD_RTC_MEDIATYPE_VIDEO)
+		if (tracktype == UCLOUD_RTC_TRACKTYPE_VIDEO)
 		{
 			char buf[256] = { 0 };
 			int height = object["height"].GetInt();
