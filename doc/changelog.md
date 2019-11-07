@@ -202,4 +202,54 @@ pgram.mHeight = 0;
 m_rtcengine->setCaptureScreenPagrams(pgram);
 ``` 
 * 11 声音采集添加3通道支持 通道支持个数包括 1 2 3 4 播放支持 1 2 通道
+# 1.5 版本
+## 功能更新
+* 1 支持x64为应用程序
+* 2 优化日志上报，减少日志上报性能消耗
+* 3 支持自定义渲染模式
+调用
+``` c++ 
+实现 自定义渲染类 现在数据格式为 argb 格式输出
+    class VideoRender : public UCloudRtcExtendVideoRender {
+    public:
+        virtual  void onRemoteFrame(const tUCloudRtcVideoFrame* videoframe)
+        {
+        }
+    };
 
+    tUCloudRtcVideoCanvas canvas;
+    canvas.mVideoView = (void*)render; // mVideoView 由int 变更为 void*
+    
+    canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
+    canvas.mUserId = "";
+    canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
+    canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_EXTEND; // 自定义渲染类型
+
+    m_rtcengine->startPreview(canvas);
+``` 
+* 4 视频外部采集支持有yuv420 扩展到 yuv420 rgb argb rgba 等格式，使用如下
+``` c++ 
+实现 自定义渲染类 现在数据格式为 argb 格式输出
+    class VideoRender : public UCloudRtcExtendVideoCaptureSource {
+    public:
+      bool CSdkTestDemoDlg::doCaptureFrame(tUCloudRtcVideoFrame* videoframe)
+        {
+
+            if (!bSuccess)
+                return false;
+            if (videoframe)
+            {
+                videoframe->mDataBuf = dataBuffer; // 外部数据内存块
+                videoframe->mHeight = 360; // 自定义数据 高度
+                videoframe->mWidth = 640;// 自定义数据 宽度
+                videoframe->mVideoType = UCLOUD_RTC_VIDEO_FRAME_TYPE_ARGB; // 自定外部输入数据类型
+            }
+            return true;
+        }
+    };
+
+    m_rtcengine->enableExtendVideocapture(true, this); // 启用外部输入
+
+    发布视频流  数据会按照固定帧率进行 采集
+
+```
