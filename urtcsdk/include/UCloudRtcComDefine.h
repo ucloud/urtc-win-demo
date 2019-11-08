@@ -143,7 +143,7 @@ typedef enum {
 	UCLOUD_RTC_SCREEN_PROFILE_HIGH_PLUS = 4
 } eUCloudRtcScreenProfile;
 
-//roomtype
+
 typedef enum {
 	UCLOUD_RTC_CHANNEL_TYPE_COMMUNICATION
 }eUCloudRtcChannelType;
