@@ -18,17 +18,6 @@
 #define new DEBUG_NEW
 #endif
 
-class MyVideoRender : public UCloudRtcExtendVideoRender {
-public:
-	void onRemoteFrame(const tUCloudRtcVideoFrame* videoframe)
-	{
-		int sizebytes = videoframe->mWidth*videoframe->mHeight * 4;
-		FILE* file = fopen("local.rgb", "ab+");
-		fwrite(videoframe->mDataBuf, 1, sizebytes, file);
-		fclose(file);
-	}
-};
-
 // CSdkTestDemoDlg ¶Ô»°¿ò
 #include <string>
 #include <stdint.h>
@@ -668,14 +657,12 @@ void CSdkTestDemoDlg::OnSubStreamHandler(std::string jsonmsg) {
 			OnMessageShow(msg);
 			if (videoview)
 			{
-				MyVideoRender* render = new MyVideoRender;
 				tRTCRenderView canvas;
-				//canvas.mVidoview = (void*)videoview->GetVideoHwnd();
-				canvas.mVidoview = (void*)render;
+				canvas.mVidoview = (void*)videoview->GetVideoHwnd();
 				canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 				canvas.mUserid = uid.data();
 				canvas.mStreamMtype = mtype;
-				canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_EXTEND;
+				canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;
 				m_rtcengine->StartRemoteRender(canvas);
 			}
 
