@@ -286,8 +286,8 @@ int URTCEngineImpl::StartRecord(tRecordConfig& config)
 		uconfig.mProfile = (eUCloudRtcRecordProfile)config.mProfile;
 		uconfig.mRecordType = (eUCloudRtcRecordType)config.mRecordType;
 		uconfig.mWatermarkPos = (eUCloudRtcWaterMarkPos)config.mWatermarkPos;
-		uconfig.mBucket = config.mBucket;
-		uconfig.mBucketRegion = config.mBucketRegion;
+		uconfig.mBucket = "urtc-test";
+		uconfig.mBucketRegion = "cn-bj";
 		return m_rtcengine->startRecord(uconfig);
 	}
 	return -1;

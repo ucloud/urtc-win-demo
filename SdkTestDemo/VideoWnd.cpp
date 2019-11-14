@@ -24,6 +24,7 @@ CVideoWnd::CVideoWnd(CWnd* pParent /*=NULL*/)
 	m_audiomute = false;
 	m_videomute = false;
 	m_isReady = false;
+	m_isfull = false;
 }
 
 CVideoWnd::~CVideoWnd()
@@ -72,8 +73,19 @@ void CVideoWnd::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_PROGRESS4, m_vol);
 }
 
+void CVideoWnd::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
+{
+	CDialogEx::OnNcLButtonDblClk(nHitTest, point);
+}
+
 void CVideoWnd::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
+	if (m_pObserver)
+	{
+		m_pObserver->OnFullCmd(!m_isfull, m_userid, m_type);
+		m_isfull = !m_isfull;
+	}
+	CDialogEx::OnLButtonDblClk(nFlags, point);
 }
 
 BOOL CVideoWnd::PreTranslateMessage(MSG* pMsg) {
@@ -84,11 +96,13 @@ BOOL CVideoWnd::PreTranslateMessage(MSG* pMsg) {
 BEGIN_MESSAGE_MAP(CVideoWnd, CDialogEx)
     ON_WM_SIZE()
     ON_WM_PAINT()
+	ON_WM_NCLBUTTONDBLCLK()
 	ON_WM_LBUTTONDBLCLK()
 	ON_BN_CLICKED(IDC_BTN_CLOSE, &CVideoWnd::OnBnClickedBtnClose)
 	ON_BN_CLICKED(IDC_BTN_VIDEO_ON, &CVideoWnd::OnBnClickedBtnVideoOn)
 	ON_BN_CLICKED(IDC_BTN_MUTE_A, &CVideoWnd::OnBnClickedBtnMuteA)
 	ON_BN_CLICKED(IDC_BTN_MUTE_V, &CVideoWnd::OnBnClickedBtnMuteV)
+	ON_STN_DBLCLK(IDC_VIDEO, &CVideoWnd::OnStnDblclickVideo)
 END_MESSAGE_MAP()
 
 
@@ -375,4 +389,14 @@ void CVideoWnd::OnBnClickedBtnMuteV()
 		}
 	}
 	
+}
+
+
+void CVideoWnd::OnStnDblclickVideo()
+{
+	if (m_pObserver)
+	{
+		m_pObserver->OnFullCmd(!m_isfull, m_userid, m_type);
+		m_isfull = !m_isfull;
+	}
 }

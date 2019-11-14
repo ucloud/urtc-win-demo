@@ -46,4 +46,7 @@ public:
 	afx_msg void OnBnClickedRadioChC();
 	CStatic m_sectxt;
 	afx_msg void OnBnClickedCheckAudioonly();
+	afx_msg void OnStnClickedSecKey();
+	afx_msg void OnBnClickedCheckPubrole();
+	afx_msg void OnBnClickedCheckSubrole();
 };

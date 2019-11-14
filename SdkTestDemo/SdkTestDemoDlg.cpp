@@ -34,6 +34,7 @@ CSdkTestDemoDlg::CSdkTestDemoDlg(CWnd* pParent /*=NULL*/)
 	m_isclose = false;
 	m_startrecord = false;
 	m_startaudiomix = false;
+	_pFullScreenDlg = nullptr;
 }
 
 void CSdkTestDemoDlg::OnMuteAudio(std::string userid, eUCloudRtcMeidaType mediatype, bool mute) {
@@ -92,6 +93,11 @@ void CSdkTestDemoDlg::OnMuteVideo(std::string userid, eUCloudRtcMeidaType mediat
 void CSdkTestDemoDlg::OnCloseMedia(std::string type, std::string id) 
 {
 
+}
+
+void CSdkTestDemoDlg::OnFullCmd(bool full, std::string userid, eUCloudRtcMeidaType mediatype)
+{
+	FullScreen(full, userid, mediatype);
 }
 
 void CSdkTestDemoDlg::DoDataExchange(CDataExchange* pDX)
@@ -199,12 +205,14 @@ BOOL CSdkTestDemoDlg::OnInitDialog()
 
 	//本地视频窗口
 	m_localWnd = CreateVideoWindow(UCLOUD_RTC_MEDIATYPE_VIDEO, 0, y, 240, 240);
+	m_localWnd->SetParent(this);
 	m_localWnd->SetTitle(L"Local (Camera)");
 	m_localWnd->SetUserId("camera");
 	m_localWnd->RegisterCallback(this);
 
 	//本地桌面窗口
 	m_screenWnd  = CreateVideoWindow(UCLOUD_RTC_MEDIATYPE_SCREEN, 242, y, 240, 240);
+	//m_screenWnd->SetParent(this);
 	m_screenWnd->SetTitle(L"Local (Screen)");
 	m_screenWnd->SetUserId("screen");
 	m_screenWnd->RegisterCallback(this);
@@ -212,6 +220,7 @@ BOOL CSdkTestDemoDlg::OnInitDialog()
 	//远端渲染窗口
 	for (int i = 2; i <= 3; ++i) {
 		CVideoWnd *pWnd = CreateVideoWindow(UCLOUD_RTC_MEDIATYPE_VIDEO, 242 * i, y, 240, 240);
+		//pWnd->SetParent(this);
 		pWnd->RegisterCallback(this);
 		m_remoteWnds.emplace_back(pWnd);
 	}
@@ -219,6 +228,7 @@ BOOL CSdkTestDemoDlg::OnInitDialog()
 	y += 242;
 	for (int i = 0; i < 4; ++i) {
 		CVideoWnd *pWnd = CreateVideoWindow(UCLOUD_RTC_MEDIATYPE_VIDEO, i * 242, y, 240, 240);
+		//pWnd->SetParent(this);
 		pWnd->RegisterCallback(this);
 		m_remoteWnds.emplace_back(pWnd);
 	}
@@ -226,6 +236,12 @@ BOOL CSdkTestDemoDlg::OnInitDialog()
 	m_rtcengine->InitRTCEngine(this->GetSafeHwnd());
 
 	InitURTCConfig();
+	_pFullScreenDlg = new VideoFullDlg();
+	if (NULL != _pFullScreenDlg)
+	{
+		_pFullScreenDlg->Create(VideoFullDlg::IDD, this);
+		_pFullScreenDlg->ShowWindow(SW_HIDE);
+	}
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -1085,15 +1101,19 @@ void CSdkTestDemoDlg::OnStartRecord(std::string jsonmsg)
 
 		const rapidjson::Value& object = doc["data"];
 		std::string recordid = object["recordid"].GetString();
+		std::string filename = object["filename"].GetString();
+		std::string bucket = object["bucket"].GetString();
+		std::string region = object["region"].GetString();
 		if (code == 0)
 		{
 			m_startrecord = true;
 			SetDlgItemText(IDC_BUTTON_RECORD, L"停止录制");
-			char mutecontent[128] = { 0 };
-			sprintf_s(mutecontent, "recordid:%s ", recordid.data());
-			std::string content = mutecontent;
-			std::string desc = "开启录制成功 " + msg + " " + content;
-			OnMessageShow(desc);
+			OnMessageShow("录像地址：");
+			char mutecontent[1024] = { 0 };
+			sprintf_s(mutecontent, "https://%s.%s.ufileos.com/%s.mp4 ", bucket.data(), region.data(), filename.data());
+			//std::string content = mutecontent;
+			//std::string desc = "开启录制成功 " + msg + " " + content;
+			OnMessageShow(mutecontent);
 
 		}
 		else
@@ -1401,6 +1421,78 @@ void CSdkTestDemoDlg::OnBnClickedButtonPubs()
 	}
 }
 
+void CSdkTestDemoDlg::FullScreen(bool bFull, std::string userid, int mediatype)
+{
+	if (bFull)
+	{
+		_pFullScreenDlg->ShowWindow(SW_SHOW);
+		if (userid == "camera")
+		{
+			m_rtcengine->StopLocalRender();
+			_pFullScreenDlg->BindChild(m_localWnd);
+		}
+		else if (userid == "screen")
+		{
+			_pFullScreenDlg->BindChild(m_screenWnd);
+		}
+		else 
+		{
+			char buf[32] = { 0 };
+			sprintf_s(buf, "%d", mediatype);
+			std::string mediakey = userid + buf;
+
+			streamrenderit srit = m_mapRenders.find(mediakey);
+			CVideoWnd* videoview = nullptr;
+			if (srit != m_mapRenders.end())
+			{
+				CVideoWnd* videoview = srit->second;
+				if (videoview)
+				{
+					_pFullScreenDlg->BindChild(videoview);
+				}
+			}
+
+		}
+	}
+	else
+	{
+		_pFullScreenDlg->ShowWindow(SW_HIDE);
+		CVideoWnd* videownd = nullptr;
+		if (userid == "camera")
+		{
+			videownd = m_localWnd;
+		}
+		else if (userid == "screen")
+		{
+			videownd = m_screenWnd;
+			
+		}
+		else
+		{
+			char buf[32] = { 0 };
+			sprintf_s(buf, "%d", mediatype);
+			std::string mediakey = userid + buf;
+
+			streamrenderit srit = m_mapRenders.find(mediakey);
+			if (srit != m_mapRenders.end())
+			{
+				videownd = srit->second;
+			}
+		}
+
+		if (videownd)
+		{
+			::SetParent(videownd->GetVideoHwnd(), this->GetSafeHwnd());
+			CRect rect;
+			::GetWindowRect(videownd->GetVideoHwnd(), &rect);
+			ScreenToClient(&rect);
+			::MoveWindow(videownd->GetVideoHwnd(), rect.left, rect.top,
+				(rect.right - rect.left), (rect.bottom - rect.top), false);
+			::ShowWindow(videownd->GetVideoHwnd(), SW_SHOW);
+		}
+	}
+}
+
 void CSdkTestDemoDlg::OnMessageShow(std::string msg) {
 	if (m_msglist.GetCount()>300)
 	{
@@ -1425,8 +1517,6 @@ void CSdkTestDemoDlg::OnBnClickedButtonRecord()
 			recordconfig.mProfile = 1;
 			recordconfig.mRecordType = 2;
 			recordconfig.mWatermarkPos = 1;
-			recordconfig.mBucket = "urtc-test";
-			recordconfig.mBucketRegion = "cn-bj";
 			m_rtcengine->StartRecord(recordconfig);
 		}
 	}

@@ -11,6 +11,7 @@
 #include <set>
 
 #include "VideoWnd.h"
+#include "VideoFullDlg.h"
 #include "afxwin.h"
 #include "afxcmn.h"
 #include "RTCEngineFactory.h"
@@ -27,6 +28,7 @@ public:
 	void OnMuteAudio(std::string userid, eUCloudRtcMeidaType mediatype, bool mute);
 	void OnMuteVideo(std::string userid, eUCloudRtcMeidaType mediatype, bool mute);
 	void OnCloseMedia(std::string type, std::string id);
+	void OnFullCmd(bool full, std::string userid, eUCloudRtcMeidaType mediatype);
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
@@ -54,6 +56,8 @@ public:
 	afx_msg void OnBnClickedButtonPubC();
 	afx_msg void OnBnClickedButtonLeaveroom();
 	afx_msg void OnBnClickedButtonPubs();
+
+	void FullScreen(bool bFull, std::string userid, int mediatype);
 
 private:
 	CVideoWnd* CreateVideoWindow(eUCloudRtcMeidaType type, int x, int y, int w, int h);
@@ -112,6 +116,7 @@ public:
 	CButton m_videocheck;
 	CButton m_audiocheck;
 
+	VideoFullDlg* _pFullScreenDlg;
 	RTCEngineBase* m_rtcengine;
 
 	std::string m_userid;      // 自己用户id

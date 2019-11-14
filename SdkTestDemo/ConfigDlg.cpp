@@ -154,6 +154,9 @@ BEGIN_MESSAGE_MAP(CConfigDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_RADIO_CH_C, &CConfigDlg::OnBnClickedRadioChC)
 	ON_BN_CLICKED(IDC_RADIO_LIVE, &CConfigDlg::OnBnClickedRadioChC)
 	ON_BN_CLICKED(IDC_CHECK_AUDIOONLY, &CConfigDlg::OnBnClickedCheckAudioonly)
+	ON_STN_CLICKED(IDC_SEC_KEY, &CConfigDlg::OnStnClickedSecKey)
+	ON_BN_CLICKED(IDC_CHECK_PUBROLE, &CConfigDlg::OnBnClickedCheckPubrole)
+	ON_BN_CLICKED(IDC_CHECK_SUBROLE, &CConfigDlg::OnBnClickedCheckSubrole)
 END_MESSAGE_MAP()
 
 
@@ -309,6 +312,22 @@ void CConfigDlg::OnBnClickedRadioNormal()
 void CConfigDlg::OnBnClickedRadioChC()
 {
 	UpdateData(TRUE);
+	int pubrcheck = m_rolepub.GetCheck();
+	int subrcheck = m_rolesub.GetCheck();
+
+	if (m_chtype == 1)
+	{
+		if (pubrcheck && subrcheck)
+		{
+			m_rolepub.SetCheck(0);
+			m_rolesub.SetCheck(1);
+		}
+	}
+	else 
+	{
+		m_rolepub.SetCheck(1);
+		m_rolesub.SetCheck(1);
+	}
 }
 
 
@@ -327,5 +346,35 @@ void CConfigDlg::OnBnClickedCheckAudioonly()
 		m_videoprofile.EnableWindow(FALSE);
 		m_pubscreen.EnableWindow(FALSE);
 		m_pubvideo.EnableWindow(FALSE);
+	}
+}
+
+
+void CConfigDlg::OnStnClickedSecKey()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+
+void CConfigDlg::OnBnClickedCheckPubrole()
+{
+	if (m_chtype == 1)
+	{
+		if (m_rolesub.GetCheck())
+		{
+			m_rolesub.SetCheck(0);
+		}
+	}
+}
+
+
+void CConfigDlg::OnBnClickedCheckSubrole()
+{
+	if (m_chtype == 1)
+	{
+		if (m_rolepub.GetCheck())
+		{
+			m_rolepub.SetCheck(0);
+		}
 	}
 }

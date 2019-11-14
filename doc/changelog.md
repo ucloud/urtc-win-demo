@@ -253,3 +253,16 @@ m_rtcengine->setCaptureScreenPagrams(pgram);
     发布视频流  数据会按照固定帧率进行 采集
 
 ```
+
+# 1.6 版本发布
+* 1 加入大班课功能，支持超大规模会议功能
+使用如下
+``` c++ 
+m_rtcengine->setChannelType(UCLOUD_RTC_CHANNEL_TYPE_BROADCAST);
+注意：
+大班课中用户只能拥有订阅或者发布一种权限
+如果m_rtcengine->setStreamRole(UCLOUD_RTC_USER_STREAM_ROLE_BOTH);
+SDK会默认把权限设置为UCLOUD_RTC_USER_STREAM_ROLE_SUB
+```
+* 2 添加超大分辨率支持1080p_plus
+
