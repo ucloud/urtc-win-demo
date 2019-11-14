@@ -89,16 +89,6 @@ typedef enum {
 	UCLOUD_RTC_WATERMARKPOS_RIGHTBOTTOM
 }eUCloudRtcWaterMarkPos;
 
-typedef struct {
-	const char* mMainviewuid;
-	const char* mBucket;
-	const char* mBucketRegion;
-	eUCloudRtcRecordProfile mProfile;
-	eUCloudRtcRecordType mRecordType;
-	eUCloudRtcWaterMarkPos mWatermarkPos;
-	eUCloudRtcMeidaType mMainviewmediatype;
-}tUCloudRtcRecordConfig;
-
 //render type
 typedef enum {
 	UCLOUD_RTC_RENDER_MODE_DEFAULT = 0, //default full
@@ -133,7 +123,7 @@ typedef enum {
 	UCLOUD_RTC_VIDEO_PROFILE_640_480 = 4,
 	UCLOUD_RTC_VIDEO_PROFILE_1280_720 = 5,
 	UCLOUD_RTC_VIDEO_PROFILE_1920_1080 = 6,
-	UCLOUD_RTC_VIDEO_PROFILE_1920_1080_PLUS = 7
+	UCLOUD_RTC_VIDEO_PROFILE_1920_1080_PLUS = 7 //1920*2*1080
 } eUCloudRtcVideoProfile;
 
 typedef enum {
@@ -167,6 +157,24 @@ typedef enum {
 	UCLOUD_RTC_CODEC_H264
 } eUCloudRtcVideoCodec;
 
+typedef enum {
+	UCLOUD_RTC_VIDEO_FRAME_TYPE_I420 = 1,
+	UCLOUD_RTC_VIDEO_FRAME_TYPE_RGB24,
+	UCLOUD_RTC_VIDEO_FRAME_TYPE_RGBA,
+	UCLOUD_RTC_VIDEO_FRAME_TYPE_ARGB,
+}eUCloudRtcVideoFrameType;
+
+
+typedef struct {
+	const char* mMainviewuid;
+	const char* mBucket;
+	const char* mBucketRegion;
+	eUCloudRtcRecordProfile mProfile;
+	eUCloudRtcRecordType mRecordType;
+	eUCloudRtcWaterMarkPos mWatermarkPos;
+	eUCloudRtcMeidaType mMainviewmediatype;
+}tUCloudRtcRecordConfig;
+
 // render view
 typedef struct
 {
@@ -176,6 +184,7 @@ typedef struct
 	eUCloudRtcMeidaType mStreamMtype;
 	eUCloudRtcRenderMode mRenderMode;
 	eUCloudRtcRenderType mRenderType;
+	eUCloudRtcVideoFrameType mVideoFrameType; //when extend render this decide callback frametype
 }tUCloudRtcVideoCanvas;
 
 
@@ -218,13 +227,6 @@ typedef struct {
 	int mChannels;
 	int mNumSimples;
 }tUCloudRtcAudioFrame;
-
-typedef enum {
-	UCLOUD_RTC_VIDEO_FRAME_TYPE_I420 = 1,
-	UCLOUD_RTC_VIDEO_FRAME_TYPE_RGB24,
-	UCLOUD_RTC_VIDEO_FRAME_TYPE_RGBA,
-	UCLOUD_RTC_VIDEO_FRAME_TYPE_ARGB,
-}eUCloudRtcVideoFrameType;
 
 typedef struct {
 	unsigned char* mDataBuf;

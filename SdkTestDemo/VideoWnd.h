@@ -11,7 +11,6 @@ public:
     virtual void OnMuteAudio(std::string userid, eUCloudRtcMeidaType mediatype,  bool mute) = 0;
 	virtual void OnMuteVideo(std::string userid, eUCloudRtcMeidaType mediatype, bool mute) = 0;
     virtual void OnCloseMedia(std::string type, std::string id) = 0;
-	virtual void OnFullCmd(bool full, std::string userid, eUCloudRtcMeidaType mediatype) = 0;
 };
 
 // CVideoWnd 对话框
@@ -89,8 +88,6 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
-	afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);
-	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg BOOL PreTranslateMessage(MSG* pMsg);
 
 	DECLARE_MESSAGE_MAP()

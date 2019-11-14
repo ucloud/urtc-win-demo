@@ -95,11 +95,6 @@ void CSdkTestDemoDlg::OnCloseMedia(std::string type, std::string id)
 
 }
 
-void CSdkTestDemoDlg::OnFullCmd(bool full, std::string userid, eUCloudRtcMeidaType mediatype)
-{
-	FullScreen(full, userid, mediatype);
-}
-
 void CSdkTestDemoDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
@@ -1418,78 +1413,6 @@ void CSdkTestDemoDlg::OnBnClickedButtonPubs()
 		}
 		int ret = m_rtcengine->PublishStream(info);
 		m_screenWnd->SetUserId("screen");
-	}
-}
-
-void CSdkTestDemoDlg::FullScreen(bool bFull, std::string userid, int mediatype)
-{
-	if (bFull)
-	{
-		_pFullScreenDlg->ShowWindow(SW_SHOW);
-		if (userid == "camera")
-		{
-			m_rtcengine->StopLocalRender();
-			_pFullScreenDlg->BindChild(m_localWnd);
-		}
-		else if (userid == "screen")
-		{
-			_pFullScreenDlg->BindChild(m_screenWnd);
-		}
-		else 
-		{
-			char buf[32] = { 0 };
-			sprintf_s(buf, "%d", mediatype);
-			std::string mediakey = userid + buf;
-
-			streamrenderit srit = m_mapRenders.find(mediakey);
-			CVideoWnd* videoview = nullptr;
-			if (srit != m_mapRenders.end())
-			{
-				CVideoWnd* videoview = srit->second;
-				if (videoview)
-				{
-					_pFullScreenDlg->BindChild(videoview);
-				}
-			}
-
-		}
-	}
-	else
-	{
-		_pFullScreenDlg->ShowWindow(SW_HIDE);
-		CVideoWnd* videownd = nullptr;
-		if (userid == "camera")
-		{
-			videownd = m_localWnd;
-		}
-		else if (userid == "screen")
-		{
-			videownd = m_screenWnd;
-			
-		}
-		else
-		{
-			char buf[32] = { 0 };
-			sprintf_s(buf, "%d", mediatype);
-			std::string mediakey = userid + buf;
-
-			streamrenderit srit = m_mapRenders.find(mediakey);
-			if (srit != m_mapRenders.end())
-			{
-				videownd = srit->second;
-			}
-		}
-
-		if (videownd)
-		{
-			::SetParent(videownd->GetVideoHwnd(), this->GetSafeHwnd());
-			CRect rect;
-			::GetWindowRect(videownd->GetVideoHwnd(), &rect);
-			ScreenToClient(&rect);
-			::MoveWindow(videownd->GetVideoHwnd(), rect.left, rect.top,
-				(rect.right - rect.left), (rect.bottom - rect.top), false);
-			::ShowWindow(videownd->GetVideoHwnd(), SW_SHOW);
-		}
 	}
 }
 
