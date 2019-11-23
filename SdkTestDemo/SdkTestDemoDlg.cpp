@@ -160,7 +160,6 @@ void CSdkTestDemoDlg::InitURTCConfig()
 	auth.mAppid = URTCConfig::getInstance()->getAppId();
 	auth.mRoomid = m_roomid.data();
 	auth.mUserid = m_userid.data();
-	auth.mToken = "test";
 	int ret = m_rtcengine->JoinRoom(auth);
 }
 
@@ -818,9 +817,8 @@ void CSdkTestDemoDlg::OnKickoffHandler(std::string jsonmsg) {
 	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
 		int code = doc["code"].GetInt();
-		std::string msg = doc["msg"].GetString();
 		char num[32] = { 0 };
-		sprintf_s(num, " err code = %d", code);
+		sprintf_s(num, " = %d", code);
 		std::string errcode = num;
 		GetDlgItem(IDC_BUTTON_LEAVEROOM)->EnableWindow(false);
 		SetDlgItemText(IDC_BUTTON_PUBC, L"·¢²¼Ã½Ìå");
