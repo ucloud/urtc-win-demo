@@ -22,6 +22,7 @@
 #include <string>
 #include <stdint.h>
 
+#define VIDEO_FRAME_CALLBACK 20000
 
 CSdkTestDemoDlg::CSdkTestDemoDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_SFU, pParent)
@@ -35,6 +36,7 @@ CSdkTestDemoDlg::CSdkTestDemoDlg(CWnd* pParent /*=NULL*/)
 	m_startrecord = false;
 	m_startaudiomix = false;
 	_pFullScreenDlg = nullptr;
+	m_lpImageBuffer = new unsigned char[0x800000];
 }
 
 void CSdkTestDemoDlg::OnMuteAudio(std::string userid, eUCloudRtcMeidaType mediatype, bool mute) {
@@ -156,6 +158,11 @@ void CSdkTestDemoDlg::InitURTCConfig()
 	m_rtcengine->MuteCamBeforeJoin(URTCConfig::getInstance()->getMuteCamBeforeJoin());
 	m_rtcengine->MuteMicBeforeJoin(URTCConfig::getInstance()->getMuteMicBeforeJoin());
 
+	m_mediadevice = UCloudRtcMediaDevice::sharedInstance();
+		m_mediadevice = UCloudRtcMediaDevice::sharedInstance();
+	m_rtcengine->enableExtendVideoSource(true, this);
+	CVideoPackageQueue::GetInstance()->SetVideoFrameLen(640 * 360 * 3/2);
+
 	tRTCAuthInfo auth;
 	auth.mAppid = URTCConfig::getInstance()->getAppId();
 	auth.mRoomid = m_roomid.data();
@@ -168,6 +175,7 @@ BEGIN_MESSAGE_MAP(CSdkTestDemoDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_WM_CLOSE()
+	ON_MESSAGE(VIDEO_FRAME_CALLBACK, &CSdkTestDemoDlg::OnVideoFrameCallback)
 	ON_BN_CLICKED(IDOK, &CSdkTestDemoDlg::OnBnClickedOk)
 	ON_BN_CLICKED(IDCANCEL, &CSdkTestDemoDlg::OnBnClickedCancel)
 	ON_MESSAGE(RTC_EVENT_UCLOUD, &CSdkTestDemoDlg::OnRTCUCloudMsg)
@@ -287,8 +295,22 @@ void CSdkTestDemoDlg::OnBnClickedCancel()
 
 void CSdkTestDemoDlg::OnClose()
 {
+	if (m_mediadevice)
+	{
+		m_mediadevice->stopCaptureFrame();
+	}
+	UCloudRtcMediaDevice::destory();
 	m_rtcengine->UnInitRTCEngine();
 	CDialogEx::OnCancel();
+}
+
+LRESULT CSdkTestDemoDlg::OnVideoFrameCallback(WPARAM data, LPARAM lp)
+{
+	unsigned char* videoframe = (unsigned char*)data;
+	int buflen = lp;
+	CVideoPackageQueue::GetInstance()->PushVideoPackage(videoframe, buflen);
+	delete[] videoframe;
+	return 0;
 }
 
 LRESULT CSdkTestDemoDlg::OnRTCUCloudMsg(WPARAM data, LPARAM lp)
@@ -1331,6 +1353,10 @@ void CSdkTestDemoDlg::OnBnClickedButtonPubC()
 		m_rtcengine->UnPublishStream(info);
 		SetDlgItemText(IDC_BUTTON_PUBC, L"·¢²¼Ã½Ìå");
 		m_campub = !m_campub;
+		if (m_mediadevice)
+		{
+			m_mediadevice->stopCaptureFrame();
+		}
 	}
 	else {
 		bool audioEnable = m_audiocheck.GetCheck();
@@ -1358,6 +1384,10 @@ void CSdkTestDemoDlg::OnBnClickedButtonPubC()
 		else 
 		{
 			m_rtcengine->EnableRtspSource(UCLOUD_RTC_MEDIATYPE_VIDEO, false, "");
+		}
+		if (m_mediadevice)
+		{
+			m_mediadevice->startCaptureFrame(UCLOUD_RTC_VIDEO_PROFILE_640_360, this);
 		}
 		int ret = m_rtcengine->PublishStream(info);
 	}
@@ -1412,6 +1442,32 @@ void CSdkTestDemoDlg::OnBnClickedButtonPubs()
 		int ret = m_rtcengine->PublishStream(info);
 		m_screenWnd->SetUserId("screen");
 	}
+}
+
+void CSdkTestDemoDlg::onCaptureFrame(unsigned char* videoframe, int buflen)
+{
+	unsigned char* buf = new unsigned char[buflen];
+	memset(buf, 0, buflen);
+	memcpy(buf, videoframe, buflen);
+	PostMessage(VIDEO_FRAME_CALLBACK, (WPARAM)buf, buflen);
+}
+
+bool CSdkTestDemoDlg::doCaptureFrame(tUCloudRtcVideoFrame* videoframe)
+{
+
+	SIZE_T nBufferSize = 0x800000;
+	memset(m_lpImageBuffer, 0, 0x800000);
+	BOOL bSuccess = CVideoPackageQueue::GetInstance()->PopVideoPackage(m_lpImageBuffer, &nBufferSize);
+	if (!bSuccess)
+		return false;
+	if (videoframe)
+	{
+		videoframe->mDataBuf = m_lpImageBuffer;
+		videoframe->mHeight = 360;
+		videoframe->mWidth = 640;
+		videoframe->mVideoType = UCLOUD_RTC_VIDEO_FRAME_TYPE_I420;
+	}
+	return true;
 }
 
 void CSdkTestDemoDlg::OnMessageShow(std::string msg) {

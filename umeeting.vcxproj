@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="SdkTestDemo\BufferQueue.cpp" />
     <ClCompile Include="SdkTestDemo\ConfigDlg.cpp" />
     <ClCompile Include="sdktestdemo\DeviceTestDlg.cpp" />
     <ClCompile Include="SdkTestDemo\LoginDlg.cpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="sdktestdemo\SdkTestDemoDlg.cpp" />
     <ClCompile Include="sdktestdemo\stdafx.cpp" />
     <ClCompile Include="SdkTestDemo\VideoFullDlg.cpp" />
+    <ClCompile Include="SdkTestDemo\VideoPackageQueue.cpp" />
     <ClCompile Include="sdktestdemo\VideoWnd.cpp" />
     <ClCompile Include="urtcsdk\RTCEngineFactory.cpp" />
     <ClCompile Include="urtcsdk\URTCConfig.cpp" />
@@ -146,6 +148,7 @@
     <ClCompile Include="utils\SdkUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SdkTestDemo\BufferQueue.h" />
     <ClInclude Include="SdkTestDemo\ConfigDlg.h" />
     <ClInclude Include="sdktestdemo\DeviceTestDlg.h" />
     <ClInclude Include="SdkTestDemo\LoginDlg.h" />
@@ -155,6 +158,7 @@
     <ClInclude Include="sdktestdemo\stdafx.h" />
     <ClInclude Include="sdktestdemo\targetver.h" />
     <ClInclude Include="SdkTestDemo\VideoFullDlg.h" />
+    <ClInclude Include="SdkTestDemo\VideoPackageQueue.h" />
     <ClInclude Include="sdktestdemo\VideoWnd.h" />
     <ClInclude Include="urtcsdk\RTCDefine.h" />
     <ClInclude Include="urtcsdk\RTCEngineBase.h" />

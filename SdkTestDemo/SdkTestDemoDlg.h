@@ -15,10 +15,17 @@
 #include "afxwin.h"
 #include "afxcmn.h"
 #include "RTCEngineFactory.h"
+#include "VideoPackageQueue.h"
+#include "UCloudRtcComDefine.h"
+#include "UCloudRtcMediaDevice.h"
 
 
 // CSdkTestDemoDlg 对话框
-class CSdkTestDemoDlg : public CDialogEx, public CVideoWndCallback
+class CSdkTestDemoDlg : 
+	public CDialogEx, 
+	public CVideoWndCallback,
+	public UCloudRtcVideoFrameObserver,
+	public UCloudRtcExtendVideoCaptureSource
 {
 // 构造
 public:
@@ -51,10 +58,17 @@ public:
 	afx_msg void OnBnClickedCancel();
 
 	afx_msg LRESULT OnRTCUCloudMsg(WPARAM data, LPARAM lp);
+	afx_msg LRESULT OnVideoFrameCallback(WPARAM data, LPARAM lp);
 
 	afx_msg void OnBnClickedButtonPubC();
 	afx_msg void OnBnClickedButtonLeaveroom();
 	afx_msg void OnBnClickedButtonPubs();
+
+	//ucloudrtcvideoframeobserver
+	virtual  void onCaptureFrame(unsigned char* videoframe, int buflen);
+
+	//extendcapture
+	virtual  bool doCaptureFrame(tUCloudRtcVideoFrame* videoframe);
 
 private:
 	CVideoWnd* CreateVideoWindow(eUCloudRtcMeidaType type, int x, int y, int w, int h);
@@ -136,4 +150,6 @@ public:
 	afx_msg void OnBnClickedButtonMixfile();
 	CEdit m_rtsp1;
 	CEdit m_rtsp2;
+	unsigned char* m_lpImageBuffer;
+	UCloudRtcMediaDevice* m_mediadevice;
 };

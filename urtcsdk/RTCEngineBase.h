@@ -2,7 +2,7 @@
 #define _UMEETING_RTCENGINEBASE_H_
 
 #include "RTCDefine.h"
-
+class UCloudRtcExtendVideoCaptureSource;
 class RTCEngineBase{
 public:
 	virtual ~RTCEngineBase(){}
@@ -19,6 +19,8 @@ public:
 
 	virtual int MuteCamBeforeJoin(bool mute) = 0;
 	virtual int MuteMicBeforeJoin(bool mute) = 0;
+
+	virtual int enableExtendVideoSource(bool enable, UCloudRtcExtendVideoCaptureSource* source) = 0;
 
 	virtual int PublishStream(tRTCStreamInfo& streaminfo) = 0;
 	virtual int UnPublishStream(tRTCStreamInfo& streaminfo) = 0;

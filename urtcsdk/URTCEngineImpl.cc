@@ -116,6 +116,15 @@ int URTCEngineImpl::MuteMicBeforeJoin(bool mute)
 	return -1;
 }
 
+int URTCEngineImpl::enableExtendVideoSource(bool enable, UCloudRtcExtendVideoCaptureSource* source)
+{
+	if (m_rtcengine)
+	{
+		return m_rtcengine->enableExtendVideocapture(enable, source);
+	}
+	return -1;
+}
+
 int URTCEngineImpl::PublishStream(tRTCStreamInfo& streaminfo)
 {
 	if (m_rtcengine)
