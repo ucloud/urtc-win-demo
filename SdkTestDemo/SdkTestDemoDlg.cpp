@@ -158,10 +158,12 @@ void CSdkTestDemoDlg::InitURTCConfig()
 	m_rtcengine->MuteCamBeforeJoin(URTCConfig::getInstance()->getMuteCamBeforeJoin());
 	m_rtcengine->MuteMicBeforeJoin(URTCConfig::getInstance()->getMuteMicBeforeJoin());
 
-	m_mediadevice = UCloudRtcMediaDevice::sharedInstance();
+	/*m_mediadevice = UCloudRtcMediaDevice::sharedInstance();
 		m_mediadevice = UCloudRtcMediaDevice::sharedInstance();
 	m_rtcengine->enableExtendVideoSource(true, this);
-	CVideoPackageQueue::GetInstance()->SetVideoFrameLen(640 * 360 * 3/2);
+	CVideoPackageQueue::GetInstance()->SetVideoFrameLen(640 * 360 * 3/2);*/
+
+	m_mediadevice = nullptr;
 
 	tRTCAuthInfo auth;
 	auth.mAppid = URTCConfig::getInstance()->getAppId();
