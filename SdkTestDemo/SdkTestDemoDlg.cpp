@@ -976,8 +976,6 @@ void CSdkTestDemoDlg::OnRemoteTrackStNotify(std::string jsonmsg) {
 	rapidjson::Document doc;
 	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		int code = doc["code"].GetInt();
-		std::string msg = doc["msg"].GetString();
 
 		const rapidjson::Value& object = doc["data"];
 		std::string uid = object["uid"].GetString();
