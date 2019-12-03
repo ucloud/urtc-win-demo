@@ -25,7 +25,7 @@ int URTCEngineImpl::InitRTCEngine(void* callback)
 	m_rtcengine->configLocalAudioPublish(URTCConfig::getInstance()->isAutoPubAudio());
 	m_rtcengine->configLocalCameraPublish(URTCConfig::getInstance()->isAutoPubVideo());
 	m_rtcengine->configLocalScreenPublish(URTCConfig::getInstance()->isAutoPubScreen());
-	m_rtcengine->setVideoProfile(URTCConfig::getInstance()->getVideoProfile());
+	m_rtcengine->setVideoProfile(URTCConfig::getInstance()->getVideoProfile(),);
 	m_rtcengine->setDesktopProfile(UCLOUD_RTC_SCREEN_PROFILE_HIGH_PLUS);
 	m_rtcengine->setSdkMode(URTCConfig::getInstance()->getSdkMode());
 	return 0;

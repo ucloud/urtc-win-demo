@@ -89,6 +89,12 @@ typedef enum {
 	UCLOUD_RTC_WATERMARKPOS_RIGHTBOTTOM
 }eUCloudRtcWaterMarkPos;
 
+typedef enum {
+	UCLOUD_RTC_WATERMARK_TYPE_TIME = 1,
+	UCLOUD_RTC_WATERMARK_TYPE_PIC,
+	UCLOUD_RTC_WATERMARK_TYPE_TEXT,
+}eUCloudRtcWaterMarkType;
+
 //render type
 typedef enum {
 	UCLOUD_RTC_RENDER_MODE_DEFAULT = 0, //default full
@@ -122,8 +128,7 @@ typedef enum {
 	UCLOUD_RTC_VIDEO_PROFILE_640_360 = 3,
 	UCLOUD_RTC_VIDEO_PROFILE_640_480 = 4,
 	UCLOUD_RTC_VIDEO_PROFILE_1280_720 = 5,
-	UCLOUD_RTC_VIDEO_PROFILE_1920_1080 = 6,
-	UCLOUD_RTC_VIDEO_PROFILE_1920_1080_PLUS = 7 //1920*2*1080
+	UCLOUD_RTC_VIDEO_PROFILE_1920_1080 = 6
 } eUCloudRtcVideoProfile;
 
 typedef enum {
@@ -173,6 +178,12 @@ typedef struct {
 	eUCloudRtcRecordType mRecordType;
 	eUCloudRtcWaterMarkPos mWatermarkPos;
 	eUCloudRtcMeidaType mMainviewmediatype;
+
+	eUCloudRtcWaterMarkType mWaterMarkType;
+	const char* mWatermarkUrl; //when mWaterMarkType is text this is text content
+	bool mIsaverage; //record layout is one big other average 
+	int mMixerTemplateType; //record layout (1 -- 9 )
+
 }tUCloudRtcRecordConfig;
 
 // render view
@@ -234,6 +245,13 @@ typedef struct {
 	int mHeight;
 	eUCloudRtcVideoFrameType mVideoType;
 }tUCloudRtcVideoFrame;
+
+typedef struct {
+	int mWidth;
+	int mHeight;
+	int mFrameRate;
+}tUCloudVideoConfig;
+
 
 class  _EXPORT_API UCloudRtcAudioFrameCallback
 {
