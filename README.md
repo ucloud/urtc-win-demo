@@ -141,6 +141,10 @@ recordconfig.mRecordType = UCLOUD_RTC_RECORDTYPE_AUDIOVIDEO;
 recordconfig.mWatermarkPos = UCLOUD_RTC_WATERMARKPOS_LEFTTOP;
 recordconfig.mBucket = "your bucket";
 recordconfig.mBucketRegion = "your bucket region";
+uconfig.mWaterMarkType = UCLOUD_RTC_WATERMARK_TYPE_TIME;
+uconfig.mWatermarkUrl = "";
+uconfig.mIsaverage = false;
+uconfig.mMixerTemplateType = 9;
 m_rtcengine->startRecord(recordconfig);
 
 消息回调

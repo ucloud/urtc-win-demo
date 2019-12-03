@@ -1494,6 +1494,11 @@ void CSdkTestDemoDlg::OnBnClickedButtonRecord()
 			recordconfig.mProfile = 1;
 			recordconfig.mRecordType = 2;
 			recordconfig.mWatermarkPos = 1;
+
+			recordconfig.mWaterMarkType = 3;
+			recordconfig.mWatermarkUrl = "hello urtc";
+			recordconfig.mIsaverage = false;
+			recordconfig.mMixerTemplateType = 5;
 			m_rtcengine->StartRecord(recordconfig);
 		}
 	}

@@ -82,7 +82,7 @@ public:
 
 	virtual int muteCamBeforeJoin(bool mute) = 0;
 	virtual int muteMicBeforeJoin(bool mute) = 0;
-	virtual void setVideoProfile(eUCloudRtcVideoProfile profile) = 0;
+	virtual void setVideoProfile(eUCloudRtcVideoProfile profile, tUCloudVideoConfig& videoconfig) = 0;
 	virtual int switchCamera(tUCloudRtcDeviceInfo& info) = 0;
 	virtual int publish(eUCloudRtcMeidaType type, bool hasvideo, bool hasaudio) = 0; 
 	virtual int unPublish(eUCloudRtcMeidaType type) = 0;
