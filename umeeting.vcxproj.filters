@@ -60,6 +60,15 @@
     <ClCompile Include="SdkTestDemo\LoginDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SdkTestDemo\VideoFullDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SdkTestDemo\BufferQueue.cpp">
+      <Filter>urtcengine</Filter>
+    </ClCompile>
+    <ClCompile Include="SdkTestDemo\VideoPackageQueue.cpp">
+      <Filter>urtcengine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sdktestdemo\DeviceTestDlg.h">
@@ -112,6 +121,15 @@
     </ClInclude>
     <ClInclude Include="SdkTestDemo\LoginDlg.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SdkTestDemo\VideoFullDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SdkTestDemo\BufferQueue.h">
+      <Filter>urtcengine</Filter>
+    </ClInclude>
+    <ClInclude Include="SdkTestDemo\VideoPackageQueue.h">
+      <Filter>urtcengine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

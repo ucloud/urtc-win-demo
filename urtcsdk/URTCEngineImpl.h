@@ -23,6 +23,8 @@ public:
 
 	virtual int MuteCamBeforeJoin(bool mute);
 	virtual int MuteMicBeforeJoin(bool mute);
+	virtual int enableExtendVideoSource(bool enable, UCloudRtcExtendVideoCaptureSource* source);
+
 
 	virtual int PublishStream(tRTCStreamInfo& streaminfo) ;
 	virtual int UnPublishStream(tRTCStreamInfo& streaminfo) ;

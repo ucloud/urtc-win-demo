@@ -89,15 +89,11 @@ typedef enum {
 	UCLOUD_RTC_WATERMARKPOS_RIGHTBOTTOM
 }eUCloudRtcWaterMarkPos;
 
-typedef struct {
-	const char* mMainviewuid;
-	const char* mBucket;
-	const char* mBucketRegion;
-	eUCloudRtcRecordProfile mProfile;
-	eUCloudRtcRecordType mRecordType;
-	eUCloudRtcWaterMarkPos mWatermarkPos;
-	eUCloudRtcMeidaType mMainviewmediatype;
-}tUCloudRtcRecordConfig;
+typedef enum {
+	UCLOUD_RTC_WATERMARK_TYPE_TIME = 1,
+	UCLOUD_RTC_WATERMARK_TYPE_PIC,
+	UCLOUD_RTC_WATERMARK_TYPE_TEXT,
+}eUCloudRtcWaterMarkType;
 
 //render type
 typedef enum {
@@ -109,7 +105,8 @@ typedef enum {
 //render type
 typedef enum {
 	UCLOUD_RTC_RENDER_TYPE_GDI = 1,
-	UCLOUD_RTC_RENDER_TYPE_D3D = 2
+	UCLOUD_RTC_RENDER_TYPE_D3D = 2,
+	UCLOUD_RTC_RENDER_TYPE_EXTEND = 3,
 } eUCloudRtcRenderType;
 
 /**
@@ -141,9 +138,10 @@ typedef enum {
 	UCLOUD_RTC_SCREEN_PROFILE_HIGH_PLUS = 4
 } eUCloudRtcScreenProfile;
 
-//roomtype
+
 typedef enum {
-	UCLOUD_RTC_CHANNEL_TYPE_COMMUNICATION
+	UCLOUD_RTC_CHANNEL_TYPE_COMMUNICATION,
+	UCLOUD_RTC_CHANNEL_TYPE_BROADCAST
 }eUCloudRtcChannelType;
 
 //stream role 
@@ -164,15 +162,40 @@ typedef enum {
 	UCLOUD_RTC_CODEC_H264
 } eUCloudRtcVideoCodec;
 
+typedef enum {
+	UCLOUD_RTC_VIDEO_FRAME_TYPE_I420 = 1,
+	UCLOUD_RTC_VIDEO_FRAME_TYPE_RGB24,
+	UCLOUD_RTC_VIDEO_FRAME_TYPE_RGBA,
+	UCLOUD_RTC_VIDEO_FRAME_TYPE_ARGB,
+}eUCloudRtcVideoFrameType;
+
+
+typedef struct {
+	const char* mMainviewuid;
+	const char* mBucket;
+	const char* mBucketRegion;
+	eUCloudRtcRecordProfile mProfile;
+	eUCloudRtcRecordType mRecordType;
+	eUCloudRtcWaterMarkPos mWatermarkPos;
+	eUCloudRtcMeidaType mMainviewmediatype;
+
+	eUCloudRtcWaterMarkType mWaterMarkType;
+	const char* mWatermarkUrl; //when mWaterMarkType is text this is text content
+	bool mIsaverage; //record layout is one big other average 
+	int mMixerTemplateType; //record layout (1 -- 9 )
+
+}tUCloudRtcRecordConfig;
+
 // render view
 typedef struct
 {
-	int mVideoView;
+	void* mVideoView;
 	const char* mUserId;
 	const char* mStreamId;
 	eUCloudRtcMeidaType mStreamMtype;
 	eUCloudRtcRenderMode mRenderMode;
 	eUCloudRtcRenderType mRenderType;
+	eUCloudRtcVideoFrameType mVideoFrameType; //when extend render this decide callback frametype
 }tUCloudRtcVideoCanvas;
 
 
@@ -217,12 +240,18 @@ typedef struct {
 }tUCloudRtcAudioFrame;
 
 typedef struct {
-	unsigned char* mYbuf;
-	unsigned char* mUbuf;
-	unsigned char* mVbuf;
+	unsigned char* mDataBuf;
 	int mWidth;
 	int mHeight;
-}tUCloudRtcI420VideoFrame;
+	eUCloudRtcVideoFrameType mVideoType;
+}tUCloudRtcVideoFrame;
+
+typedef struct {
+	int mWidth;
+	int mHeight;
+	int mFrameRate;
+}tUCloudVideoConfig;
+
 
 class  _EXPORT_API UCloudRtcAudioFrameCallback
 {
@@ -234,13 +263,19 @@ public:
 class  _EXPORT_API UCloudRtcExtendVideoCaptureSource
 {
 public:
-	virtual  bool doCaptureFrame(tUCloudRtcI420VideoFrame* videoframe) = 0;
+	virtual  bool doCaptureFrame(tUCloudRtcVideoFrame* videoframe) = 0;
 };
 
 class _EXPORT_API UCloudRtcVideoFrameObserver 
 {
 public:
 	virtual  void onCaptureFrame(unsigned char* videoframe, int buflen) = 0;
+};
+
+class _EXPORT_API UCloudRtcExtendVideoRender
+{
+public:
+	virtual  void onRemoteFrame(const tUCloudRtcVideoFrame* videoframe) = 0;
 };
 
 #endif

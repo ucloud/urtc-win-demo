@@ -202,4 +202,102 @@ pgram.mHeight = 0;
 m_rtcengine->setCaptureScreenPagrams(pgram);
 ``` 
 * 11 声音采集添加3通道支持 通道支持个数包括 1 2 3 4 播放支持 1 2 通道
+# 1.5 版本
+## 功能更新
+* 1 支持x64为应用程序
+* 2 优化日志上报，减少日志上报性能消耗
+* 3 支持自定义渲染模式
+调用
+``` c++ 
+实现 自定义渲染类 现在数据格式为 argb 格式输出
+    class VideoRender : public UCloudRtcExtendVideoRender {
+    public:
+        virtual  void onRemoteFrame(const tUCloudRtcVideoFrame* videoframe)
+        {
+        }
+    };
+
+    tUCloudRtcVideoCanvas canvas;
+    canvas.mVideoView = (void*)render; // mVideoView 由int 变更为 void*
+    
+    canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
+    canvas.mUserId = "";
+    canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
+    canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_EXTEND; // 自定义渲染类型
+
+    m_rtcengine->startPreview(canvas);
+``` 
+* 4 视频外部采集支持有yuv420 扩展到 yuv420 rgb argb rgba 等格式，使用如下
+``` c++ 
+实现 自定义渲染类 现在数据格式为 argb 格式输出
+    class VideoRender : public UCloudRtcExtendVideoCaptureSource {
+    public:
+      bool CSdkTestDemoDlg::doCaptureFrame(tUCloudRtcVideoFrame* videoframe)
+        {
+
+            if (!bSuccess)
+                return false;
+            if (videoframe)
+            {
+                videoframe->mDataBuf = dataBuffer; // 外部数据内存块
+                videoframe->mHeight = 360; // 自定义数据 高度
+                videoframe->mWidth = 640;// 自定义数据 宽度
+                videoframe->mVideoType = UCLOUD_RTC_VIDEO_FRAME_TYPE_ARGB; // 自定外部输入数据类型
+            }
+            return true;
+        }
+    };
+
+    m_rtcengine->enableExtendVideocapture(true, this); // 启用外部输入
+
+    发布视频流  数据会按照固定帧率进行 采集
+
+```
+
+# 1.6 版本发布
+* 1 加入大班课功能，支持超大规模会议功能
+使用如下
+``` c++ 
+必须在最开始调用
+m_rtcengine->setChannelType(UCLOUD_RTC_CHANNEL_TYPE_BROADCAST);
+注意：
+大班课中用户只能拥有订阅或者发布一种权限
+如果m_rtcengine->setStreamRole(UCLOUD_RTC_USER_STREAM_ROLE_BOTH);
+SDK会默认把权限设置为UCLOUD_RTC_USER_STREAM_ROLE_SUB
+```
+
+# 1.6.1 版本发布
+* 1 加入大班课功能，支持超大规模会议功能
+使用如下
+``` c++ 
+必须在最开始调用
+m_rtcengine->setChannelType(UCLOUD_RTC_CHANNEL_TYPE_BROADCAST);
+注意：
+大班课中用户只能拥有订阅或者发布一种权限
+如果m_rtcengine->setStreamRole(UCLOUD_RTC_USER_STREAM_ROLE_BOTH);
+SDK会默认把权限设置为UCLOUD_RTC_USER_STREAM_ROLE_SUB
+```
+* 2 添加自定义编码（最大分辨率到1080p(1920*1080)）
+``` c++ 
+virtual void setVideoProfile(eUCloudRtcVideoProfile profile) = 0;
+变更为
+virtual void setVideoProfile(eUCloudRtcVideoProfile profile, tUCloudVideoConfig& videoconfig) = 0;
+tUCloudVideoConfig 用来定义自己编码分辨率
+```
+* 3 录制功能增加更多录制模板以及水印 调用示例如下
+``` c++ 
+tUCloudRtcRecordConfig recordconfig;
+recordconfig.mMainviewmediatype = UCLOUD_RTC_MEDIATYPE_VIDEO; // 主画面类型 video screen
+recordconfig.mMainviewuid = m_userid.data(); // 主画面用户id
+recordconfig.mProfile = UCLOUD_RTC_RECORDPROFILE_SD;//录制输出等级
+recordconfig.mRecordType = UCLOUD_RTC_RECORDTYPE_AUDIOVIDEO;//录制媒体内容
+recordconfig.mWatermarkPos = UCLOUD_RTC_WATERMARKPOS_LEFTTOP;//水印位置
+recordconfig.mBucket = "urtc-test";  // ufile bucket
+recordconfig.mBucketRegion = "cn-bj"; // ufile region
+recordconfig.mIsaverage = false; // 画面是否均分 不均分 均采用 1大几小格式 大画面在左 小画面在右
+recordconfig.mWaterMarkType = UCLOUD_RTC_WATERMARK_TYPE_TIME;  // 水印类型
+recordconfig.mWatermarkUrl = "hello urtc"; // 如果是文字水印为水印内容   如果是图片则为图片url 地址
+recordconfig.mMixerTemplateType = 4; [混流模板](http:https://github.com/UCloudDocs/urtc/blob/master/cloudRecord/RecordLaylout.md)
+m_rtcengine->startRecord(recordconfig);
+```
 

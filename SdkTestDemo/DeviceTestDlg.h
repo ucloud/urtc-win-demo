@@ -53,7 +53,7 @@ public:
 	afx_msg void OnBnClickedButtonMicTest();
 	afx_msg void OnBnClickedButtonSpeakerTest();
 
-	afx_msg HRESULT OnAudioVol(WPARAM data, LPARAM lp);
+	afx_msg LRESULT OnAudioVol(WPARAM data, LPARAM lp);
 
 	CComboBox m_videocom;
 	CComboBox m_miccom;

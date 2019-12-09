@@ -88,7 +88,6 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
-	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg BOOL PreTranslateMessage(MSG* pMsg);
 
 	DECLARE_MESSAGE_MAP()
@@ -102,4 +101,6 @@ public:
 	afx_msg void OnBnClickedBtnMuteV();
 	CProgressCtrl m_volprocess;
 	CProgressCtrl m_vol;
+	bool m_isfull;
+	afx_msg void OnStnDblclickVideo();
 };

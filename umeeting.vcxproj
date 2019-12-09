@@ -35,18 +35,22 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <UseOfMfc>Dynamic</UseOfMfc>
+    <UseOfMfc>Static</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -85,14 +89,14 @@
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>./urtcsdk/sdk</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>./urtcsdk/sdk/x86</AdditionalLibraryDirectories>
       <AdditionalDependencies>UCloudRtcMediaEngine.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalIncludeDirectories>./urtcsdk;./utils;./urtcsdk/include;./third_party</AdditionalIncludeDirectories>
@@ -103,17 +107,39 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>./urtcsdk/sdk</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>./urtcsdk/sdk/x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>UCloudRtcMediaEngine.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Link>
+      <AdditionalLibraryDirectories>./urtcsdk/sdk/x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>UCloudRtcMediaEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>./urtcsdk;./utils;./urtcsdk/include;./third_party</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>./urtcsdk;./utils;./urtcsdk/include;./third_party</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>./urtcsdk/sdk/x64</AdditionalLibraryDirectories>
       <AdditionalDependencies>UCloudRtcMediaEngine.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="SdkTestDemo\BufferQueue.cpp" />
     <ClCompile Include="SdkTestDemo\ConfigDlg.cpp" />
     <ClCompile Include="sdktestdemo\DeviceTestDlg.cpp" />
     <ClCompile Include="SdkTestDemo\LoginDlg.cpp" />
     <ClCompile Include="sdktestdemo\SdkTestDemo.cpp" />
     <ClCompile Include="sdktestdemo\SdkTestDemoDlg.cpp" />
     <ClCompile Include="sdktestdemo\stdafx.cpp" />
+    <ClCompile Include="SdkTestDemo\VideoFullDlg.cpp" />
+    <ClCompile Include="SdkTestDemo\VideoPackageQueue.cpp" />
     <ClCompile Include="sdktestdemo\VideoWnd.cpp" />
     <ClCompile Include="urtcsdk\RTCEngineFactory.cpp" />
     <ClCompile Include="urtcsdk\URTCConfig.cpp" />
@@ -122,6 +148,7 @@
     <ClCompile Include="utils\SdkUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SdkTestDemo\BufferQueue.h" />
     <ClInclude Include="SdkTestDemo\ConfigDlg.h" />
     <ClInclude Include="sdktestdemo\DeviceTestDlg.h" />
     <ClInclude Include="SdkTestDemo\LoginDlg.h" />
@@ -130,6 +157,8 @@
     <ClInclude Include="sdktestdemo\SdkTestDemoDlg.h" />
     <ClInclude Include="sdktestdemo\stdafx.h" />
     <ClInclude Include="sdktestdemo\targetver.h" />
+    <ClInclude Include="SdkTestDemo\VideoFullDlg.h" />
+    <ClInclude Include="SdkTestDemo\VideoPackageQueue.h" />
     <ClInclude Include="sdktestdemo\VideoWnd.h" />
     <ClInclude Include="urtcsdk\RTCDefine.h" />
     <ClInclude Include="urtcsdk\RTCEngineBase.h" />

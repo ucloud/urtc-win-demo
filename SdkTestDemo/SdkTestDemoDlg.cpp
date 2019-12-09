@@ -18,11 +18,11 @@
 #define new DEBUG_NEW
 #endif
 
-
 // CSdkTestDemoDlg 对话框
 #include <string>
 #include <stdint.h>
 
+#define VIDEO_FRAME_CALLBACK 20000
 
 CSdkTestDemoDlg::CSdkTestDemoDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_SFU, pParent)
@@ -35,6 +35,8 @@ CSdkTestDemoDlg::CSdkTestDemoDlg(CWnd* pParent /*=NULL*/)
 	m_isclose = false;
 	m_startrecord = false;
 	m_startaudiomix = false;
+	_pFullScreenDlg = nullptr;
+	m_lpImageBuffer = new unsigned char[0x800000];
 }
 
 void CSdkTestDemoDlg::OnMuteAudio(std::string userid, eUCloudRtcMeidaType mediatype, bool mute) {
@@ -156,11 +158,17 @@ void CSdkTestDemoDlg::InitURTCConfig()
 	m_rtcengine->MuteCamBeforeJoin(URTCConfig::getInstance()->getMuteCamBeforeJoin());
 	m_rtcengine->MuteMicBeforeJoin(URTCConfig::getInstance()->getMuteMicBeforeJoin());
 
+	/*m_mediadevice = UCloudRtcMediaDevice::sharedInstance();
+		m_mediadevice = UCloudRtcMediaDevice::sharedInstance();
+	m_rtcengine->enableExtendVideoSource(true, this);
+	CVideoPackageQueue::GetInstance()->SetVideoFrameLen(640 * 360 * 3/2);*/
+
+	m_mediadevice = nullptr;
+
 	tRTCAuthInfo auth;
 	auth.mAppid = URTCConfig::getInstance()->getAppId();
 	auth.mRoomid = m_roomid.data();
 	auth.mUserid = m_userid.data();
-	auth.mToken = "test";
 	int ret = m_rtcengine->JoinRoom(auth);
 }
 
@@ -169,6 +177,7 @@ BEGIN_MESSAGE_MAP(CSdkTestDemoDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_WM_CLOSE()
+	ON_MESSAGE(VIDEO_FRAME_CALLBACK, &CSdkTestDemoDlg::OnVideoFrameCallback)
 	ON_BN_CLICKED(IDOK, &CSdkTestDemoDlg::OnBnClickedOk)
 	ON_BN_CLICKED(IDCANCEL, &CSdkTestDemoDlg::OnBnClickedCancel)
 	ON_MESSAGE(RTC_EVENT_UCLOUD, &CSdkTestDemoDlg::OnRTCUCloudMsg)
@@ -200,12 +209,14 @@ BOOL CSdkTestDemoDlg::OnInitDialog()
 
 	//本地视频窗口
 	m_localWnd = CreateVideoWindow(UCLOUD_RTC_MEDIATYPE_VIDEO, 0, y, 240, 240);
+	m_localWnd->SetParent(this);
 	m_localWnd->SetTitle(L"Local (Camera)");
 	m_localWnd->SetUserId("camera");
 	m_localWnd->RegisterCallback(this);
 
 	//本地桌面窗口
 	m_screenWnd  = CreateVideoWindow(UCLOUD_RTC_MEDIATYPE_SCREEN, 242, y, 240, 240);
+	//m_screenWnd->SetParent(this);
 	m_screenWnd->SetTitle(L"Local (Screen)");
 	m_screenWnd->SetUserId("screen");
 	m_screenWnd->RegisterCallback(this);
@@ -213,6 +224,7 @@ BOOL CSdkTestDemoDlg::OnInitDialog()
 	//远端渲染窗口
 	for (int i = 2; i <= 3; ++i) {
 		CVideoWnd *pWnd = CreateVideoWindow(UCLOUD_RTC_MEDIATYPE_VIDEO, 242 * i, y, 240, 240);
+		//pWnd->SetParent(this);
 		pWnd->RegisterCallback(this);
 		m_remoteWnds.emplace_back(pWnd);
 	}
@@ -220,6 +232,7 @@ BOOL CSdkTestDemoDlg::OnInitDialog()
 	y += 242;
 	for (int i = 0; i < 4; ++i) {
 		CVideoWnd *pWnd = CreateVideoWindow(UCLOUD_RTC_MEDIATYPE_VIDEO, i * 242, y, 240, 240);
+		//pWnd->SetParent(this);
 		pWnd->RegisterCallback(this);
 		m_remoteWnds.emplace_back(pWnd);
 	}
@@ -227,6 +240,12 @@ BOOL CSdkTestDemoDlg::OnInitDialog()
 	m_rtcengine->InitRTCEngine(this->GetSafeHwnd());
 
 	InitURTCConfig();
+	_pFullScreenDlg = new VideoFullDlg();
+	if (NULL != _pFullScreenDlg)
+	{
+		_pFullScreenDlg->Create(VideoFullDlg::IDD, this);
+		_pFullScreenDlg->ShowWindow(SW_HIDE);
+	}
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -278,11 +297,25 @@ void CSdkTestDemoDlg::OnBnClickedCancel()
 
 void CSdkTestDemoDlg::OnClose()
 {
+	if (m_mediadevice)
+	{
+		m_mediadevice->stopCaptureFrame();
+	}
+	UCloudRtcMediaDevice::destory();
 	m_rtcengine->UnInitRTCEngine();
 	CDialogEx::OnCancel();
 }
 
-HRESULT CSdkTestDemoDlg::OnRTCUCloudMsg(WPARAM data, LPARAM lp)
+LRESULT CSdkTestDemoDlg::OnVideoFrameCallback(WPARAM data, LPARAM lp)
+{
+	unsigned char* videoframe = (unsigned char*)data;
+	int buflen = lp;
+	CVideoPackageQueue::GetInstance()->PushVideoPackage(videoframe, buflen);
+	delete[] videoframe;
+	return 0;
+}
+
+LRESULT CSdkTestDemoDlg::OnRTCUCloudMsg(WPARAM data, LPARAM lp)
 {
 	tEventMsg* callmsg = (tEventMsg*)data;
 	int eventid = callmsg->mEventid;
@@ -477,7 +510,7 @@ void CSdkTestDemoDlg::OnPulibshCamStreamHandler(std::string jsonmsg) {
 			SetDlgItemText(IDC_BUTTON_PUBC, L"停止发布");
 			OnMessageShow("摄像头发布成功");
 			tRTCRenderView canvas;
-			canvas.mVidoview = (int)m_localWnd->GetVideoHwnd();
+			canvas.mVidoview = (void*)m_localWnd->GetVideoHwnd();
 			canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 			canvas.mUserid = m_userid;
 			canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
@@ -515,7 +548,7 @@ void CSdkTestDemoDlg::OnPulibshScreenStreamHandler(std::string jsonmsg) {
 			SetDlgItemText(IDC_BUTTON_PUBS, L"停止桌面");
 			OnMessageShow("桌面发布成功");
 			tRTCRenderView canvas;
-			canvas.mVidoview = (int)m_screenWnd->GetVideoHwnd();
+			canvas.mVidoview = (void*)m_screenWnd->GetVideoHwnd();
 			canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 			canvas.mUserid = m_userid;
 			canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_SCREEN;
@@ -658,13 +691,12 @@ void CSdkTestDemoDlg::OnSubStreamHandler(std::string jsonmsg) {
 			OnMessageShow(msg);
 			if (videoview)
 			{
-
 				tRTCRenderView canvas;
-				canvas.mVidoview = (int)videoview->GetVideoHwnd();
+				canvas.mVidoview = (void*)videoview->GetVideoHwnd();
 				canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 				canvas.mUserid = uid.data();
 				canvas.mStreamMtype = mtype;
-				canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_GDI;
+				canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;
 				m_rtcengine->StartRemoteRender(canvas);
 			}
 
@@ -809,9 +841,8 @@ void CSdkTestDemoDlg::OnKickoffHandler(std::string jsonmsg) {
 	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
 		int code = doc["code"].GetInt();
-		std::string msg = doc["msg"].GetString();
 		char num[32] = { 0 };
-		sprintf_s(num, " err code = %d", code);
+		sprintf_s(num, " = %d", code);
 		std::string errcode = num;
 		GetDlgItem(IDC_BUTTON_LEAVEROOM)->EnableWindow(false);
 		SetDlgItemText(IDC_BUTTON_PUBC, L"发布媒体");
@@ -945,8 +976,6 @@ void CSdkTestDemoDlg::OnRemoteTrackStNotify(std::string jsonmsg) {
 	rapidjson::Document doc;
 	if (!doc.Parse(jsonmsg.data()).HasParseError())
 	{
-		int code = doc["code"].GetInt();
-		std::string msg = doc["msg"].GetString();
 
 		const rapidjson::Value& object = doc["data"];
 		std::string uid = object["uid"].GetString();
@@ -1087,15 +1116,19 @@ void CSdkTestDemoDlg::OnStartRecord(std::string jsonmsg)
 
 		const rapidjson::Value& object = doc["data"];
 		std::string recordid = object["recordid"].GetString();
+		std::string filename = object["filename"].GetString();
+		std::string bucket = object["bucket"].GetString();
+		std::string region = object["region"].GetString();
 		if (code == 0)
 		{
 			m_startrecord = true;
 			SetDlgItemText(IDC_BUTTON_RECORD, L"停止录制");
-			char mutecontent[128] = { 0 };
-			sprintf_s(mutecontent, "recordid:%s ", recordid.data());
-			std::string content = mutecontent;
-			std::string desc = "开启录制成功 " + msg + " " + content;
-			OnMessageShow(desc);
+			OnMessageShow("录像地址：");
+			char mutecontent[1024] = { 0 };
+			sprintf_s(mutecontent, "https://%s.%s.ufileos.com/%s.mp4 ", bucket.data(), region.data(), filename.data());
+			//std::string content = mutecontent;
+			//std::string desc = "开启录制成功 " + msg + " " + content;
+			OnMessageShow(mutecontent);
 
 		}
 		else
@@ -1320,6 +1353,10 @@ void CSdkTestDemoDlg::OnBnClickedButtonPubC()
 		m_rtcengine->UnPublishStream(info);
 		SetDlgItemText(IDC_BUTTON_PUBC, L"发布媒体");
 		m_campub = !m_campub;
+		if (m_mediadevice)
+		{
+			m_mediadevice->stopCaptureFrame();
+		}
 	}
 	else {
 		bool audioEnable = m_audiocheck.GetCheck();
@@ -1347,6 +1384,10 @@ void CSdkTestDemoDlg::OnBnClickedButtonPubC()
 		else 
 		{
 			m_rtcengine->EnableRtspSource(UCLOUD_RTC_MEDIATYPE_VIDEO, false, "");
+		}
+		if (m_mediadevice)
+		{
+			m_mediadevice->startCaptureFrame(UCLOUD_RTC_VIDEO_PROFILE_640_360, this);
 		}
 		int ret = m_rtcengine->PublishStream(info);
 	}
@@ -1403,6 +1444,32 @@ void CSdkTestDemoDlg::OnBnClickedButtonPubs()
 	}
 }
 
+void CSdkTestDemoDlg::onCaptureFrame(unsigned char* videoframe, int buflen)
+{
+	unsigned char* buf = new unsigned char[buflen];
+	memset(buf, 0, buflen);
+	memcpy(buf, videoframe, buflen);
+	PostMessage(VIDEO_FRAME_CALLBACK, (WPARAM)buf, buflen);
+}
+
+bool CSdkTestDemoDlg::doCaptureFrame(tUCloudRtcVideoFrame* videoframe)
+{
+
+	SIZE_T nBufferSize = 0x800000;
+	memset(m_lpImageBuffer, 0, 0x800000);
+	BOOL bSuccess = CVideoPackageQueue::GetInstance()->PopVideoPackage(m_lpImageBuffer, &nBufferSize);
+	if (!bSuccess)
+		return false;
+	if (videoframe)
+	{
+		videoframe->mDataBuf = m_lpImageBuffer;
+		videoframe->mHeight = 360;
+		videoframe->mWidth = 640;
+		videoframe->mVideoType = UCLOUD_RTC_VIDEO_FRAME_TYPE_I420;
+	}
+	return true;
+}
+
 void CSdkTestDemoDlg::OnMessageShow(std::string msg) {
 	if (m_msglist.GetCount()>300)
 	{
@@ -1427,8 +1494,11 @@ void CSdkTestDemoDlg::OnBnClickedButtonRecord()
 			recordconfig.mProfile = 1;
 			recordconfig.mRecordType = 2;
 			recordconfig.mWatermarkPos = 1;
-			recordconfig.mBucket = "urtc-test";
-			recordconfig.mBucketRegion = "cn-bj";
+
+			recordconfig.mWaterMarkType = 3;
+			recordconfig.mWatermarkUrl = "hello urtc";
+			recordconfig.mIsaverage = false;
+			recordconfig.mMixerTemplateType = 5;
 			m_rtcengine->StartRecord(recordconfig);
 		}
 	}

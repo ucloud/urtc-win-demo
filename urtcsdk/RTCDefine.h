@@ -23,7 +23,7 @@ struct tRTCRenderView
 {
 	std::string mUserid;
 	int mStreamMtype;//1 camera 2 screen
-	int mVidoview;
+	void* mVidoview;
 	int mRenderMode;
 	int mRenderType; //1 gdi 2 dx 
 };
@@ -77,6 +77,11 @@ struct tRecordConfig
 	int mRecordType;
 	int mWatermarkPos;
 	int mMainviewmediatype;
+
+	int mWaterMarkType; // 1 time 2 picture 3 text
+	const char* mWatermarkUrl; //when mWaterMarkType is text this is text content
+	bool mIsaverage; //record layout is one big other average 
+	int mMixerTemplateType; //record layout (1 -- 9 )
 };
 
 typedef std::map<std::string, tUserInfo*>::iterator userit;
