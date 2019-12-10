@@ -17,6 +17,7 @@ struct tRTCAuthInfo
 	std::string mRoomid;
 	std::string mAppid;
 	std::string mToken;
+	std::string mServerUrl;
 };
 
 struct tRTCRenderView

@@ -79,6 +79,7 @@ int URTCEngineImpl::JoinRoom(tRTCAuthInfo& auth)
 		uauth.mUserId = auth.mUserid.data();
 		uauth.mRoomId = auth.mRoomid.data();
 		uauth.mUserToken = auth.mToken.data();
+		uauth.mServerUrl = auth.mServerUrl.data();
 		return m_rtcengine->joinChannel(uauth);
 	}
 	return -1;

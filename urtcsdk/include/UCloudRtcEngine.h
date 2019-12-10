@@ -54,8 +54,9 @@ public:
 	static void destroy();
 	static const char *getSdkVersion();
 	virtual void regRtcEventListener(UCloudRtcEventListener* listener) = 0;
-	virtual int setSdkMode(eUCloudRtcSdkMode mode) = 0;
 	virtual int setChannelType(eUCloudRtcChannelType roomtype) = 0;
+	virtual int setSdkMode(eUCloudRtcSdkMode mode) = 0;
+	virtual int setServerGetFrom(eUCloudServerGetFrom from) = 0;
 	virtual int setStreamRole(eUCloudRtcUserStreamRole role) = 0;
 	virtual void setLogLevel(eUCloudRtcLogLevel level) = 0;
 	virtual void setTokenSecKey(const char* seckey) = 0;
