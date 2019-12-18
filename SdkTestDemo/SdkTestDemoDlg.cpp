@@ -169,7 +169,7 @@ void CSdkTestDemoDlg::InitURTCConfig()
 	auth.mAppid = URTCConfig::getInstance()->getAppId();
 	auth.mRoomid = m_roomid.data();
 	auth.mUserid = m_userid.data();
-	auth.mServerUrl = "default";
+	auth.mServerUrl = "wss://urtc.ibusre.cn:5005";
 	int ret = m_rtcengine->JoinRoom(auth);
 }
 
