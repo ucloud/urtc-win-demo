@@ -1,9 +1,9 @@
 # UCloudRTC win SDK API 手册
 
-* [引擎接口 类](#class)
-    * [获取引擎](#class-UCloudRtcEngine)
-    * [销毁引擎](#class-destroy)
-    * [注册时间监听](#class-regRtcEventListener)
+* [UcloudRtcEngine引擎接口 类](#class)
+    * [UCloudRtcEngine类 - 获取引擎](#class-UCloudRtcEngine)
+    * [destroy类 - 销毁引擎](#class-destroy)
+    * [regRtcEventListener类 - 注册时间监听](#class-regRtcEventListener)
     
 <a name='class'></a>
 
