@@ -6,7 +6,7 @@
 
 ## 1. class UcloudRtcEngine引擎接口类
 
-### 1.1 获取引擎
+### 1.1  获取引擎
 
 static UCloudRtcEngine *sharedInstance()
 
@@ -22,7 +22,7 @@ UCloudRtcEngine* 引擎类指针
 
 无
 
-### 1.2 销毁引擎
+### 1.2  销毁引擎
 
 static void destroy()
 
@@ -38,7 +38,7 @@ static void destroy()
 
 无
 
-### 1.3 注册时间监听
+### 1.3  注册时间监听
 
 void regRtcEventListener(UCloudRtcEventListener* listener)
 
