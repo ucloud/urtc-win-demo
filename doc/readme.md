@@ -42,7 +42,7 @@ static void destroy()
 
 void regRtcEventListener(UCloudRtcEventListener* listener)
 
-**返回值
+**返回值 
 
 无
 
