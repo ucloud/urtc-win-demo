@@ -1820,54 +1820,56 @@ code回调为0代表成功，其他代表失败。详见错误码描述。
 
 ###  3.1  事件回调错误码
 
-
-typedef enum _tUCloudRtcCallbackErrCode{
-	UCLOUD_RTC_CALLBACK_ERR_CODE_OK = 0,  //成功
-	UCLOUD_RTC_CALLBACK_ERR_SERVER_CON_FAIL = 5000, //服务器连接失败
-	UCLOUD_RTC_CALLBACK_ERR_SERVER_DIS, // 服务端连接断开
-	UCLOUD_RTC_CALLBACK_ERR_SAME_CMD,  //重复的调用
-	UCLOUD_RTC_CALLBACK_ERR_NOT_IN_ROOM, //未加入房间 无发进行操作 
-	UCLOUD_RTC_CALLBACK_ERR_ROOM_JOINED, // 已加入房间 无需加入
-	UCLOUD_RTC_CALLBACK_ERR_SDK_INNER,   // SDK 内部错误
-	UCLOUD_RTC_CALLBACK_ERR_ROOM_RECONNECTING, // 重连中 请求无法投递      
-	UCLOUD_RTC_CALLBACK_ERR_STREAM_PUBED,  // 流已经发布  无需发布
-	UCLOUD_RTC_CALLBACK_ERR_PUB_NO_DEV,  // 发布无可用 音频 视频设备
-	UCLOUD_RTC_CALLBACK_ERR_STREAM_NOT_PUB, //流没有发布 无法对流进行操作
-	UCLOUD_RTC_CALLBACK_ERR_STREAM_SUBED,  //流已经订阅  无需订阅
-	UCLOUD_RTC_CALLBACK_ERR_STREAM_NO_SUB, //流没有订阅  无法
-	UCLOUD_RTC_CALLBACK_ERR_SUB_NO_USER,   //无对应的用户 无法订阅
-	UCLOUD_RTC_CALLBACK_ERR_SUB_NO_STREAM,  // 无对应的媒体流
-	UCLOUD_RTC_CALLBACK_ERR_USER_LEAVING, // 用户正在离开房间  无法进行其他操作
-	UCLOUD_RTC_CALLBACK_ERR_NO_HAS_TRACK,  //无对应的媒体轨道
-	UCLOUD_RTC_CALLBACK_ERR_MSG_TIMEOUT, // 消息请求超时
-}tUCloudRtcCallbackErrCode;
+```cpp
+typedef enum _tUCloudRtcCallbackErrCode{    
+	UCLOUD_RTC_CALLBACK_ERR_CODE_OK = 0,  //成功    
+	UCLOUD_RTC_CALLBACK_ERR_SERVER_CON_FAIL = 5000, //服务器连接失败    
+	UCLOUD_RTC_CALLBACK_ERR_SERVER_DIS, // 服务端连接断开    
+	UCLOUD_RTC_CALLBACK_ERR_SAME_CMD,  //重复的调用    
+	UCLOUD_RTC_CALLBACK_ERR_NOT_IN_ROOM, //未加入房间 无发进行操作     
+	UCLOUD_RTC_CALLBACK_ERR_ROOM_JOINED, // 已加入房间 无需加入    
+	UCLOUD_RTC_CALLBACK_ERR_SDK_INNER,   // SDK 内部错误    
+	UCLOUD_RTC_CALLBACK_ERR_ROOM_RECONNECTING, // 重连中 请求无法投递          
+	UCLOUD_RTC_CALLBACK_ERR_STREAM_PUBED,  // 流已经发布  无需发布    
+	UCLOUD_RTC_CALLBACK_ERR_PUB_NO_DEV,  // 发布无可用 音频 视频设备    
+	UCLOUD_RTC_CALLBACK_ERR_STREAM_NOT_PUB, //流没有发布 无法对流进行操作    
+	UCLOUD_RTC_CALLBACK_ERR_STREAM_SUBED,  //流已经订阅  无需订阅    
+	UCLOUD_RTC_CALLBACK_ERR_STREAM_NO_SUB, //流没有订阅  无法    
+	UCLOUD_RTC_CALLBACK_ERR_SUB_NO_USER,   //无对应的用户 无法订阅    
+	UCLOUD_RTC_CALLBACK_ERR_SUB_NO_STREAM,  // 无对应的媒体流    
+	UCLOUD_RTC_CALLBACK_ERR_USER_LEAVING, // 用户正在离开房间  无法进行其他操作    
+	UCLOUD_RTC_CALLBACK_ERR_NO_HAS_TRACK,  //无对应的媒体轨道    
+	UCLOUD_RTC_CALLBACK_ERR_MSG_TIMEOUT, // 消息请求超时    
+}tUCloudRtcCallbackErrCode;    
+```
 
 <a name='ErrCode-hanshu'></a>
 
 ###  3.2  函数值错误码
 
-typedef enum _tUCloudRtcReturnErrCode {
-	UCLOUD_RTC_RETURN_ERR_CODE_OK = 0,  //成功
-	UCLOUD_RTC_RETURN_ERR_AUTO_PUB = 1000, //自动发布
-	UCLOUD_RTC_RETURN_ERR_AUTO_SUB, //自动订阅
-	UCLOUD_RTC_RETURN_ERR_NOT_INIT, //引擎没有初始化
-	UCLOUD_RTC_RETURN_ERR_IN_ROOM, //已经加入房间
-	UCLOUD_RTC_RETURN_ERR_NOT_IN_ROOM, // 未加入房间
-	UCLOUD_RTC_RETURN_ERR_NOT_PUB_TRACK, //未发布对应媒体
-	UCLOUD_RTC_RETURN_ERR_INVAILED_PARGRAM, // 无效参数
-	UCLOUD_RTC_RETURN_ERR_INVAILED_WND_HANDLE, // 无效窗口句柄
-	UCLOUD_RTC_RETURN_ERR_INVAILED_MEDIA_TYPE, // 无效媒体类型
-	UCLOUD_RTC_RETURN_ERR_SUB_ONEMORE, // 最少订阅一种媒体
-	UCLOUD_RTC_RETURN_ERR_NO_PUB_ROLE, //无发布权限
-	UCLOUD_RTC_RETURN_ERR_NO_SUB_ROLE, //无订阅权限
-	UCLOUD_RTC_RETURN_ERR_CAM_NOT_ENABLE, //没有配置本地cam 发送
-	UCLOUD_RTC_RETURN_ERR_SCREEN_NOT_ENABLE, //没有配置本地screen 发送
-	UCLOUD_RTC_RETURN_ERR_AUDIO_MODE,        // 纯音频模式
-	UCLOUD_RTC_RETURN_ERR_SECKEY_INVALID ,    // seckey 无效
-	UCLOUD_RTC_RETURN_ERR_INVAILD_FILEPATH,
-	UCLOUD_RTC_RETURN_ERR_NOT_SUPORT_AUDIO_FORMAT,
-}tUCloudRtcReturnErrCode;
-
+```cpp
+typedef enum _tUCloudRtcReturnErrCode {    
+	UCLOUD_RTC_RETURN_ERR_CODE_OK = 0,  //成功    
+	UCLOUD_RTC_RETURN_ERR_AUTO_PUB = 1000, //自动发布    
+	UCLOUD_RTC_RETURN_ERR_AUTO_SUB, //自动订阅    
+	UCLOUD_RTC_RETURN_ERR_NOT_INIT, //引擎没有初始化    
+	UCLOUD_RTC_RETURN_ERR_IN_ROOM, //已经加入房间    
+	UCLOUD_RTC_RETURN_ERR_NOT_IN_ROOM, // 未加入房间    
+	UCLOUD_RTC_RETURN_ERR_NOT_PUB_TRACK, //未发布对应媒体    
+	UCLOUD_RTC_RETURN_ERR_INVAILED_PARGRAM, // 无效参数    
+	UCLOUD_RTC_RETURN_ERR_INVAILED_WND_HANDLE, // 无效窗口句柄    
+	UCLOUD_RTC_RETURN_ERR_INVAILED_MEDIA_TYPE, // 无效媒体类型    
+	UCLOUD_RTC_RETURN_ERR_SUB_ONEMORE, // 最少订阅一种媒体    
+	UCLOUD_RTC_RETURN_ERR_NO_PUB_ROLE, //无发布权限    
+	UCLOUD_RTC_RETURN_ERR_NO_SUB_ROLE, //无订阅权限    
+	UCLOUD_RTC_RETURN_ERR_CAM_NOT_ENABLE, //没有配置本地cam 发送    
+	UCLOUD_RTC_RETURN_ERR_SCREEN_NOT_ENABLE, //没有配置本地screen 发送    
+	UCLOUD_RTC_RETURN_ERR_AUDIO_MODE,        // 纯音频模式    
+	UCLOUD_RTC_RETURN_ERR_SECKEY_INVALID ,    // seckey 无效    
+	UCLOUD_RTC_RETURN_ERR_INVAILD_FILEPATH,    
+	UCLOUD_RTC_RETURN_ERR_NOT_SUPORT_AUDIO_FORMAT,    
+}tUCloudRtcReturnErrCode;    
+```
 
 <a name='struct'></a>
 
@@ -1877,112 +1879,130 @@ typedef enum _tUCloudRtcReturnErrCode {
 
 ###  4.1  设备信息类
 
-typedef struct {
-	char mDeviceName[MAX_DEVICE_ID_LENGTH]; // 设备名称
-	char mDeviceId[MAX_DEVICE_ID_LENGTH];   // 设备id
-} tUCloudRtcDeviceInfo;
+```cpp
+typedef struct {    
+	char mDeviceName[MAX_DEVICE_ID_LENGTH]; // 设备名称    
+	char mDeviceId[MAX_DEVICE_ID_LENGTH];   // 设备id    
+} tUCloudRtcDeviceInfo;    
+```
 
 <a name='struct-tUCloudRtcMediaConfig'></a>
 
 ###  4.2  媒体发布配置类
 
-最少启用一种媒体    
-
-typedef struct {
-	bool mVideoEnable; // 启用视频
-	bool mAudioEnable; // 启用音频
-}tUCloudRtcMediaConfig;
+最少启用一种媒体
+    
+```cpp
+typedef struct {    
+	bool mVideoEnable; // 启用视频    
+	bool mAudioEnable; // 启用音频    
+}tUCloudRtcMediaConfig;    
+```
 
 <a name='struct-eUCloudRtcTrackType'></a>
 
 ###  4.3  媒体轨道类型类型描述
 
-typedef enum {
-	UCLOUD_RTC_TRACKTYPE_AUDIO = 1, // 音频轨道
-	UCLOUD_RTC_TRACKTYPE_VIDEO   // 视频轨道
-} eUCloudRtcTrackType;
-
+```cpp
+typedef enum {    
+	UCLOUD_RTC_TRACKTYPE_AUDIO = 1, // 音频轨道    
+	UCLOUD_RTC_TRACKTYPE_VIDEO   // 视频轨道    
+} eUCloudRtcTrackType;    
+```
 <a name='struct-eUCloudRtcMeidaType'></a>
 
 ###  4.4  媒体流类型描述
 
-typedef enum {
-   	UCLOUD_RTC_MEDIATYPE_NONE = 0, // 无效类型
-	UCLOUD_RTC_MEDIATYPE_VIDEO, // 摄像头
-	UCLOUD_RTC_MEDIATYPE_SCREEN  // 桌面流
-} eUCloudRtcMeidaType;
-
+```cpp
+typedef enum {    
+   	UCLOUD_RTC_MEDIATYPE_NONE = 0, // 无效类型    
+	UCLOUD_RTC_MEDIATYPE_VIDEO, // 摄像头    
+	UCLOUD_RTC_MEDIATYPE_SCREEN  // 桌面流    
+} eUCloudRtcMeidaType;    
+```
 
 <a name='struct-tUCloudRtcStreamInfo'></a>
 
 ###  4.5  流信息结构体
 
-typedef struct {
-	const char* mUserId;  // 用户id
-const char* mStreamId; // 流id
-	bool mEnableVideo;    //启用视频
-	bool mEnableAudio;    // 启用音频
-	bool mEnableData;     // 启用数据通道（暂时无效）
-	eUCloudRtcMeidaType mStreamMtype;// 流类型
-} tUCloudRtcStreamInfo;
+```cpp
+typedef struct {    
+	const char* mUserId;  // 用户id    
+const char* mStreamId; // 流id    
+	bool mEnableVideo;    //启用视频    
+	bool mEnableAudio;    // 启用音频    
+	bool mEnableData;     // 启用数据通道（暂时无效）    
+	eUCloudRtcMeidaType mStreamMtype;// 流类型        
+} tUCloudRtcStreamInfo;    
+```
 
 <a name='struct-eUCloudRtcWaterMarkPos'></a>
 
+
 ###  4.6  录制水印位置
 
-typedef enum {
-    UCLOUD_RTC_WATERMARKPOS_LEFTTOP = 1, //左上
-UCLOUD_RTC_WATERMARKPOS_LEFTBOTTOM， // 左下
-UCLOUD_RTC_WATERMARKPOS_RIGHTTOP， // 右上
-UCLOUD_RTC_WATERMARKPOS_LEFTBOTTOM， // 右下
-} eUCloudRtcWaterMarkPos;
+```cpp
+typedef enum {    
+    UCLOUD_RTC_WATERMARKPOS_LEFTTOP = 1, //左上    
+UCLOUD_RTC_WATERMARKPOS_LEFTBOTTOM， // 左下    
+UCLOUD_RTC_WATERMARKPOS_RIGHTTOP， // 右上    
+UCLOUD_RTC_WATERMARKPOS_LEFTBOTTOM， // 右下    
+} eUCloudRtcWaterMarkPos;    
+```
 
 <a name='struct-eUCloudRtcWaterMarkType'></a>
 
 ###  4.7  水印类型
 
-typedef enum {
-	UCLOUD_RTC_WATERMARK_TYPE_TIME = 1, // 时间水印
-	UCLOUD_RTC_WATERMARK_TYPE_PIC, // 图片水印
-	UCLOUD_RTC_WATERMARK_TYPE_TEXT, // 文字水印
-} eUCloudRtcWaterMarkType;
-
+```cpp
+typedef enum {    
+	UCLOUD_RTC_WATERMARK_TYPE_TIME = 1, // 时间水印    
+	UCLOUD_RTC_WATERMARK_TYPE_PIC, // 图片水印    
+	UCLOUD_RTC_WATERMARK_TYPE_TEXT, // 文字水印    
+} eUCloudRtcWaterMarkType;    
+```
 
 <a name='struct-tUCloudRtcMuteSt'></a>
 
 ###  4.8  Mute操作结构体
 
-typedef struct {
-	const char* mUserId; // 用户id
-    const char* mStreamId; // 流id
-	bool mMute;  //true 关闭媒体  false 打开媒体
-	eUCloudRtcMeidaType mStreamMtype; // 媒体流类型
-} tUCloudRtcMuteSt;
+```cpp
+typedef struct {        
+	const char* mUserId; // 用户id    
+    const char* mStreamId; // 流id    
+	bool mMute;  //true 关闭媒体  false 打开媒体    
+	eUCloudRtcMeidaType mStreamMtype; // 媒体流类型    
+} tUCloudRtcMuteSt;    
+```
 
 <a name='struct-eUCloudRtcRecordProfile'></a>
 
 ###  4.9  录制输出等级
 
+```cpp
 typedef enum {
     UCLOUD_RTC_RECORDPROFILE_SD = 1, //标清 640*360
 	UCLOUD_RTC_RECORDPROFILE_HD,    // 高清  1280*720
 	UCLOUD_RTC_RECORDPROFILE_HDPLUS, //超清 1920*1080
 } eUCloudRtcRecordProfile;
+```
 
 <a name='struct-eUCloudRtcRecordType'></a>
 
 ###  4.10  录制媒体类型
 
+```cpp
 typedef enum {
     UCLOUD_RTC_RECORDTYPE_AUDIOONLY = 1,  //直录音频（混音）
     UCLOUD_RTC_RECORDTYPE_AUDIOVIDEO     // 录制混音混流
 } eUCloudRtcRecordType;
-
+```
 
 <a name='struct-tUCloudRtcRecordConfig'></a>
 
 ###  4.11  录制配置信息
 
+```cpp
 typedef struct {
 	const char* mMainviewuid;    // 录制视频时大屏用户
     const char* mBucket;       //ufile 的存储名称
@@ -1996,21 +2016,25 @@ typedef struct {
 	bool mIsaverage;  // 画面是否均分，不均为1大几小
 	int mMixerTemplateType; //混流风格 (1 -- 9 )
 } tUCloudRtcRecordConfig;
+```
 
 <a name='struct-eUCloudRtcRenderMode'></a>
 
 ###  4.12  渲染模式
 
+```cpp
 typedef enum {
     UCLOUD_RTC_RENDER_MODE_DEFAULT = 0, //默认平铺
     UCLOUD_RTC_RENDER_MODE_FIT, //保持比例
     UCLOUD_RTC_RENDER_MODE_FILL   //平铺
 } eUCloudRtcRenderMode;
+```
 
 <a name='struct-eUCloudRtcLogLevel'></a>
 
 ###  4.13  日志级别
 
+```cpp
 typedef enum {
 	UCLOUD_RTC_LOG_LEVEL_DEBUG,
 	UCLOUD_RTC_LOG_LEVEL_INFO,
@@ -2018,12 +2042,13 @@ typedef enum {
 	UCLOUD_RTC_LOG_LEVEL_ERROR,
 	UCLOUD_RTC_LOG_LEVEL_NONE,
 } eUCloudRtcLogLevel;
-
+```
 
 <a name='struct-eUCloudRtcVideoProfile'></a>
 
 ###  4.14  视频质量参数
 
+```cpp
 typedef enum {
     UCLOUD_RTC_VIDEO_PROFILE_NONE = -1,
 	UCLOUD_RTC_VIDEO_PROFILE_320_180 = 1,
@@ -2034,24 +2059,26 @@ typedef enum {
 	UCLOUD_RTC_VIDEO_PROFILE_1920_1080 = 6，
     UCLOUD_RTC_VIDEO_PROFILE_1920_1080_PLUS = 7// 1920*2*1080
 } eUCloudRtcVideoProfile;
-
+```
 
 <a name='struct-eUCloudRtcScreenProfile'></a>
 
 ###  4.15  桌面输出参数
 
+```cpp
 typedef enum {
     UCLOUD_RTC_SCREEN_PROFILE_LOW = 1, //640*360
 	UCLOUD_RTC_SCREEN_PROFILE_MIDDLE, //960*540
 	UCLOUD_RTC_SCREEN_PROFILE_HIGH，// 1280*720
     UCLOUD_RTC_SCREEN_PROFILE_HIGH_PLUS  // 1920*1080
 } eUCloudRtcScreenProfile;
-
+```
 
 <a name='struct-tUCloudRtcScreenPargram'></a>
 
 ###  4.16  桌面采集参数
 
+```cpp
 typedef struct
 {
 	long mScreenId; // 窗或者桌面id标识
@@ -2060,53 +2087,60 @@ typedef struct
 	int mWidth;// 采集宽度
 	int mHeight; // 采集高度
 } tUCloudRtcScreenPargram;
+```
 
 <a name='struct-eUCloudRtcDesktopType'></a>
 
 ###  4.17  桌面采集类型
 
+```cpp
 typedef enum {
 	UCLOUD_RTC_DESKTOPTYPE_SCREEN = 1, 采集桌面
 	UCLOUD_RTC_DESKTOPTYPE_WINDOW 采集窗口
 } eUCloudRtcDesktopType;
-
+```
 
 <a name='struct-tUCloudRtcDeskTopInfo'></a>
 
 ###  4.18  桌面参数
 
+```cpp
 typedef struct
 {
 	eUCloudRtcDesktopType mType;  桌面类型
 	int mDesktopId;  id 标识
 	char mDesktopTitle[MAX_WINDOWS_TILE_LEN]; //桌面标题
 } tUCloudRtcDeskTopInfo;
-
+```
 
 <a name='struct-eUCloudRtcUserStreamRoleCHANNEL'></a>
 
 ###  4.19  通道类型
 
+```cpp
 typedef enum {
 	UCLOUD_RTC_CHANNEL_TYPE_COMMUNICATION,   // 实时互动模式,
     UCLOUD_RTC_CHANNEL_TYPE_BROADCAST      // 直播模式
 } eUCloudRtcUserStreamRole;
+```
 
 <a name='struct-eUCloudRtcUserStreamRoleSTREAM'></a>
 
 ###  4.20  流权限
 
+```cpp
 typedef enum {
 	UCLOUD_RTC_USER_STREAM_ROLE_PUB, // 上行推流
 	UCLOUD_RTC_USER_STREAM_ROLE_SUB, // 下行拉流
 	UCLOUD_RTC_USER_STREAM_ROLE_BOTH //双向推拉流
 } eUCloudRtcUserStreamRole;
-
+```
 
 <a name='struct-tUCloudRtcVideoCanvas'></a>
 
 ###  4.21  渲染窗口
 
+```cpp
 typedef struct 
 {
     void* mVideoView;   // 渲染的窗口句柄
@@ -2116,11 +2150,13 @@ typedef struct
     eUCloudRtcRenderMode mRenderMode;  // 渲染模式
     eUCloudRtcRenderType mRenderType; // 自定义渲染 mVideoView 指定为自己的render 扩展类
 } tUCloudRtcVideoCanvas;
+```
 
 <a name='struct-tUCloudRtcAuth'></a>
 
 ###  4.22  登录信息类
 
+```cpp
 typedef struct 
 {
     const char* mAppId; // 平台分配的appid
@@ -2128,11 +2164,13 @@ typedef struct
 	const char* mUserId; // 用户标识
 	const char* mUserToken; // 用户通过用户服务器获取的token
 } tUCloudRtcAuth;
+```
 
 <a name='struct-tUCloudRtcStreamStats'></a>
 
 ###  4.23  当前媒体状态统计
 
+```cpp
 typedef struct {
 	const char* mUserId; // 用户id
     const char* mStreamId; //流id
@@ -2145,12 +2183,13 @@ typedef struct {
 	int mVideoFrameRate = 0;     // video frames per secon
 	float mPacketLostRate = 0.0f;
 } tUCloudRtcStreamStats;
-
+```
 
 <a name='struct-tUCloudRtcRecordInfo'></a>
 
 ###  4.24  录制信息回调
 
+```cpp
 typedef struct {
 	const char* mRecordId;
 	const char* mFileName;
@@ -2158,12 +2197,13 @@ typedef struct {
 	const char* mBucket;
 	const char* mRoomid;
 } tUCloudRtcRecordInfo;
-
+```
 
 <a name='struct-tUCloudRtcAudioFrame'></a>
 
 ###  4.25  音频帧
 
+```cpp
 typedef struct {
 	const char* mUserId;
 	const char* mStreamId;
@@ -2173,37 +2213,41 @@ typedef struct {
 	int mChannels;    // 声道数
 	int mNumSimples;  //采集样本数
 } tUCloudRtcAudioFrame;
-
+```
 
 <a name='struct-eUCloudRtcVideoFrameType'></a>
 
 ###  4.26  视频数据帧类型
 
+```cpp
 typedef enum {
 	UCLOUD_RTC_VIDEO_FRAME_TYPE_I420 = 1,
 	UCLOUD_RTC_VIDEO_FRAME_TYPE_RGB24,
 	UCLOUD_RTC_VIDEO_FRAME_TYPE_RGBA,
 	UCLOUD_RTC_VIDEO_FRAME_TYPE_ARGB,
 } eUCloudRtcVideoFrameType;
-
+```
 
 <a name='struct-tUCloudRtcVideoFrame'></a>
 
 ###  4.27  视频数据帧
 
+```cpp
 typedef struct {
 	unsigned char* mDataBuf;
 	int mWidth;
 	int mHeight;
 	eUCloudRtcVideoFrameType mVideoType;
 } tUCloudRtcVideoFrame;
-
+```
 
 <a name='struct-UCloudRtcEventListener'></a>
 
 ###  4.28  消息回调事件接口类
 
 下面所有code 为0 代表成功，其他代表失败。
+
+```cpp
 class  UCloudRtcEventListener
 {
 public：
@@ -2258,23 +2302,26 @@ virtual void onWarning(int warn) {}
 // 错误
     virtual void onError(int error) {}
 };
-
+```
 
 <a name='struct-UCloudRtcMediaListener'></a>
 
 ###  4.29  音频测试回调
 
+```cpp
 class  UCloudRtcMediaListener
 {
 public:
 	// 音频能量回调   （0--255）
     virtual void onMiceAudioLevel(int volume) {} 
 };
+```
 
 <a name='struct-UCloudRtcAudioFrameCallback'></a>
 
 ###  4.30  音频数据回调
 
+```cpp
 class  UCloudRtcAudioFrameCallback
 {
 public:
@@ -2283,7 +2330,7 @@ public:
    // 远端混音数据
 	virtual void onRemoteMixAudioFrame(tUCloudRtcAudioFrame* audioframe) {} 
 };
-
+```
 
 <a name='struct-UCloudRtcExtendVideoCaptureSource'></a>
 
@@ -2291,12 +2338,13 @@ public:
 
 用户可以扩展自己的视频输入 音频通过doCaptureFrame 采集数据。
 
+```cpp
 class  UCloudRtcExtendVideoCaptureSource
 {
 public:
 	virtual  bool doCaptureFrame(tUCloudRtcVideoFrame* videoframe) = 0; 
 };
-
+```
 
 <a name='struct-UCloudRtcExtendVideoRender'></a>
 
@@ -2304,12 +2352,13 @@ public:
 
 用户结合渲染 可以获取数据进行自己渲染。
 
+```cpp
 class _EXPORT_API UCloudRtcExtendVideoRender
 {
 public:
 	virtual  void onRemoteFrame(const tUCloudRtcVideoFrame* videoframe) = 0;
 };
-
+```
 
 <a name='struct-UCloudRtcVideoFrameObserver'></a>
 
@@ -2317,40 +2366,45 @@ public:
 
 引擎内存回调camera 采集数据 和 扩展数据源使用方便做视频前置处理。
 
+```cpp
 class  UCloudRtcVideoFrameObserver
 {
 public:
 	virtual  void onCaptureFrame(unsigned char* videoframe, int buflen) = 0;
 };
-
+```
 
 <a name='struct-eUCloudRtcRenderType'></a>
 
 ###  4.34  视频渲染类型
 
+```cpp
 typedef enum {
     UCLOUD_RTC_RENDER_TYPE_GDI = 1,
 	UCLOUD_RTC_RENDER_TYPE_D3D = 2，
     UCLOUD_RTC_RENDER_TYPE_EXTEND = 3
 } eUCloudRtcRenderType;
+```
 
 <a name='struct-eUCloudRtcVideoCodec'></a>
 
 ###  4.35  视频编码类型
 
+```cpp
 typedef enum {
 	UCLOUD_RTC_CODEC_VP8 = 1, //default
 	UCLOUD_RTC_CODEC_H264
 } eUCloudRtcVideoCodec;
-
+```
 
 <a name='struct-tUCloudVideoConfig'></a>
 
 ###  4.36  视频参数
 
+```cpp
 typedef struct {
 	int mWidth; // 宽
 	int mHeight; // 高
 	int mFrameRate; // 帧率
 } tUCloudVideoConfig;
-
+```
