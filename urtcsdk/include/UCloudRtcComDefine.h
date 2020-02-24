@@ -122,7 +122,7 @@ typedef enum {
 
 //video profile
 typedef enum {
-	UCLOUD_RTC_VIDEO_PROFILE_NONE = -1,
+	UCLOUD_RTC_VIDEO_PROFILE_NONE = -1, // 用户自定义编码
 	UCLOUD_RTC_VIDEO_PROFILE_320_180 = 1,
 	UCLOUD_RTC_VIDEO_PROFILE_320_240 = 2,
 	UCLOUD_RTC_VIDEO_PROFILE_640_360 = 3,
@@ -169,6 +169,12 @@ typedef enum {
 	UCLOUD_RTC_VIDEO_FRAME_TYPE_ARGB,
 }eUCloudRtcVideoFrameType;
 
+typedef enum 
+{
+	UCLOUD_RTC_SERVER_GET_FROM_UTECH = 1,
+	UCLOUD_RTC_SERVER_GET_FROM_USER_GATEWAY,
+	UCLOUD_RTC_SERVER_GET_FROM_USER_DIRECT
+}eUCloudServerGetFrom;
 
 typedef struct {
 	const char* mMainviewuid;
@@ -205,6 +211,7 @@ typedef struct
 	const char* mRoomId;
 	const char* mUserId;
 	const char* mUserToken;
+	const char* mServerUrl;
 }tUCloudRtcAuth;
 
 typedef struct {

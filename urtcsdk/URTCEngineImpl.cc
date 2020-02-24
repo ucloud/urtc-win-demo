@@ -17,6 +17,7 @@ int URTCEngineImpl::InitRTCEngine(void* callback)
 	m_rtcengine = UCloudRtcEngine::sharedInstance();
 	m_rtcengine->regRtcEventListener(m_eventhandler);
 	m_rtcengine->setChannelType(URTCConfig::getInstance()->getChannelType());
+	m_rtcengine->setServerGetFrom(UCLOUD_RTC_SERVER_GET_FROM_USER_DIRECT);
 	m_rtcengine->setStreamRole(URTCConfig::getInstance()->getStreamRole());
 	m_rtcengine->setTokenSecKey(URTCConfig::getInstance()->getSecKey().data());
 	m_rtcengine->setAudioOnlyMode(URTCConfig::getInstance()->isAudioOnly());
@@ -79,6 +80,7 @@ int URTCEngineImpl::JoinRoom(tRTCAuthInfo& auth)
 		uauth.mUserId = auth.mUserid.data();
 		uauth.mRoomId = auth.mRoomid.data();
 		uauth.mUserToken = auth.mToken.data();
+		uauth.mServerUrl = auth.mServerUrl.data();
 		return m_rtcengine->joinChannel(uauth);
 	}
 	return -1;
