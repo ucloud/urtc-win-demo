@@ -1218,7 +1218,7 @@ static void destroy()
 
 
 
-<a name='#class-setServerGetFrom'></a>
+<a name='class-setServerGetFrom'></a>
 
 ### 1.53  设置接入点获取方式
 
