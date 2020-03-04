@@ -52,6 +52,7 @@
     * [1.50  设置日志等级 - setLogLevel](#class-setLogLevel)	
     * [1.51  获取SDK 版本 - getSdkVersion](#class-getSdkVersion)	
     * [1.52  销毁引擎 - destroy](#class-destroy)	
+    * [1.53  设置接入点获取方式 - setServerGetFrom](#class-setServerGetFrom)	
 * [二、UcloudMediaDevice设备引擎接口类](#Device)    
     * [2.1  初始化设备模块 - UCloudRtcMediaDevice](#Device-UCloudRtcMediaDevice)		
     * [2.2  销毁设备模块 - destory](#Device-destory)			
@@ -123,7 +124,7 @@
     * [4.34  视频渲染类型 - eUCloudRtcRenderType](#struct-eUCloudRtcRenderType)		
     * [4.35  视频编码类型 - eUCloudRtcVideoCodec](#struct-eUCloudRtcVideoCodec)		
     * [4.36  视频参数 - tUCloudVideoConfig](#struct-tUCloudVideoConfig)		
-    
+    * [4.37  接入点获取方式 - eUCloudServerGetFrom](#struct-eUCloudServerGetFrom)	 
 	
 <a name='class'></a>
 
@@ -1215,6 +1216,30 @@ static void destroy()
 
 无
 
+
+
+<a name='#class-setServerGetFrom'></a>
+
+### 1.53  设置接入点获取方式
+
+virtual int setServerGetFrom(eUCloudServerGetFrom from)
+
+**返回值**
+
+详情错误描述。
+
+**参数说明**    
+
+
+| 名称    | 说明 | 数据类型 | 可空 |
+| -| -| -| -|
+|  from [in]   | 接入点获取方式eUCloudServerGetFrom     | enum | N |
+
+
+**消息回调**
+
+无
+
 <a name='Device'></a>
 
 ## 二、UcloudMediaDevice设备引擎接口类
@@ -2159,10 +2184,12 @@ typedef struct
 ```cpp
 typedef struct 
 {
-    const char* mAppId; // 平台分配的appid
+        const char* mAppId; // 平台分配的appid
 	const char* mRoomId; // room 标识
 	const char* mUserId; // 用户标识
 	const char* mUserToken; // 用户通过用户服务器获取的token
+        const char* mServerUrl; // 接入点连接地址
+
 } tUCloudRtcAuth;
 ```
 
@@ -2407,4 +2434,17 @@ typedef struct {
 	int mHeight; // 高
 	int mFrameRate; // 帧率
 } tUCloudVideoConfig;
+```
+<a name='struct-eUCloudServerGetFrom'></a>
+
+###  4.37  接入点获取方式
+
+```cpp
+typedef enum 
+{
+	UCLOUD_RTC_SERVER_GET_FROM_UTECH = 1, // 公有云默认调度
+	UCLOUD_RTC_SERVER_GET_FROM_USER_GATEWAY, // room gateway
+	UCLOUD_RTC_SERVER_GET_FROM_USER_DIRECT // 直连 wss 服务
+}eUCloudServerGetFrom;
+
 ```
