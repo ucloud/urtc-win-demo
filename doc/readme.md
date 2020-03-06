@@ -2502,7 +2502,7 @@ public:
 
 <a name='struct-UCloudRtcExtendAudioCaptureSource'></a>
 
-###  4.39  设备热插拔回调
+###  4.40  音频外部采集
 
 ```cpp
 class  _EXPORT_API UCloudRtcExtendAudioCaptureSource
