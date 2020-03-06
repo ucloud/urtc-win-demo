@@ -51,7 +51,9 @@
     * [1.49  停止录制 - stopRecord](#class-stopRecord)	
     * [1.50  设置日志等级 - setLogLevel](#class-setLogLevel)	
     * [1.51  获取SDK 版本 - getSdkVersion](#class-getSdkVersion)	
-    * [1.52  销毁引擎 - destroy](#class-destroy)	
+    * [1.52  销毁引擎 - destroy](#class-destroy)
+	* [1.53  设置外部音频采集 - enableExtendAudiocapture](#class-enableExtendAudiocapture)
+	* [1.54  注册设备热插拔回调通知 - regDeviceChangeCallback](#class-regDeviceChangeCallback)
 * [二、UcloudMediaDevice设备引擎接口类](#Device)    
     * [2.1  初始化设备模块 - UCloudRtcMediaDevice](#Device-UCloudRtcMediaDevice)		
     * [2.2  销毁设备模块 - destory](#Device-destory)			
@@ -122,7 +124,10 @@
     * [4.33  视频数据回调监听类（yuv420p格式） - UCloudRtcVideoFrameObserver](#struct-UCloudRtcVideoFrameObserver)		
     * [4.34  视频渲染类型 - eUCloudRtcRenderType](#struct-eUCloudRtcRenderType)		
     * [4.35  视频编码类型 - eUCloudRtcVideoCodec](#struct-eUCloudRtcVideoCodec)		
-    * [4.36  视频参数 - tUCloudVideoConfig](#struct-tUCloudVideoConfig)		
+    * [4.36  视频参数 - tUCloudVideoConfig](#struct-tUCloudVideoConfig)	
+	* [4.37  网络上下类型 - eUCloudRtcNetworkQuality](#struct-eUCloudRtcNetworkQuality)
+	* [4.38  网络评分 - eUCloudRtcQualityType](#struct-eUCloudRtcQualityType)
+	* [4.39  热插拔回调 - UcloudRtcDeviceChanged](#struct-UcloudRtcDeviceChanged)	
     
 	
 <a name='class'></a>
@@ -1215,6 +1220,48 @@ static void destroy()
 
 无
 
+<a name='class-destroy'></a>
+
+### 1.53  开启外部音频采集
+
+int enableExtendAudiocapture(bool enable, UCloudRtcExtendAudioCaptureSource* audiocapture)
+
+**返回值**
+
+0 代表成功
+
+**参数说明**    
+
+
+| 名称    | 说明 | 数据类型 | 可空 |
+| -| -| -| -|
+|  enable[in]   | 设置true还是false     | bool | N |
+| audiocapture[in]    | 外部音频源。<br> 详见UCloudRtcExtendAudioCaptureSource参数说明。  | struct| N |
+
+**消息回调**
+
+无
+
+<a name='class-destroy'></a>
+
+### 1.54  注册设备热插拔回调通知
+
+virtual void regDeviceChangeCallback(UcloudRtcDeviceChanged* callback)
+
+**返回值**
+
+无
+**参数说明**    
+
+
+| 名称    | 说明 | 数据类型 | 可空 |
+| -| -| -| -|
+| callback[in]    | 回调通知句柄<br> 详见UcloudRtcDeviceChanged参数说明。  | struct| N |
+
+**消息回调**
+
+无
+
 <a name='Device'></a>
 
 ## 二、UcloudMediaDevice设备引擎接口类
@@ -2301,6 +2348,8 @@ virtual void onKickoff(int code) {}
 virtual void onWarning(int warn) {}
 // 错误
     virtual void onError(int error) {}
+//网络质量评分回调
+virtual void onNetworkQuality(const char* uid, eUCloudRtcNetworkQuality&rtype, eUCloudRtcQualityType& Quality) {}
 };
 ```
 
@@ -2407,4 +2456,59 @@ typedef struct {
 	int mHeight; // 高
 	int mFrameRate; // 帧率
 } tUCloudVideoConfig;
+```
+
+<a name='eUCloudRtcNetworkQuality'></a>
+
+###  4.37  上下行网络类型
+
+```cpp
+typedef enum {
+	UCLOUD_RTC_NETWORK_TX = 1,  //上行
+	UCLOUD_RTC_NETWORK_RX = 2,  //下行
+}eUCloudRtcNetworkQuality;
+```
+
+<a name='struct-eUCloudRtcQualityType'></a>
+
+###  4.38  网络质量评分
+
+```cpp
+typedef enum {
+	UCLOUD_RTC_QUALITY_UNKNOWN = 0, //未知
+	UCLOUD_RTC_QUALITY_DOWN = 1,  //很坏
+	UCLOUD_RTC_QUALITY_BAD = 2,  //勉强能沟通但不顺畅
+	UCLOUD_RTC_QUALITY_POOR =  3, //用户主观感受有瑕疵但不影响沟通
+	UCLOUD_RTC_QUALITY_GOOD = 4, // 用户主观感觉和 excellent 差不多
+	UCLOUD_RTC_QUALITY_EXCELLENT = 5, //网络质量极好
+}eUCloudRtcQualityType;
+```
+
+<a name='struct-UcloudRtcDeviceChanged'></a>
+
+###  4.39  设备热插拔回调
+
+```cpp
+class _EXPORT_API UcloudRtcDeviceChanged
+{
+public:
+	virtual void onInterfaceArrival(const char* dccname, int len) {}  //设备插入
+	virtual void onInterfaceRemoved(const char* dccname, int len) {}  //设备移除
+	virtual void onInterfaceChangeValue(const char* dccname, int len) {} //设备属性改变
+	virtual ~UcloudRtcDeviceChanged() {}
+};
+```
+
+
+<a name='struct-UCloudRtcExtendAudioCaptureSource'></a>
+
+###  4.39  设备热插拔回调
+
+```cpp
+class  _EXPORT_API UCloudRtcExtendAudioCaptureSource
+{
+public:
+	virtual ~UCloudRtcExtendAudioCaptureSource() {}
+	virtual  bool doCaptureAudioFrame(tUCloudRtcAudioFrame* audioframe) = 0;
+};
 ```
