@@ -18,14 +18,14 @@
 #include "VideoPackageQueue.h"
 #include "UCloudRtcComDefine.h"
 #include "UCloudRtcMediaDevice.h"
-
-
+#include "ExtendMediaCaptuer.h"
 // CSdkTestDemoDlg 对话框
 class CSdkTestDemoDlg : 
 	public CDialogEx, 
 	public CVideoWndCallback,
 	public UCloudRtcVideoFrameObserver,
-	public UCloudRtcExtendVideoCaptureSource
+	public UCloudRtcExtendVideoCaptureSource,
+	public UcloudRtcDeviceChanged
 {
 // 构造
 public:
@@ -68,7 +68,11 @@ public:
 	virtual  void onCaptureFrame(unsigned char* videoframe, int buflen);
 
 	//extendcapture
-	virtual  bool doCaptureFrame(tUCloudRtcVideoFrame* videoframe);
+	virtual  bool doCaptureVideoFrame(tUCloudRtcVideoFrame* videoframe);
+
+	//device change call back
+	virtual void onInterfaceArrival(const char* dccname, int len);
+	virtual void onInterfaceRemoved(const char* dccname, int len);
 
 private:
 	CVideoWnd* CreateVideoWindow(eUCloudRtcMeidaType type, int x, int y, int w, int h);
@@ -113,6 +117,8 @@ private:
 	void OnStartRecord(std::string jsonmsg);
 	void OnStopRecord(std::string jsonmsg);
 
+	void OnRecvNetworkQuality(std::string jsonmsg);
+
 	//用户离开 释放所有资源
 	void ReleaseUserAllRes();
 	void SubscribeAllStream();
@@ -152,4 +158,5 @@ public:
 	CEdit m_rtsp2;
 	unsigned char* m_lpImageBuffer;
 	UCloudRtcMediaDevice* m_mediadevice;
+	HANDLE m_audiopushthread;
 };

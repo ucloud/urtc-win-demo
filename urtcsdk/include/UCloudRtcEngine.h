@@ -40,11 +40,16 @@ public:
 	virtual void onSendRTCStats(tUCloudRtcStreamStats& rtstats) {}
 	virtual void onRemoteRTCStats(tUCloudRtcStreamStats rtstats) {}
 	virtual void onRemoteAudioLevel(const char* uid, int volume) {}
+	virtual void onNetworkQuality(const char* uid, eUCloudRtcNetworkQuality&rtype, eUCloudRtcQualityType& Quality) {}
 
 	virtual void onLocalAudioLevel(int volume) {}
 	virtual void onKickoff(int code) {}
 	virtual void onWarning(int warn) {}
 	virtual void onError(int error) {}
+
+	
+
+	
 };
 
 class _EXPORT_API UCloudRtcEngine
@@ -65,9 +70,11 @@ public:
 
 	virtual int enableExtendRtspVideocapture(eUCloudRtcMeidaType type, bool enable, const char* rtspurl) = 0;
 	virtual int enableExtendVideocapture(bool enable, UCloudRtcExtendVideoCaptureSource* videocapture) = 0;
+	virtual int enableExtendAudiocapture(bool enable, UCloudRtcExtendAudioCaptureSource* audiocapture) = 0;
 	virtual int startAudioMixing(const char* filepath, bool replace, bool loop,float musicvol) = 0;
 	virtual int stopAudioMixing() = 0;
 	virtual void regAudioFrameCallback(UCloudRtcAudioFrameCallback* callback) = 0;
+	virtual void regDeviceChangeCallback(UcloudRtcDeviceChanged* callback) = 0;
 
 	virtual int joinChannel(tUCloudRtcAuth& auth) = 0;
 	virtual int leaveChannel() = 0;

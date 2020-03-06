@@ -60,6 +60,11 @@ std::string URTCEngineImpl::getSdkVersion()
 	return "";
 }
 
+void URTCEngineImpl::RegDeviceChangeCallback(UcloudRtcDeviceChanged* callback)
+{
+	m_rtcengine->regDeviceChangeCallback(callback);
+}
+
 int URTCEngineImpl::EnableRtspSource(int mediatype, bool enable, std::string rtspurl)
 {
 	if (m_rtcengine)
@@ -125,6 +130,15 @@ int URTCEngineImpl::enableExtendVideoSource(bool enable, UCloudRtcExtendVideoCap
 	if (m_rtcengine)
 	{
 		return m_rtcengine->enableExtendVideocapture(enable, source);
+	}
+	return -1;
+}
+
+int URTCEngineImpl::enableExtendAudiocapture(bool enable, UCloudRtcExtendAudioCaptureSource* source)
+{
+	if (m_rtcengine)
+	{
+		return m_rtcengine->enableExtendAudiocapture(enable, source);
 	}
 	return -1;
 }

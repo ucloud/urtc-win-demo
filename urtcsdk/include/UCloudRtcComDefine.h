@@ -72,9 +72,9 @@ typedef struct {
 }tUCloudRtcMuteSt;
 
 typedef enum {
-	UCLOUD_RTC_RECORDPROFILE_SD = 1, //±Í«Â 640*360
-	UCLOUD_RTC_RECORDPROFILE_HD, // ∏ﬂ«Â  1280*720
-	UCLOUD_RTC_RECORDPROFILE_HDPLUS, //≥¨«Â 1920*1080
+	UCLOUD_RTC_RECORDPROFILE_SD = 1, 
+	UCLOUD_RTC_RECORDPROFILE_HD, 
+	UCLOUD_RTC_RECORDPROFILE_HDPLUS, 
 }eUCloudRtcRecordProfile;
 
 typedef enum {
@@ -122,7 +122,7 @@ typedef enum {
 
 //video profile
 typedef enum {
-	UCLOUD_RTC_VIDEO_PROFILE_NONE = -1,
+	UCLOUD_RTC_VIDEO_PROFILE_NONE = -1, 
 	UCLOUD_RTC_VIDEO_PROFILE_320_180 = 1,
 	UCLOUD_RTC_VIDEO_PROFILE_320_240 = 2,
 	UCLOUD_RTC_VIDEO_PROFILE_640_360 = 3,
@@ -153,8 +153,8 @@ typedef enum {
 
 //sdk mode
 typedef enum {
-	UCLOUD_RTC_SDK_MODE_NORMAL, // ’˝≥£ƒ£ Ω –Ë“™…˙≥…token
-	UCLOUD_RTC_SDK_MODE_TRIVAL, // ”–∆⁄œﬁœﬁ÷∆≤‚ ‘
+	UCLOUD_RTC_SDK_MODE_NORMAL, 
+	UCLOUD_RTC_SDK_MODE_TRIVAL, 
 } eUCloudRtcSdkMode;
 
 typedef enum {
@@ -165,10 +165,25 @@ typedef enum {
 typedef enum {
 	UCLOUD_RTC_VIDEO_FRAME_TYPE_I420 = 1,
 	UCLOUD_RTC_VIDEO_FRAME_TYPE_RGB24,
+	UCLOUD_RTC_VIDEO_FRAME_TYPE_BGR24,
 	UCLOUD_RTC_VIDEO_FRAME_TYPE_RGBA,
 	UCLOUD_RTC_VIDEO_FRAME_TYPE_ARGB,
 }eUCloudRtcVideoFrameType;
 
+
+typedef enum {
+	UCLOUD_RTC_NETWORK_TX = 1,  //‰∏äË°å
+	UCLOUD_RTC_NETWORK_RX = 2,  //‰∏ãË°å
+}eUCloudRtcNetworkQuality;
+
+typedef enum {
+	UCLOUD_RTC_QUALITY_UNKNOWN = 0, //Êú™Áü•
+	UCLOUD_RTC_QUALITY_DOWN = 1,  //ÂæàÂùè
+	UCLOUD_RTC_QUALITY_BAD = 2,  //ÂãâÂº∫ËÉΩÊ≤üÈÄö‰ΩÜ‰∏çÈ°∫ÁïÖ
+	UCLOUD_RTC_QUALITY_POOR =  3, //Áî®Êà∑‰∏ªËßÇÊÑüÂèóÊúâÁëïÁñµ‰ΩÜ‰∏çÂΩ±ÂìçÊ≤üÈÄö
+	UCLOUD_RTC_QUALITY_GOOD = 4, // Áî®Êà∑‰∏ªËßÇÊÑüËßâÂíå excellent Â∑Æ‰∏çÂ§ö
+	UCLOUD_RTC_QUALITY_EXCELLENT = 5, //ÁΩëÁªúË¥®ÈáèÊûÅÂ•Ω
+}eUCloudRtcQualityType;
 
 typedef struct {
 	const char* mMainviewuid;
@@ -253,6 +268,15 @@ typedef struct {
 }tUCloudVideoConfig;
 
 
+class _EXPORT_API UcloudRtcDeviceChanged
+{
+public:
+	virtual void onInterfaceArrival(const char* dccname, int len) {}
+	virtual void onInterfaceRemoved(const char* dccname, int len) {}
+	virtual void onInterfaceChangeValue(const char* dccname, int len) {}
+	virtual ~UcloudRtcDeviceChanged() {}
+};
+
 class  _EXPORT_API UCloudRtcAudioFrameCallback
 {
 public:
@@ -260,10 +284,17 @@ public:
 	virtual void onRemoteMixAudioFrame(tUCloudRtcAudioFrame* audioframe) {}
 };
 
+class  _EXPORT_API UCloudRtcExtendAudioCaptureSource
+{
+public:
+	virtual ~UCloudRtcExtendAudioCaptureSource() {}
+	virtual  bool doCaptureAudioFrame(tUCloudRtcAudioFrame* audioframe) = 0;
+};
+
 class  _EXPORT_API UCloudRtcExtendVideoCaptureSource
 {
 public:
-	virtual  bool doCaptureFrame(tUCloudRtcVideoFrame* videoframe) = 0;
+	virtual  bool doCaptureVideoFrame(tUCloudRtcVideoFrame* videoframe) = 0;
 };
 
 class _EXPORT_API UCloudRtcVideoFrameObserver 

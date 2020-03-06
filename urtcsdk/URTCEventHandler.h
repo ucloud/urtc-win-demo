@@ -38,6 +38,7 @@ public:
 	virtual void onLocalAudioLevel(int volume);
 	virtual void onSendRTCStats(tUCloudRtcStreamStats& rtstats);
 	virtual void onRemoteRTCStats(tUCloudRtcStreamStats rtstats);
+	virtual void onNetworkQuality(const char* uid, eUCloudRtcNetworkQuality&rtype, eUCloudRtcQualityType& Quality);
 
 private:
 	void dispatchEvent(int eventid, std::string jsonmsg);

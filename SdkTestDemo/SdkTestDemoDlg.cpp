@@ -24,6 +24,52 @@
 
 #define VIDEO_FRAME_CALLBACK 20000
 
+CString GetProgramDir()
+{
+	TCHAR szFilePath[MAX_PATH + 1] = { 0 };
+	GetModuleFileName(NULL, szFilePath, MAX_PATH);
+	(_tcsrchr(szFilePath, _T('\\')))[1] = 0; 
+	CString str_url = szFilePath;
+	return str_url;
+}
+
+DWORD WINAPI PushPro(LPVOID lpParam)
+{
+	bool run = (int*)lpParam;
+	CString dir = GetProgramDir() + "local.pcm";
+
+	FILE* file = fopen("./local.pcm", "rb");
+	if (file == NULL) {
+		return 0;
+	}
+
+	do {
+		if (!run) {
+			break;
+		}
+		if (feof(file)) {
+			rewind(file);
+		}
+		tUCloudRtcAudioFrame* frame = new tUCloudRtcAudioFrame;
+		frame->mAudioData = (char*)malloc(sizeof(char) * 480 * 2 * 2);
+		memset(frame->mAudioData, 0, 480 * 2 * 2);
+		int n = fread(frame->mAudioData, 1, 480 * 2 * 2, file);
+
+		if (n == 480 * 2 * 2) {
+			frame->mStreamId = "";
+			frame->mUserId = "";
+			frame->mChannels = 2;
+			frame->mNumSimples = 2;
+			frame->mSimpleRate = 10;
+			frame->mBytePerSimple = 48000;
+			ExtendMediaCapturer::createInstance()->pushAudioFrame(frame);
+		}
+
+	} while (1);
+
+	fclose(file);
+}
+
 CSdkTestDemoDlg::CSdkTestDemoDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_SFU, pParent)
 {
@@ -238,7 +284,8 @@ BOOL CSdkTestDemoDlg::OnInitDialog()
 	}
 	m_rtcengine = RTCEngineFactory::createRtcEngine(RTC_CHANNELTYPE_UCLOUD);
 	m_rtcengine->InitRTCEngine(this->GetSafeHwnd());
-
+	m_rtcengine->RegDeviceChangeCallback(this);
+	//m_rtcengine->enableExtendAudiocapture(true, ExtendMediaCapturer::createInstance());
 	InitURTCConfig();
 	_pFullScreenDlg = new VideoFullDlg();
 	if (NULL != _pFullScreenDlg)
@@ -388,6 +435,9 @@ LRESULT CSdkTestDemoDlg::OnRTCUCloudMsg(WPARAM data, LPARAM lp)
 	case URTC_EVENT_MSG_ELEC_STOPRECORD:
 		OnStopRecord(callmsg->mJsonMsg);
 		break;
+	case URTC_EVENT_MSG_NETWORK_QUA:
+		OnRecvNetworkQuality(callmsg->mJsonMsg);
+		break;
 	default:
 		break;
 	}
@@ -515,6 +565,9 @@ void CSdkTestDemoDlg::OnPulibshCamStreamHandler(std::string jsonmsg) {
 			canvas.mUserid = m_userid;
 			canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
 			canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_GDI;
+			m_campub = true;
+			DWORD ThreadID;
+			//m_audiopushthread = CreateThread(NULL, 0, PushPro, &m_campub, 0, &ThreadID);
 
 			m_rtcengine->StartLocalRender(canvas);
 			m_localWnd->setUsed(true);
@@ -522,7 +575,7 @@ void CSdkTestDemoDlg::OnPulibshCamStreamHandler(std::string jsonmsg) {
 
 			m_localWnd->muteVideo(URTCConfig::getInstance()->getMuteCamBeforeJoin());
 			m_localWnd->muteAudio(URTCConfig::getInstance()->getMuteMicBeforeJoin());
-			m_campub = true;
+			
 		}
 		else {
 			char num[32] = { 0 };
@@ -1169,6 +1222,29 @@ void CSdkTestDemoDlg::OnStopRecord(std::string jsonmsg)
 	}
 }
 
+void CSdkTestDemoDlg::OnRecvNetworkQuality(std::string jsonmsg) {
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
+	{
+
+		const rapidjson::Value& object = doc["data"];
+		std::string uid = object["uid"].GetString();
+		int rtype = object["rtype"].GetInt();
+		int quality = object["quality"].GetInt();
+
+	
+		std::string msg = "";
+		if (rtype == 1) {
+			msg = uid + "-->上行网络质量:";
+		}
+		else {
+			msg = uid + "-->下行网络质量:";
+		}
+		msg = msg + std::to_string(quality);
+		OnMessageShow(msg);
+	}
+}
+
 void CSdkTestDemoDlg::ReleaseUserAllRes() {
 	m_campub = false;
 	m_screenpub = false;
@@ -1452,7 +1528,21 @@ void CSdkTestDemoDlg::onCaptureFrame(unsigned char* videoframe, int buflen)
 	PostMessage(VIDEO_FRAME_CALLBACK, (WPARAM)buf, buflen);
 }
 
-bool CSdkTestDemoDlg::doCaptureFrame(tUCloudRtcVideoFrame* videoframe)
+void CSdkTestDemoDlg::onInterfaceArrival(const char* dccname, int len)
+{
+	std::string device = dccname;
+	std::string msg = "发现设备:" + device;
+	OnMessageShow(msg);
+}
+
+void CSdkTestDemoDlg::onInterfaceRemoved(const char* dccname, int len)
+{
+	std::string device = dccname;
+	std::string msg = "移除设备:" + device;
+	OnMessageShow(msg);
+}
+
+bool CSdkTestDemoDlg::doCaptureVideoFrame(tUCloudRtcVideoFrame* videoframe)
 {
 
 	SIZE_T nBufferSize = 0x800000;

@@ -5,6 +5,8 @@
 #include "RTCEngineBase.h"
 #include "URTCEventHandler.h"
 
+
+
 class URTCEngineImpl :   
 	public RTCEngineBase{
 public:
@@ -24,8 +26,8 @@ public:
 	virtual int MuteCamBeforeJoin(bool mute);
 	virtual int MuteMicBeforeJoin(bool mute);
 	virtual int enableExtendVideoSource(bool enable, UCloudRtcExtendVideoCaptureSource* source);
-
-
+	virtual int enableExtendAudiocapture(bool enable, UCloudRtcExtendAudioCaptureSource* source);
+	virtual void RegDeviceChangeCallback(UcloudRtcDeviceChanged* callback);
 	virtual int PublishStream(tRTCStreamInfo& streaminfo) ;
 	virtual int UnPublishStream(tRTCStreamInfo& streaminfo) ;
 	virtual int StartLocalRender(tRTCRenderView& renderview);

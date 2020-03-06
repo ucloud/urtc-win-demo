@@ -3,6 +3,8 @@
 
 #include "RTCDefine.h"
 class UCloudRtcExtendVideoCaptureSource;
+class UCloudRtcExtendAudioCaptureSource;
+class UcloudRtcDeviceChanged;
 class RTCEngineBase{
 public:
 	virtual ~RTCEngineBase(){}
@@ -11,6 +13,8 @@ public:
 	virtual int UnInitRTCEngine() = 0;
 
 	virtual std::string getSdkVersion() = 0;
+
+	virtual void RegDeviceChangeCallback(UcloudRtcDeviceChanged* callback) = 0;
 
 	virtual int EnableRtspSource(int mediatype, bool enable, std::string rtspurl) =0;
 
@@ -21,7 +25,7 @@ public:
 	virtual int MuteMicBeforeJoin(bool mute) = 0;
 
 	virtual int enableExtendVideoSource(bool enable, UCloudRtcExtendVideoCaptureSource* source) = 0;
-
+	virtual int enableExtendAudiocapture(bool enable, UCloudRtcExtendAudioCaptureSource* audiocapture)  = 0;
 	virtual int PublishStream(tRTCStreamInfo& streaminfo) = 0;
 	virtual int UnPublishStream(tRTCStreamInfo& streaminfo) = 0;
 	virtual int StartLocalRender(tRTCRenderView& renderview) = 0;

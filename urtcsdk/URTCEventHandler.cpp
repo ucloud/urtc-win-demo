@@ -570,6 +570,26 @@ void URTCEventHandler::onRemoteRTCStats(tUCloudRtcStreamStats rtstats)
 	dispatchEvent(URTC_EVENT_MSG_REMOTE_ST_UPDATE, strBuf.GetString());
 }
 
+void URTCEventHandler::onNetworkQuality(const char* uid, eUCloudRtcNetworkQuality&rtype, eUCloudRtcQualityType& Quality)
+{
+	rapidjson::StringBuffer strBuf;
+	rapidjson::Writer<rapidjson::StringBuffer> writer(strBuf);
+	writer.StartObject();
+	writer.Key("data");
+	writer.StartObject();
+	writer.Key("uid");
+	writer.String(uid);
+	writer.Key("rtype");
+	writer.Int(rtype);
+	writer.Key("quality");
+	writer.Int(Quality);
+
+	writer.EndObject();
+	writer.EndObject();
+
+	dispatchEvent(URTC_EVENT_MSG_NETWORK_QUA, strBuf.GetString());
+}
+
 void URTCEventHandler::dispatchEvent(int eventid, std::string jsonmsg)
 {
 	if (mCallback)
