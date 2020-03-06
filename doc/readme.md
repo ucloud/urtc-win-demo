@@ -1220,7 +1220,7 @@ static void destroy()
 
 无
 
-<a name='class-destroy'></a>
+<a name='class-enableExtendAudiocapture'></a>
 
 ### 1.53  开启外部音频采集
 
@@ -1242,7 +1242,7 @@ int enableExtendAudiocapture(bool enable, UCloudRtcExtendAudioCaptureSource* aud
 
 无
 
-<a name='class-destroy'></a>
+<a name='class-regDeviceChangeCallback'></a>
 
 ### 1.54  注册设备热插拔回调通知
 
