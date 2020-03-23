@@ -39,6 +39,7 @@ public:
 	virtual void onSendRTCStats(tUCloudRtcStreamStats& rtstats);
 	virtual void onRemoteRTCStats(tUCloudRtcStreamStats rtstats);
 	virtual void onNetworkQuality(const char* uid, eUCloudRtcNetworkQuality&rtype, eUCloudRtcQualityType& Quality);
+	virtual void onRtmpStreamingStateChanged(const int 	state, const char* url, int code);
 
 private:
 	void dispatchEvent(int eventid, std::string jsonmsg);

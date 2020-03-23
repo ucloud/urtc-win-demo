@@ -33,7 +33,7 @@ CString GetProgramDir()
 	return str_url;
 }
 
-DWORD WINAPI PushPro(LPVOID lpParam)
+/*DWORD WINAPI PushPro(LPVOID lpParam)
 {
 	bool run = (int*)lpParam;
 	CString dir = GetProgramDir() + "local.pcm";
@@ -68,7 +68,7 @@ DWORD WINAPI PushPro(LPVOID lpParam)
 	} while (1);
 
 	fclose(file);
-}
+}*/
 
 CSdkTestDemoDlg::CSdkTestDemoDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_SFU, pParent)
@@ -232,6 +232,7 @@ BEGIN_MESSAGE_MAP(CSdkTestDemoDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_PUBS, &CSdkTestDemoDlg::OnBnClickedButtonPubs)
 	ON_BN_CLICKED(IDC_BUTTON_RECORD, &CSdkTestDemoDlg::OnBnClickedButtonRecord)
 	ON_BN_CLICKED(IDC_BUTTON_MIXFILE, &CSdkTestDemoDlg::OnBnClickedButtonMixfile)
+	ON_BN_CLICKED(IDC_BUTTON_RELAY, &CSdkTestDemoDlg::OnBnClickedButtonRelay)
 END_MESSAGE_MAP()
 
 
@@ -252,6 +253,8 @@ BOOL CSdkTestDemoDlg::OnInitDialog()
 	GetDlgItem(IDC_BUTTON_LEAVEROOM)->GetWindowRect(&rcBtn);
 	ScreenToClient(rcBtn);
 	int y = rcBtn.bottom + 2;
+
+	m_startrelay = false;
 
 	//本地视频窗口
 	m_localWnd = CreateVideoWindow(UCLOUD_RTC_MEDIATYPE_VIDEO, 0, y, 240, 240);
@@ -438,6 +441,9 @@ LRESULT CSdkTestDemoDlg::OnRTCUCloudMsg(WPARAM data, LPARAM lp)
 	case URTC_EVENT_MSG_NETWORK_QUA:
 		OnRecvNetworkQuality(callmsg->mJsonMsg);
 		break;
+	case URTC_EVENT_MSG_RTMP:
+		OnRtmpStateChanged(callmsg->mJsonMsg);
+		break;
 	default:
 		break;
 	}
@@ -462,6 +468,7 @@ void CSdkTestDemoDlg::OnJoinRoomHandler(std::string jsonmsg) {
 			GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(true);
 			GetDlgItem(IDC_BUTTON_RECORD)->EnableWindow(true);
 			GetDlgItem(IDC_BUTTON_MIXFILE)->EnableWindow(true);
+			GetDlgItem(IDC_BUTTON_RELAY)->EnableWindow(true);
 			OnMessageShow("加入房间成功");
 		}
 		else {
@@ -510,6 +517,7 @@ void CSdkTestDemoDlg::OnLeaveRoomHandler(std::string jsonmsg) {
 			GetDlgItem(IDC_BUTTON_PUBS)->EnableWindow(false);
 			GetDlgItem(IDC_BUTTON_RECORD)->EnableWindow(false);
 			GetDlgItem(IDC_BUTTON_MIXFILE)->EnableWindow(false);
+			GetDlgItem(IDC_BUTTON_RELAY)->EnableWindow(false);
 			OnMessageShow("退出房间成功");
 		}
 		else
@@ -1245,6 +1253,51 @@ void CSdkTestDemoDlg::OnRecvNetworkQuality(std::string jsonmsg) {
 	}
 }
 
+void CSdkTestDemoDlg::OnRtmpStateChanged(std::string jsonmsg)
+{
+	rapidjson::Document doc;
+	if (!doc.Parse(jsonmsg.data()).HasParseError())
+	{
+		const rapidjson::Value& object = doc["data"];
+		std::string url = object["url"].GetString();
+		int code = object["code"].GetInt();
+		int state = object["state"].GetInt();
+
+		switch (state) {
+		case RTMP_STREAM_PUBLISH_STATE_IDLE: {
+			m_startrelay = false;
+			SetDlgItemText(IDC_BUTTON_RELAY, L"开始旁推");
+			OnMessageShow("旁推停止或者未开启");
+		}break;
+		case RTMP_STREAM_PUBLISH_STATE_RUNNING: {
+			m_startrelay = true;
+			SetDlgItemText(IDC_BUTTON_RELAY, L"停止旁推");
+			OnMessageShow("旁推开启成功,观看地址:http://rtchls.ugslb.com/rtclive/888.m3u8");
+		}break;
+		case RTMP_STREAM_PUBLISH_STATE_FAILURE: {
+			m_startrelay = false;
+			char buf[256] = { 0 };
+			sprintf_s(buf, "%s 错误码： %d",
+				"旁推失败", code);
+			std::string info = buf;
+			SetDlgItemText(IDC_BUTTON_RELAY, L"开始旁推");
+			OnMessageShow(info);
+		}break;
+		case RTMP_STREAM_PUBLISH_STATE_STOPFAILURE: {
+			m_startrelay = false;
+			char buf[256] = { 0 };
+			sprintf_s(buf, "%s 错误码： %d",
+				"停止旁推失败", code);
+			std::string info = buf;
+
+			OnMessageShow(info);
+		}break;
+		default:
+			break;
+		}
+	}
+}
+
 void CSdkTestDemoDlg::ReleaseUserAllRes() {
 	m_campub = false;
 	m_screenpub = false;
@@ -1630,5 +1683,38 @@ void CSdkTestDemoDlg::OnBnClickedButtonMixfile()
 			m_startaudiomix = true;
 		}
 		
+	}
+}
+
+
+void CSdkTestDemoDlg::OnBnClickedButtonRelay()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if (!m_rtcengine)
+	{
+		return;
+	}
+
+	if (m_startrelay)
+	{
+		//	m_startrelay = false;
+		m_rtcengine->StopPushCDN("rtmp://publish3.cdn.ucloud.com.cn/ucloud/mylll");
+		return;
+	}
+	else
+	{
+		tUCloudRtcTranscodeConfig relayconfig;
+		relayconfig.mbgColor.mBlue = 0;
+		relayconfig.mbgColor.mGreen = 0;
+		relayconfig.mbgColor.mRed = 0;
+		relayconfig.mBitrate = 500; 
+		relayconfig.mFramerate = 15;
+		relayconfig.mWidth = 1280;
+		relayconfig.mHeight = 720;
+		relayconfig.mMainviewType = 1;
+		relayconfig.mMainViewUid = m_userid.data();
+	
+		m_rtcengine->StartPushCDN("rtmp://rtcpush.ugslb.com/rtclive/888", &relayconfig);
+		//m_startrelay = true;
 	}
 }

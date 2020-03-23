@@ -49,6 +49,10 @@ public:
 
 	virtual int StartMixFile(const char* filepath, bool replace, bool loop, float musicvol);
 	virtual int StopMixFile();
+
+
+	virtual int StartPushCDN(const char* url, tUCloudRtcTranscodeConfig *config);
+	virtual int StopPushCDN(const char* url) ;
 private:
 
 	UCloudRtcEngine*   m_rtcengine;

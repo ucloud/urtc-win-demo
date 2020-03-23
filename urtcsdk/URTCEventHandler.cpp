@@ -590,6 +590,25 @@ void URTCEventHandler::onNetworkQuality(const char* uid, eUCloudRtcNetworkQualit
 	dispatchEvent(URTC_EVENT_MSG_NETWORK_QUA, strBuf.GetString());
 }
 
+void URTCEventHandler::onRtmpStreamingStateChanged(const int 	state, const char* url, int code)
+{
+	rapidjson::StringBuffer strBuf;
+	rapidjson::Writer<rapidjson::StringBuffer> writer(strBuf);
+	writer.StartObject();
+	writer.Key("data");
+	writer.StartObject();
+	writer.Key("state");
+	writer.Int(state);	
+	writer.Key("url");
+	writer.String(url);
+	writer.Key("code");
+	writer.Int(code);
+	writer.EndObject();
+	writer.EndObject();
+
+	dispatchEvent(URTC_EVENT_MSG_RTMP, strBuf.GetString());
+}
+
 void URTCEventHandler::dispatchEvent(int eventid, std::string jsonmsg)
 {
 	if (mCallback)

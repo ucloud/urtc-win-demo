@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 #include <list>
-
+#include "UCloudRtcEngine.h"
 enum RTC_CHANNEL_TYPE {
 	RTC_CHANNELTYPE_UCLOUD,
 	RTC_CHANNELTYPE_AGORA,

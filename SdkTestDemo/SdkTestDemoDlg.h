@@ -74,6 +74,7 @@ public:
 	virtual void onInterfaceArrival(const char* dccname, int len);
 	virtual void onInterfaceRemoved(const char* dccname, int len);
 
+
 private:
 	CVideoWnd* CreateVideoWindow(eUCloudRtcMeidaType type, int x, int y, int w, int h);
 
@@ -118,6 +119,7 @@ private:
 	void OnStopRecord(std::string jsonmsg);
 
 	void OnRecvNetworkQuality(std::string jsonmsg);
+	void OnRtmpStateChanged(std::string jsonmsg);
 
 	//用户离开 释放所有资源
 	void ReleaseUserAllRes();
@@ -152,11 +154,14 @@ public:
 	bool m_isclose;
 	bool m_startrecord;
 	bool m_startaudiomix;
+	bool m_startrelay;
 	afx_msg void OnBnClickedButtonRecord();
 	afx_msg void OnBnClickedButtonMixfile();
+	afx_msg void OnBnClickedButtonRelay();
 	CEdit m_rtsp1;
 	CEdit m_rtsp2;
 	unsigned char* m_lpImageBuffer;
 	UCloudRtcMediaDevice* m_mediadevice;
 	HANDLE m_audiopushthread;
+	
 };

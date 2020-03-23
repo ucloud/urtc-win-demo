@@ -351,3 +351,22 @@ int URTCEngineImpl::StopMixFile()
 	}
 	return -1;
 }
+
+int URTCEngineImpl::StartPushCDN(const char* url, tUCloudRtcTranscodeConfig *config)
+{
+	if (m_rtcengine)
+	{
+		
+		m_rtcengine->addPublishStreamUrl(url, config);
+	}
+	return -1;
+}
+
+int URTCEngineImpl::StopPushCDN(const char* url)
+{
+	if (m_rtcengine)
+	{
+		return m_rtcengine->removePublishStreamUrl(url);
+	}
+	return -1;
+}
