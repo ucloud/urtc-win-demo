@@ -54,6 +54,9 @@
     * [1.52  销毁引擎 - destroy](#class-destroy)
 	* [1.53  设置外部音频采集 - enableExtendAudiocapture](#class-enableExtendAudiocapture)
 	* [1.54  注册设备热插拔回调通知 - regDeviceChangeCallback](#class-regDeviceChangeCallback)
+	* [1.55  旁路推流 - addPublishStreamUrl](#class-addPublishStreamUrl)
+	* [1.56  停止旁路推流 - removePublishStreamUrl](#class-removePublishStreamUrl)
+	* [1.57  更新旁路推流合流的流 - updateRtmpMixStream](#class-updateRtmpMixStream)
 * [二、UcloudMediaDevice设备引擎接口类](#Device)    
     * [2.1  初始化设备模块 - UCloudRtcMediaDevice](#Device-UCloudRtcMediaDevice)		
     * [2.2  销毁设备模块 - destory](#Device-destory)			
@@ -1262,6 +1265,70 @@ virtual void regDeviceChangeCallback(UcloudRtcDeviceChanged* callback)
 
 无
 
+<a name='class-addPublishStreamUrl'></a>
+
+### 1.54  旁路推流
+
+virtual int addPublishStreamUrl(const char* url, tUCloudRtcTranscodeConfig *config)
+
+**返回值**
+
+0 成功
+**参数说明**    
+
+
+| 名称    | 说明 | 数据类型 | 可空 |
+| -| -| -| -|
+| url[in]    | cdn地址<br>   | string| N |
+| config[in]    | 转推配置<br> 详见tUCloudRtcTranscodeConfig参数说明。  | struct| N |
+**消息回调**
+
+void onRtmpStreamingStateChanged(const int 	state, const char* url, int code)
+
+<a name='class-removePublishStreamUrl'></a>
+
+### 1.54  停止旁路推流
+
+virtual int removePublishStreamUrl(const char* url)
+
+**返回值**
+
+0 成功
+**参数说明**    
+
+
+| 名称    | 说明 | 数据类型 | 可空 |
+| -| -| -| -|
+| url[in]    | cdn地址<br>   | string| N |
+
+**消息回调**
+
+void onRtmpStreamingStateChanged(const int 	state, const char* url, int code)
+
+<a name='class-updateRtmpMixStream'></a>
+
+### 1.54  更新旁路推流合流的流
+
+virtual int updateRtmpMixStream(eUCloudRtmpOpration cmd, tUCloudRtcRelayStream* streams,int length)
+
+**返回值**
+
+0 成功
+**参数说明**    
+
+
+| 名称    | 说明 | 数据类型 | 可空 |
+| -| -| -| -|
+| cmd[in]    | 操作类型<br> 详见eUCloudRtmpOpration参数说明。  | int| N |
+| streams[in]    | 流列表<br> 详见tUCloudRtcRelayStream参数说明。  | struct| N |
+| length[in]    | 流长度<br>   | int| N |
+
+**消息回调**
+
+virtual void onRtmpUpdateMixStreamRes(eUCloudRtmpOpration& cmd,const int code, const char* msg)
+
+
+
 <a name='Device'></a>
 
 ## 二、UcloudMediaDevice设备引擎接口类
@@ -2050,19 +2117,35 @@ typedef enum {
 ###  4.11  录制配置信息
 
 ```cpp
-typedef struct {
-	const char* mMainviewuid;    // 录制视频时大屏用户
-    const char* mBucket;       //ufile 的存储名称
-	const char* mBucketRegion;    //存储所在的地域目前仅支持存储在北京
-	eUCloudRtcRecordProfile mProfile; // 输出等级
-	eUCloudRtcRecordType mRecordType;  // 录制媒体类型
-	eUCloudRtcWaterMarkPos mWatermarkPos; // 水印位置
-	eUCloudRtcMeidaType mMainviewmediatype; // 主媒体类型
-    eUCloudRtcWaterMarkType mWaterMarkType; // 水印类型
-	const char* mWatermarkUrl;  // 当图片水印位水印url  当时文字水印为文字内容
-	bool mIsaverage;  // 画面是否均分，不均为1大几小
-	int mMixerTemplateType; //混流风格 (1 -- 9 )
-} tUCloudRtcRecordConfig;
+typedef struct UCloudRtcRecordConfig {
+	const char* mMainviewuid;   //录制的主流用户id
+	const char* mBucket;        //存储bucket
+	const char* mBucketRegion;  //存储region
+	eUCloudRtcRecordProfile mProfile;  //录制profile
+	eUCloudRtcRecordType mRecordType;  //录制类型
+	eUCloudRtcWaterMarkPos mWatermarkPos;  //水印位置
+	eUCloudRtcMeidaType mMainviewmediatype;  //主流的媒体类型
+
+	eUCloudRtcWaterMarkType mWaterMarkType;   //水印类型
+	const char* mWatermarkUrl;		//水印url  为图片水印时
+	bool mIsaverage;				//是否均分 (true .流式布局，false:讲课模式)
+	int mMixerTemplateType;			//模板类型
+
+	//新版录制新增参数
+	tUCloudRtcRelayStream *mStreams; //混流的用户
+	int mStreamslength; //混流的用户长度
+	int mLayout; // 0.取决于mIsaverage 1.流式布局 2.讲课模式 3.自定义布局 4.模板自适应1 5.模板自适应2
+
+
+	UCloudRtcRecordConfig() {
+		mWatermarkUrl = nullptr;
+		mMainviewuid = nullptr;
+		mBucket = nullptr;
+		mBucketRegion = nullptr;
+		mStreams = nullptr;
+		mLayout = MIX_LAYOUT_OLD;
+	}
+}tUCloudRtcRecordConfig;
 ```
 
 <a name='struct-eUCloudRtcRenderMode'></a>
@@ -2349,7 +2432,11 @@ virtual void onWarning(int warn) {}
 // 错误
     virtual void onError(int error) {}
 //网络质量评分回调
-virtual void onNetworkQuality(const char* uid, eUCloudRtcNetworkQuality&rtype, eUCloudRtcQualityType& Quality) {}
+	virtual void onNetworkQuality(const char* uid, eUCloudRtcNetworkQuality&rtype, eUCloudRtcQualityType& Quality) {}
+//旁推状态回调
+	virtual void onRtmpStreamingStateChanged(const int 	state, const char* url, int code) {};
+//旁推更新混合流回调
+	virtual void onRtmpUpdateMixStreamRes(eUCloudRtmpOpration& cmd,const int code, const char* msg) {};
 };
 ```
 
@@ -2512,3 +2599,63 @@ public:
 	virtual  bool doCaptureAudioFrame(tUCloudRtcAudioFrame* audioframe) = 0;
 };
 ```
+
+<a name='struct-tUCloudRtcRelayStream'></a>
+
+###  4.41  转推的流
+
+```cpp
+typedef struct UCloudRtcRelayStream {
+	const char* mUid;          //用户id
+	eUCloudRtcMeidaType mType; //媒体类型 1摄像头 2桌面
+	UCloudRtcRelayStream() {
+		mUid = nullptr;
+		mType = UCLOUD_RTC_MEDIATYPE_NONE;
+	}
+}tUCloudRtcRelayStream;
+```
+
+<a name='struct-eUCloudMixLayout'></a>
+
+###  4.42  转推混流操作类型
+
+```cpp
+typedef enum {
+	MIX_LAYOUT_OLD,      //兼容之前模板
+	MIX_LAYOUT_FLOW,	 //流式布局
+	MIX_LAYOUT_TEACH,			 //讲课布局
+	MIX_LAYOUT_CUSTOM,    //自定义
+	MIX_LAYOUT_ADAPTION1, //自适应模板1
+	MIX_LAYOUT_ADAPTION2, //自适应模板2
+}eUCloudMixLayout;
+```
+
+<a name='struct-UCloudRtcTranscodeConfig'></a>
+
+###  4.43  转推配置
+
+```cpp
+typedef struct UCloudRtcTranscodeConfig {
+	tUCloudBackgroundColor mbgColor;  //背景色
+	int mFramerate; //帧率
+	int mBitrate;   //码率
+	const char*  mMainViewUid; //主讲人的uid
+	int mMainviewType; //主讲人放置的流类型
+	int mWidth;  //输出分辨率宽度
+	int mHeight; //输出分辨率高度
+	eUCloudMixLayout mLayout; // 1.流式布局 2.讲课模式 3.自定义布局 4.模板自适应1 5.模板自适应2
+	const char*  mStyle; //mLayout=3 时自定义风格内容
+	int mLenth;
+	tUCloudRtcRelayStream *mStreams; //混流的用户
+	int mStreamslength; //长度
+	UCloudRtcTranscodeConfig()
+	{
+		mLayout = MIX_LAYOUT_TEACH;
+		mMainViewUid = nullptr;
+		mStreams = nullptr;
+		mStyle = nullptr;
+		mStreamslength = 0;
+	}
+}tUCloudRtcTranscodeConfig;
+```
+
