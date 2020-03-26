@@ -22,6 +22,8 @@ typedef enum _tUCloudRtcCallbackErrCode {
 	UCLOUD_RTC_CALLBACK_ERR_USER_LEAVING, // 用户正在离开房间  无法进行其他操作
 	UCLOUD_RTC_CALLBACK_ERR_NO_HAS_TRACK,  //无对应的媒体轨道
 	UCLOUD_RTC_CALLBACK_ERR_MSG_TIMEOUT, // 消息请求超时
+	UCLOUD_RTC_CALLBACK_ERR_MSG_RECORDSTART, //录制已开启
+	UCLOUD_RTC_CALLBACK_ERR_MSG_RELAYSTART,  //转推已开启
 }tUCloudRtcCallbackErrCode;
 
 typedef enum _tUCloudRtcReturnErrCode {

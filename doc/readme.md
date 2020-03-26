@@ -1267,7 +1267,7 @@ virtual void regDeviceChangeCallback(UcloudRtcDeviceChanged* callback)
 
 <a name='class-addPublishStreamUrl'></a>
 
-### 1.54  旁路推流
+### 1.55  旁路推流
 
 virtual int addPublishStreamUrl(const char* url, tUCloudRtcTranscodeConfig *config)
 
@@ -1287,7 +1287,7 @@ void onRtmpStreamingStateChanged(const int 	state, const char* url, int code)
 
 <a name='class-removePublishStreamUrl'></a>
 
-### 1.54  停止旁路推流
+### 1.56  停止旁路推流
 
 virtual int removePublishStreamUrl(const char* url)
 
@@ -1307,7 +1307,7 @@ void onRtmpStreamingStateChanged(const int 	state, const char* url, int code)
 
 <a name='class-updateRtmpMixStream'></a>
 
-### 1.54  更新旁路推流合流的流
+### 1.57  更新旁路推流合流的流
 
 virtual int updateRtmpMixStream(eUCloudRtmpOpration cmd, tUCloudRtcRelayStream* streams,int length)
 

@@ -103,6 +103,7 @@ typedef enum {
 
 //水印类型
 typedef enum {
+	UCLOUD_RTC_WATERMARK_TYPE_NONE = 0,
 	UCLOUD_RTC_WATERMARK_TYPE_TIME = 1,
 	UCLOUD_RTC_WATERMARK_TYPE_PIC,
 	UCLOUD_RTC_WATERMARK_TYPE_TEXT,
@@ -211,24 +212,8 @@ typedef enum {
 	RTMP_STREAM_PUBLISH_STATE_RUNNING,  //正在推流
 	RTMP_STREAM_PUBLISH_STATE_FAILURE , //推流失败 详见code
 	RTMP_STREAM_PUBLISH_STATE_STOPFAILURE, //停止推流失败 详见code
+	RTMP_STREAM_PUBLISH_STATE_EXCEPTIONSTOP, //异常停止推流(无流超时停止)
 }eUCloudRtmpState;
-
-//录制信息
-typedef struct {
-	const char* mMainviewuid;   //录制的主流用户id
-	const char* mBucket;        //存储bucket
-	const char* mBucketRegion;  //存储region
-	eUCloudRtcRecordProfile mProfile;  //录制profile
-	eUCloudRtcRecordType mRecordType;  //录制类型
-	eUCloudRtcWaterMarkPos mWatermarkPos;  //水印位置
-	eUCloudRtcMeidaType mMainviewmediatype;  //主流的媒体类型
-
-	eUCloudRtcWaterMarkType mWaterMarkType;   //水印类型
-	const char* mWatermarkUrl;		//水印url  为图片水印时
-	bool mIsaverage;				//是否均分
-	int mMixerTemplateType;			//模板类型
-
-}tUCloudRtcRecordConfig;
 
 // 渲染类型
 typedef struct
@@ -332,6 +317,16 @@ typedef struct UCloudRtcRelayStream {
 	}
 }tUCloudRtcRelayStream;
 
+//转推混流操作类型
+typedef enum {
+	MIX_LAYOUT_OLD,      //兼容之前模板
+	MIX_LAYOUT_FLOW,	 //流式布局
+	MIX_LAYOUT_TEACH,			 //讲课布局
+	MIX_LAYOUT_CUSTOM,    //自定义
+	MIX_LAYOUT_ADAPTION1, //自适应模板1
+	MIX_LAYOUT_ADAPTION2, //自适应模板2
+}eUCloudMixLayout;
+
 //转推配置
 typedef struct UCloudRtcTranscodeConfig {
 	tUCloudBackgroundColor mbgColor;  //背景色
@@ -341,18 +336,51 @@ typedef struct UCloudRtcTranscodeConfig {
 	int mMainviewType; //主讲人放置的流类型
 	int mWidth;  //输出分辨率宽度
 	int mHeight; //输出分辨率高度
-	const char*  mStyle; //自定义风格 为空时 采用默认自动放置 不为空自定义风格 参见风格字符串
+	eUCloudMixLayout mLayout; // 1.流式布局 2.讲课模式 3.自定义布局 4.模板自适应1 5.模板自适应2
+	const char*  mStyle; //mLayout=3 时自定义风格内容
 	int mLenth;
 	tUCloudRtcRelayStream *mStreams; //混流的用户
 	int mStreamslength; //长度
 	UCloudRtcTranscodeConfig()
 	{
+		mLayout = MIX_LAYOUT_TEACH;
+		mMainViewUid = nullptr;
 		mStreams = nullptr;
 		mStyle = nullptr;
 		mStreamslength = 0;
 	}
 }tUCloudRtcTranscodeConfig;
 
+//录制信息
+typedef struct UCloudRtcRecordConfig {
+	const char* mMainviewuid;   //录制的主流用户id
+	const char* mBucket;        //存储bucket
+	const char* mBucketRegion;  //存储region
+	eUCloudRtcRecordProfile mProfile;  //录制profile
+	eUCloudRtcRecordType mRecordType;  //录制类型
+	eUCloudRtcWaterMarkPos mWatermarkPos;  //水印位置
+	eUCloudRtcMeidaType mMainviewmediatype;  //主流的媒体类型
+
+	eUCloudRtcWaterMarkType mWaterMarkType;   //水印类型
+	const char* mWatermarkUrl;		//水印url  为图片水印时
+	bool mIsaverage;				//是否均分 (true .流式布局，false:讲课模式)
+	int mMixerTemplateType;			//模板类型
+
+	//新版录制新增参数
+	tUCloudRtcRelayStream *mStreams; //混流的用户
+	int mStreamslength; //混流的用户长度
+	int mLayout; // 0.取决于mIsaverage 1.流式布局 2.讲课模式 3.自定义布局 4.模板自适应1 5.模板自适应2
+
+
+	UCloudRtcRecordConfig() {
+		mWatermarkUrl = nullptr;
+		mMainviewuid = nullptr;
+		mBucket = nullptr;
+		mBucketRegion = nullptr;
+		mStreams = nullptr;
+		mLayout = MIX_LAYOUT_OLD;
+	}
+}tUCloudRtcRecordConfig;
 //设备插拔回调
 class _EXPORT_API UcloudRtcDeviceChanged
 {
