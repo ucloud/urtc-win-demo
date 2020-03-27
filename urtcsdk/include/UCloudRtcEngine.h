@@ -296,7 +296,6 @@ public:
 
 	///设置桌面分享profile
 	///@param profile 分辨率
-
 	virtual void setDesktopProfile(eUCloudRtcScreenProfile profile) = 0;
 
 	///设置桌面分享参数
