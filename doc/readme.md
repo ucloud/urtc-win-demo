@@ -1988,7 +1988,7 @@ typedef enum _tUCloudRtcReturnErrCode {
 * [4.34  视频渲染类型 - eUCloudRtcRenderType](#struct-eUCloudRtcRenderType)		
 * [4.35  视频编码类型 - eUCloudRtcVideoCodec](#struct-eUCloudRtcVideoCodec)		
 * [4.36  视频参数 - tUCloudVideoConfig](#struct-tUCloudVideoConfig)	
-* [4.37  网络上下类型 - eUCloudRtcNetworkQuality](#struct-eUCloudRtcNetworkQuality)
+* [4.37  上下行网络类型 - eUCloudRtcNetworkQuality](#struct-eUCloudRtcNetworkQuality)
 * [4.38  网络评分 - eUCloudRtcQualityType](#struct-eUCloudRtcQualityType)
 * [4.39  热插拔回调 - UcloudRtcDeviceChanged](#struct-UcloudRtcDeviceChanged)
 
