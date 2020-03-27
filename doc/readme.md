@@ -2548,7 +2548,7 @@ typedef struct {
 } tUCloudVideoConfig;
 ```
 
-<a name='eUCloudRtcNetworkQuality'></a>
+<a name='struct-eUCloudRtcNetworkQuality'></a>
 
 ###  4.37  上下行网络类型
 
