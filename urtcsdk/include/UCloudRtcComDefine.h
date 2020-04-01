@@ -500,6 +500,13 @@ typedef struct UCloudRtcRecordConfig {
 	}
 }tUCloudRtcRecordConfig;
 
+
+
+typedef enum {
+	DEVICE_VIDEO,      //视频设备
+	DEVICE_AUDIO,	 //音频设备
+}eUCloudDeviceType;
+
 //设备插拔回调
 class _EXPORT_API UcloudRtcDeviceChanged
 {
@@ -507,17 +514,17 @@ public:
 	///发现设备
 	///@param dccname 名称
 	///@param len 长度
-	virtual void onInterfaceArrival(const char* dccname, int len) {}
+	virtual void onInterfaceArrival(eUCloudDeviceType dtype,const char* dccname, int len) {}
 
 	///移除设备
 	///@param dccname 名称
 	///@param len 长度
-	virtual void onInterfaceRemoved(const char* dccname, int len) {}
+	virtual void onInterfaceRemoved(eUCloudDeviceType dtype, const char* dccname, int len) {}
 
 	///设备属性改变
 	///@param dccname 设备名称
 	///@param len 长度
-	virtual void onInterfaceChangeValue(const char* dccname, int len) {}
+	virtual void onInterfaceChangeValue(eUCloudDeviceType dtype, const char* dccname, int len) {}
 	virtual ~UcloudRtcDeviceChanged() {}
 };
 
