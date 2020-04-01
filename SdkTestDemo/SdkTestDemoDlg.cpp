@@ -231,6 +231,7 @@ BEGIN_MESSAGE_MAP(CSdkTestDemoDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_RECORD, &CSdkTestDemoDlg::OnBnClickedButtonRecord)
 	ON_BN_CLICKED(IDC_BUTTON_MIXFILE, &CSdkTestDemoDlg::OnBnClickedButtonMixfile)
 	ON_BN_CLICKED(IDC_BUTTON_RELAY, &CSdkTestDemoDlg::OnBnClickedButtonRelay)
+	ON_LBN_SELCHANGE(IDC_LIST2, &CSdkTestDemoDlg::OnLbnSelchangeList2)
 END_MESSAGE_MAP()
 
 
@@ -1247,7 +1248,7 @@ void CSdkTestDemoDlg::OnRecvNetworkQuality(std::string jsonmsg) {
 			msg = uid + "-->下行网络质量:";
 		}
 		msg = msg + std::to_string(quality);
-		OnMessageShow(msg);
+		//OnMessageShow(msg);
 	}
 }
 
@@ -1265,12 +1266,16 @@ void CSdkTestDemoDlg::OnRtmpStateChanged(std::string jsonmsg)
 		case RTMP_STREAM_PUBLISH_STATE_IDLE: {
 			m_startrelay = false;
 			SetDlgItemText(IDC_BUTTON_RELAY, L"开始旁推");
-			OnMessageShow("旁推停止或者未开启");
+			OnMessageShow("旁推停止");
 		}break;
 		case RTMP_STREAM_PUBLISH_STATE_RUNNING: {
 			m_startrelay = true;
 			SetDlgItemText(IDC_BUTTON_RELAY, L"停止旁推");
-			OnMessageShow("旁推开启成功,观看地址:http://rtchls.ugslb.com/rtclive/888.m3u8");
+			std::string url = "http://rtchls.ugslb.com/rtclive/" + m_roomid + ".m3u8";
+			char buf[256] = { 0 };
+			sprintf_s(buf, "旁推开启成功,观看地址:%s", url.data(), code);
+			std::string info = buf;
+			OnMessageShow(info);
 		}break;
 		case RTMP_STREAM_PUBLISH_STATE_FAILURE: {
 			m_startrelay = false;
@@ -1706,7 +1711,8 @@ void CSdkTestDemoDlg::OnBnClickedButtonRelay()
 	if (m_startrelay)
 	{
 		//	m_startrelay = false;
-		m_rtcengine->StopPushCDN("rtmp://publish3.cdn.ucloud.com.cn/ucloud/mylll");
+		std::string url = "rtmp://rtcpush.ugslb.com/rtclive/" + m_roomid ;
+		m_rtcengine->StopPushCDN(url.data());
 		return;
 	}
 	else
@@ -1721,8 +1727,31 @@ void CSdkTestDemoDlg::OnBnClickedButtonRelay()
 		relayconfig.mHeight = 720;
 		relayconfig.mMainviewType = 1;
 		relayconfig.mMainViewUid = m_userid.data();
-	
-		m_rtcengine->StartPushCDN("rtmp://rtcpush.ugslb.com/rtclive/888", &relayconfig);
+		std::string url = "rtmp://rtcpush.ugslb.com/rtclive/" + m_roomid;
+		m_rtcengine->StartPushCDN(url.data(), &relayconfig);
 		//m_startrelay = true;
 	}
+}
+
+
+void CSdkTestDemoDlg::OnLbnSelchangeList2()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	int curSel = m_msglist.GetCurSel();
+	CString str;
+	m_msglist.GetText(curSel, str);
+	BOOL bret = OpenClipboard();
+	EmptyClipboard();
+	int len = str.GetLength() * 2;
+	HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE, len + 2);
+	wchar_t *p = (wchar_t*)GlobalLock(hGlobal);
+	wmemset(p, 0, str.GetLength() + 1);
+	wmemcpy(p, str.GetBuffer(), str.GetLength() + 1);
+	bret = GlobalUnlock(hGlobal);
+	HANDLE hResult = SetClipboardData(CF_UNICODETEXT, hGlobal);
+
+	
+	CloseClipboard();
+	//str.Format(L"拷贝数据到剪切板成功, 长度：%d", str.GetLength());
+	//MessageBox(str);
 }

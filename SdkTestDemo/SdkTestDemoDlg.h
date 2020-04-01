@@ -164,4 +164,5 @@ public:
 	UCloudRtcMediaDevice* m_mediadevice;
 	HANDLE m_audiopushthread;
 	
+	afx_msg void OnLbnSelchangeList2();
 };
