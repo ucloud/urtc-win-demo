@@ -455,6 +455,7 @@ public:
 	///@return 0 succ
 	virtual int addPublishStreamUrl(const char* url, tUCloudRtcTranscodeConfig *config) = 0;
 
+
 	///停止旁路推流
 	///@param url cdn地址
 	///@return 0 succ
