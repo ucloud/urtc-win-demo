@@ -27,6 +27,7 @@ typedef enum _tUCloudRtcCallbackErrCode {
 	UCLOUD_RTC_CALLBACK_ERR_MSG_RELAYURLNOTEXISTED, //转推地址不存在
 	UCLOUD_RTC_CALLBACK_ERR_MSG_URLERROR,  //CDN地址无效
 	UCLOUD_RTC_CALLBACK_ERR_MSG_NOSTREAMS, //房间内无流
+	UCLOUD_RTC_CALLBACK_ERR_MSG_VIDEODVICEERR, //视频设备出错
 }tUCloudRtcCallbackErrCode;
 
 typedef enum _tUCloudRtcReturnErrCode {

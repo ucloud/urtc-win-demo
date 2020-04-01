@@ -143,6 +143,10 @@ public:
 	///@param msg 错误信息
 	virtual void onRtmpUpdateMixStreamRes(eUCloudRtmpOpration& cmd,const int code, const char* msg) {};
 
+	///设备报错回调
+	///@param code 设备报错回调
+	virtual void onCaptureError(const int code, const int detail) {}
+
 	///本地音频能量回调
 	///@param volume 音量大小
 	virtual void onLocalAudioLevel(int volume) {}
@@ -451,7 +455,6 @@ public:
 	///@return 0 succ
 	virtual int addPublishStreamUrl(const char* url, tUCloudRtcTranscodeConfig *config) = 0;
 
-
 	///停止旁路推流
 	///@param url cdn地址
 	///@return 0 succ
@@ -464,6 +467,13 @@ public:
 	///@param streams 转推的流长度
 	///@return 0 succ
 	virtual int updateRtmpMixStream(eUCloudRtmpOpration cmd, tUCloudRtcRelayStream* streams,int length) = 0;
+
+	///设置mute后的水印图 yuv420格式 内部自动缩放 
+	///@param rgb格式的字节数组
+	///@param 长度
+	///@return 0 succ
+	virtual int setMuteBackImage(const unsigned char* image,const int width,const int height) = 0;
+
 protected:
 	virtual ~UCloudRtcEngine() {}
 };

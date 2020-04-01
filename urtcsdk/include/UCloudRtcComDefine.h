@@ -440,6 +440,13 @@ typedef struct UCloudRtcTranscodeConfig {
 	tUCloudRtcRelayStream *mStreams; 
 	//混流用户数
 	int mStreamslength;
+
+	//水印位置
+	eUCloudRtcWaterMarkPos mWatermarkPos;
+	//水印类型
+	eUCloudRtcWaterMarkType mWaterMarkType;
+	//水印url  为图片水印时
+	const char* mWatermarkUrl;
 	UCloudRtcTranscodeConfig()
 	{
 		mLayout = MIX_LAYOUT_TEACH;
@@ -447,6 +454,8 @@ typedef struct UCloudRtcTranscodeConfig {
 		mStreams = nullptr;
 		mStyle = nullptr;
 		mStreamslength = 0;
+		mWatermarkUrl = nullptr;
+		mWaterMarkType = UCLOUD_RTC_WATERMARK_TYPE_NONE;
 	}
 }tUCloudRtcTranscodeConfig;
 

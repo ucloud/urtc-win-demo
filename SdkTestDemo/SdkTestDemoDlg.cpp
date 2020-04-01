@@ -50,14 +50,12 @@ CString GetProgramDir()
 		if (feof(file)) {
 			rewind(file);
 		}
-		tUCloudRtcAudioFrame* frame = new tUCloudRtcAudioFrame;
+		tRtcAudioFrame* frame = new tRtcAudioFrame;
 		frame->mAudioData = (char*)malloc(sizeof(char) * 480 * 2 * 2);
 		memset(frame->mAudioData, 0, 480 * 2 * 2);
 		int n = fread(frame->mAudioData, 1, 480 * 2 * 2, file);
 
 		if (n == 480 * 2 * 2) {
-			frame->mStreamId = "";
-			frame->mUserId = "";
 			frame->mChannels = 2;
 			frame->mNumSimples = 2;
 			frame->mSimpleRate = 10;
@@ -1288,6 +1286,16 @@ void CSdkTestDemoDlg::OnRtmpStateChanged(std::string jsonmsg)
 			char buf[256] = { 0 };
 			sprintf_s(buf, "%s ¥ÌŒÛ¬Î£∫ %d",
 				"Õ£÷π≈‘Õ∆ ß∞‹", code);
+			std::string info = buf;
+
+			OnMessageShow(info);
+		}break;
+		case RTMP_STREAM_PUBLISH_STATE_EXCEPTIONSTOP: {
+			m_startrelay = false;
+			SetDlgItemText(IDC_BUTTON_RELAY, L"ø™ º≈‘Õ∆");
+			char buf[256] = { 0 };
+			sprintf_s(buf, "%s ¥ÌŒÛ¬Î£∫ %d",
+				"“Ï≥£Õ£÷π", code);
 			std::string info = buf;
 
 			OnMessageShow(info);

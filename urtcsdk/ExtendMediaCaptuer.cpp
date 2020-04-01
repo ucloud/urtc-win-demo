@@ -1,4 +1,4 @@
-
+#include "stdafx.h"
 #include "ExtendMediaCaptuer.h"
 #include <string>
 #include <vector>
@@ -15,6 +15,8 @@ ExtendMediaCapturer* ExtendMediaCapturer::createInstance()
 }
 
 void ExtendMediaCapturer::initExtendMediaCapturer() {
+	m_videolist.setVideoFrameLen(640 * 360 * 3 / 2);
+	m_audiolist.setAudioFrameLen(480*2*2);
 
 }
 ExtendMediaCapturer* ExtendMediaCapturer::getInstance() 
@@ -32,6 +34,7 @@ ExtendMediaCapturer* ExtendMediaCapturer::getInstance()
 
 ExtendMediaCapturer::ExtendMediaCapturer()
 {
+
 }
 
 ExtendMediaCapturer::~ExtendMediaCapturer()
@@ -41,80 +44,52 @@ ExtendMediaCapturer::~ExtendMediaCapturer()
 
 void ExtendMediaCapturer::reset() 
 {	
-	m_videolist.clear();
-	m_audiolist.clear();
+
 }
 
-bool ExtendMediaCapturer::pushVideoFrame(tUCloudRtcVideoFrame* frame) 
+
+bool ExtendMediaCapturer::pushVideoFrame(tRtcVideoFrame* pframe)
 {
-	if (m_videolist.size() > 30) {
-		delete[]frame->mDataBuf;
-		delete frame;
-		frame = nullptr;
-		return false;
-	}
-	m_vbuflock.lock() ;
-	m_videolist.push_back(frame);
-	m_vbuflock.unlock() ;
+	return m_videolist.pushVideoFrame(pframe);
 }
 
-bool ExtendMediaCapturer::pushAudioFrame(tUCloudRtcAudioFrame* frame) 
+bool ExtendMediaCapturer::pushAudioFrame(tRtcAudioFrame* pframe)
 {
-	if (m_audiolist.size() > 3) {
-		delete[]frame->mAudioData;
-		delete frame;
-		frame = nullptr;
-		return false;
-	}
-	m_buflock.lock() ;
-	m_audiolist.push_back(frame);
-	m_buflock.unlock() ;
+	return m_audiolist.pushAudioFrame(pframe);
 }
 
-bool ExtendMediaCapturer::doCaptureVideoFrame(tUCloudRtcVideoFrame* frame) 
+bool ExtendMediaCapturer::doCaptureVideoFrame(tUCloudRtcVideoFrame* pframe) 
 {
-	if (m_videolist.empty() ) {
+	tRtcVideoFrame frame;
+
+	if (m_videolist.popVideoFrame(&frame))
+	{
+		memcpy_s(pframe->mDataBuf, frame.mBuflen, frame.mVideoData, frame.mBuflen);
+		pframe->mHeight = frame.mHeight;
+		pframe->mWidth = frame.mWidth;
+		pframe->mVideoType = frame.mVideoType;
 		return true;
 	}
-	m_vbuflock.lock();
-	tUCloudRtcVideoFrame *pFrame = m_videolist.front();
-	m_videolist.pop_front();
-	m_vbuflock.unlock();
-
-	frame->mWidth = pFrame->mWidth ;
-	frame->mHeight = pFrame->mHeight;
-
-	frame->mVideoType = pFrame->mVideoType;
-	memcpy(frame->mDataBuf, pFrame->mDataBuf, pFrame->mHeight*pFrame->mWidth) ;
-	
-	
-	delete[]pFrame->mDataBuf;
-	delete pFrame;
-	return true ;
+	return false;
 }
 
-bool ExtendMediaCapturer::doCaptureAudioFrame(tUCloudRtcAudioFrame* frame) 
+bool ExtendMediaCapturer::doCaptureAudioFrame(tUCloudRtcAudioFrame* pframe) 
 {
-	if (m_audiolist.empty()  ) {
 	
+	tRtcAudioFrame frame;
+
+	if (m_audiolist.popAudioFrame(&frame))
+	{
+		pframe->mBytePerSimple = frame.mBytePerSimple;
+		pframe->mChannels = frame.mChannels;
+
+		pframe->mNumSimples = frame.mNumSimples;
+		pframe->mSimpleRate = frame.mSimpleRate;
+		pframe->mStreamId = "";
+		pframe->mUserId = "";
+
+		memcpy(pframe->mAudioData, frame.mAudioData, 480 * 2 * 2);
 		return true;
 	}
-	m_buflock.lock();
-	tUCloudRtcAudioFrame *pFrame = m_audiolist.front();
-	m_audiolist.pop_front();
-	m_buflock.unlock();
-
-	frame->mBytePerSimple = pFrame->mBytePerSimple;
-	frame->mChannels = pFrame->mChannels;
-
-	frame->mNumSimples = pFrame->mNumSimples;
-	frame->mSimpleRate = pFrame->mSimpleRate;
-	frame->mStreamId = pFrame->mStreamId;
-	frame->mUserId = pFrame->mUserId;
-	memcpy(frame->mAudioData, pFrame->mAudioData, 480*2*2);
-	
-	delete[]pFrame->mAudioData;
-	delete pFrame;
-	pFrame = nullptr;
-	return true;
+	return false;
 }
