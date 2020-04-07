@@ -455,6 +455,11 @@ public:
 	///@return 0 succ
 	virtual int addPublishStreamUrl(const char* url, tUCloudRtcTranscodeConfig *config) = 0;
 
+	///更新转推设置
+	///@param url cdn 地址
+	///@param 转推更新设置(只针对mMainViewUid mMainviewType mLayout有效 )
+	///@return 0 succ
+	virtual int updateTranscodeConfig(const char* url, tUCloudRtcTranscodeConfig *config) = 0;
 
 	///停止旁路推流
 	///@param url cdn地址

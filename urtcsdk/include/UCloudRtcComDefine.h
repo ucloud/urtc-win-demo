@@ -272,6 +272,8 @@ typedef enum {
 	RTMP_STREAM_PUBLISH_STATE_STOPFAILURE, 
 	//异常停止推流(无流超时停止)
 	RTMP_STREAM_PUBLISH_STATE_EXCEPTIONSTOP, 
+	//更新布局结果
+	RTMP_STREAM_PUBLISH_STATE_UPDATECONFIGRES,  //code 为0时更新succ
 }eUCloudRtmpState;
 
 // 渲染视图
@@ -408,12 +410,13 @@ typedef struct UCloudRtcRelayStream {
 
 //转推混流操作类型
 typedef enum {
-	MIX_LAYOUT_OLD,      //兼容之前模板
-	MIX_LAYOUT_FLOW,	 //流式布局
-	MIX_LAYOUT_TEACH,			 //讲课布局
+	MIX_LAYOUT_OLD,       //兼容之前模板
+	MIX_LAYOUT_FLOW,	  //流式布局
+	MIX_LAYOUT_TEACH,	  //讲课布局
 	MIX_LAYOUT_CUSTOM,    //自定义
-	MIX_LAYOUT_ADAPTION1, //自适应模板1
-	MIX_LAYOUT_ADAPTION2, //自适应模板2
+	MIX_LAYOUT_ADAPTION1, //主讲模式
+	MIX_LAYOUT_ADAPTION2, //多人模式
+	MIX_LAYOUT_ADAPTION3, //单人模式
 }eUCloudMixLayout;
 
 //转推配置
@@ -541,6 +544,9 @@ public:
 	///远端音频源数据callback
 	///@param audioframe 音频数据
 	virtual void onRemoteMixAudioFrame(tUCloudRtcAudioFrame* audioframe) {}
+	///本地和远端音频源数据callback
+	///@param audioframe 音频数据
+	virtual void onLoaclRemoteMixAudioFrame(tUCloudRtcAudioFrame* audioframe) {}
 };
 
 //外部音频源
