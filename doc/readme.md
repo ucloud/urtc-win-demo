@@ -85,6 +85,7 @@ UCloudRtcEngine* 引擎类指针
 
 无
 
+<a name='class-regRtcEventListener'></a>
 
 ### 1.2  绑定监听事件
 
