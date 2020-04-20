@@ -171,6 +171,7 @@ public:
 	///@param bIsInline 是否采用自采集
 	///@return 创建出的engine
 	static UCloudRtcEngine *sharedInstance(bool bIsInline = true);
+	static UCloudRtcEngine *sharedInstance(tUCloudRtcInitContext* context);
 
 	///销毁引擎
 	static void destroy();
@@ -237,9 +238,14 @@ public:
 	///@return 0 succ
 	virtual int enableExtendVideocapture(bool enable, UCloudRtcExtendVideoCaptureSource* videocapture) = 0;
 	
+	///初始化外部音频源
+	///@param audiocapture 外部音频源
+	///@return 0 succ
+	virtual int initExtendAudioSource(UCloudRtcExtendAudioCaptureSource* audiocapture) = 0;
+
 	///开启外部采集音频
 	///@param enable 是否使用扩展的外部采集音频
-	///@param audiocapture 外部音频源
+	///@param audiocapture 外部音频源(note :必须先初始化initExtendAudioSource一次)
 	///@return 0 succ
 	virtual int enableExtendAudiocapture(bool enable, UCloudRtcExtendAudioCaptureSource* audiocapture) = 0;
 	
@@ -256,7 +262,7 @@ public:
 	virtual int stopAudioMixing() = 0;
 	
 	///注册音频接收回调
-	///@param callback 派生自UCloudRtcAudioFrameCallback 的实例
+	///@param callback 派生自UCloudRtcAudioFrameCallback 的实例 (note :在setChanleType后调用)
 	///@return 0 succ
 	virtual void regAudioFrameCallback(UCloudRtcAudioFrameCallback* callback) = 0;
 	
@@ -451,13 +457,13 @@ public:
 
 	///旁路推流
 	///@param url cdn地址
-	///@param config 转推配置
+	///@param config 转推配置(note: 初始模板会自动选择mlayouts[0]，布局列表最大支持3种在房间内切换)
 	///@return 0 succ
 	virtual int addPublishStreamUrl(const char* url, tUCloudRtcTranscodeConfig *config) = 0;
 
 	///更新转推设置
 	///@param url cdn 地址
-	///@param 转推更新设置(只针对mMainViewUid mMainviewType mLayout有效 )
+	///@param 转推更新设置
 	///@return 0 succ
 	virtual int updateTranscodeConfig(const char* url, tUCloudRtcTranscodeConfig *config) = 0;
 

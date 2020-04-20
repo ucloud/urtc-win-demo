@@ -53,6 +53,8 @@ public:
 
 	virtual int StartPushCDN(const char* url, tUCloudRtcTranscodeConfig *config);
 	virtual int StopPushCDN(const char* url) ;
+
+	virtual int SetStreamRole(int role);
 private:
 
 	UCloudRtcEngine*   m_rtcengine;

@@ -370,3 +370,12 @@ int URTCEngineImpl::StopPushCDN(const char* url)
 	}
 	return -1;
 }
+
+int  URTCEngineImpl::SetStreamRole(int role)
+{
+	if (m_rtcengine)
+	{
+		return m_rtcengine->setStreamRole((eUCloudRtcUserStreamRole)role);
+	}
+	return -1;
+ }

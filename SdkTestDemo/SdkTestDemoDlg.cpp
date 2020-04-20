@@ -180,12 +180,21 @@ void CSdkTestDemoDlg::InitURTCConfig()
 		m_videocheck.SetCheck(1);
 	}
 
+	if (URTCConfig::getInstance()->getChannelType() == UCLOUD_RTC_CHANNEL_TYPE_COMMUNICATION
+		|| (URTCConfig::getInstance()->getChannelType() == UCLOUD_RTC_CHANNEL_TYPE_BROADCAST
+		&&  (URTCConfig::getInstance()->getStreamRole() == UCLOUD_RTC_USER_STREAM_ROLE_PUB 
+			|| URTCConfig::getInstance()->getStreamRole() == UCLOUD_RTC_USER_STREAM_ROLE_BOTH))
+		)
+	{
+		GetDlgItem(IDC_BUTTON_LIANMAI)->ShowWindow(FALSE);
+	}
+
 	if (URTCConfig::getInstance()->getStreamRole() == UCLOUD_RTC_USER_STREAM_ROLE_SUB)
 	{
 		GetDlgItem(IDC_BUTTON_PUBC)->ShowWindow(FALSE);
 		GetDlgItem(IDC_BUTTON_PUBS)->ShowWindow(FALSE);
-		m_audiocheck.ShowWindow(FALSE);
-		m_videocheck.ShowWindow(FALSE);
+		//m_audiocheck.ShowWindow(FALSE);
+		//m_videocheck.ShowWindow(FALSE);
 	}
 
 	if (URTCConfig::getInstance()->isAutoPublish())
@@ -232,6 +241,7 @@ BEGIN_MESSAGE_MAP(CSdkTestDemoDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_MIXFILE, &CSdkTestDemoDlg::OnBnClickedButtonMixfile)
 	ON_BN_CLICKED(IDC_BUTTON_RELAY, &CSdkTestDemoDlg::OnBnClickedButtonRelay)
 	ON_LBN_SELCHANGE(IDC_LIST2, &CSdkTestDemoDlg::OnLbnSelchangeList2)
+	ON_BN_CLICKED(IDC_BUTTON_LIANMAI, &CSdkTestDemoDlg::OnBnClickedButtonLianmai)
 END_MESSAGE_MAP()
 
 
@@ -468,6 +478,7 @@ void CSdkTestDemoDlg::OnJoinRoomHandler(std::string jsonmsg) {
 			GetDlgItem(IDC_BUTTON_RECORD)->EnableWindow(true);
 			GetDlgItem(IDC_BUTTON_MIXFILE)->EnableWindow(true);
 			GetDlgItem(IDC_BUTTON_RELAY)->EnableWindow(true);
+			GetDlgItem(IDC_BUTTON_LIANMAI)->EnableWindow(true);
 			OnMessageShow("加入房间成功");
 		}
 		else {
@@ -564,7 +575,10 @@ void CSdkTestDemoDlg::OnPulibshCamStreamHandler(std::string jsonmsg) {
 
 		if (code == 0)
 		{
-			SetDlgItemText(IDC_BUTTON_PUBC, L"停止发布");
+			if (URTCConfig::getInstance()->getChannelType() == UCLOUD_RTC_CHANNEL_TYPE_BROADCAST ) {
+				SetDlgItemText(IDC_BUTTON_LIANMAI, L"取消连麦");
+			}
+			SetDlgItemText(IDC_BUTTON_PUBC, L"取消发布");
 			OnMessageShow("摄像头发布成功");
 			tRTCRenderView canvas;
 			canvas.mVidoview = (void*)m_localWnd->GetVideoHwnd();
@@ -1493,6 +1507,11 @@ void CSdkTestDemoDlg::OnBnClickedButtonPubC()
 		info.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
 		info.mUserid = m_userid;
 		m_rtcengine->UnPublishStream(info);
+		
+		
+		if (URTCConfig::getInstance()->getChannelType() == UCLOUD_RTC_CHANNEL_TYPE_BROADCAST) {
+			SetDlgItemText(IDC_BUTTON_LIANMAI, L"连麦");
+		}
 		SetDlgItemText(IDC_BUTTON_PUBC, L"发布媒体");
 		m_campub = !m_campub;
 		if (m_mediadevice)
@@ -1754,4 +1773,13 @@ void CSdkTestDemoDlg::OnLbnSelchangeList2()
 	CloseClipboard();
 	//str.Format(L"拷贝数据到剪切板成功, 长度：%d", str.GetLength());
 	//MessageBox(str);
+}
+
+
+void CSdkTestDemoDlg::OnBnClickedButtonLianmai()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	URTCConfig::getInstance()->setStreamRole(UCLOUD_RTC_USER_STREAM_ROLE_BOTH);
+	m_rtcengine->SetStreamRole(UCLOUD_RTC_USER_STREAM_ROLE_BOTH);
+	OnBnClickedButtonPubC();
 }

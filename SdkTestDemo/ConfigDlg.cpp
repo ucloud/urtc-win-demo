@@ -199,7 +199,7 @@ void CConfigDlg::OnBnClickedButtonSave()
 	{
 		if (pubrcheck && subrcheck)
 		{
-			URTCConfig::getInstance()->setStreamRole(UCLOUD_RTC_USER_STREAM_ROLE_SUB);
+			URTCConfig::getInstance()->setStreamRole(UCLOUD_RTC_USER_STREAM_ROLE_BOTH);
 		}
 		else if (pubrcheck)
 		{
@@ -315,19 +315,10 @@ void CConfigDlg::OnBnClickedRadioChC()
 	int pubrcheck = m_rolepub.GetCheck();
 	int subrcheck = m_rolesub.GetCheck();
 
-	if (m_chtype == 1)
-	{
-		if (pubrcheck && subrcheck)
-		{
-			m_rolepub.SetCheck(0);
-			m_rolesub.SetCheck(1);
-		}
-	}
-	else 
-	{
-		m_rolepub.SetCheck(1);
-		m_rolesub.SetCheck(1);
-	}
+
+	m_rolepub.SetCheck(1);
+	m_rolesub.SetCheck(1);
+
 }
 
 
@@ -358,23 +349,23 @@ void CConfigDlg::OnStnClickedSecKey()
 
 void CConfigDlg::OnBnClickedCheckPubrole()
 {
-	if (m_chtype == 1)
+	/*if (m_chtype == 1)
 	{
 		if (m_rolesub.GetCheck())
 		{
 			m_rolesub.SetCheck(0);
 		}
-	}
+	}*/
 }
 
 
 void CConfigDlg::OnBnClickedCheckSubrole()
 {
-	if (m_chtype == 1)
+	/*if (m_chtype == 1)
 	{
 		if (m_rolepub.GetCheck())
 		{
 			m_rolepub.SetCheck(0);
 		}
-	}
+	}*/
 }

@@ -52,6 +52,8 @@ public:
 
 	virtual int StartPushCDN(const char* url, tUCloudRtcTranscodeConfig *config) = 0;
 	virtual int StopPushCDN(const char* url) = 0;
+
+	virtual int SetStreamRole(int role) = 0;
 };
 
 #endif

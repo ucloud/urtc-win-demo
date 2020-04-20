@@ -165,4 +165,5 @@ public:
 	HANDLE m_audiopushthread;
 	
 	afx_msg void OnLbnSelchangeList2();
+	afx_msg void OnBnClickedButtonLianmai();
 };

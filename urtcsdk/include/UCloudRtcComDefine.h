@@ -142,6 +142,14 @@ typedef enum {
 	UCLOUD_RTC_WATERMARK_TYPE_TEXT,
 }eUCloudRtcWaterMarkType;
 
+//转推模式
+typedef enum {
+	//自动
+	UCLOUD_RTC_AUTO = 1,
+	//手动
+	UCLOUD_RTC_MANAUL = 2,
+}eUCloudRtcRelayMode;
+
 //渲染缩放类型
 typedef enum {
 	//default full
@@ -179,7 +187,10 @@ typedef enum {
 	UCLOUD_RTC_VIDEO_PROFILE_640_360 = 3,
 	UCLOUD_RTC_VIDEO_PROFILE_640_480 = 4,
 	UCLOUD_RTC_VIDEO_PROFILE_1280_720 = 5,
-	UCLOUD_RTC_VIDEO_PROFILE_1920_1080 = 6
+	UCLOUD_RTC_VIDEO_PROFILE_1920_1080 = 6,
+	UCLOUD_RTC_VIDEO_PROFILE_240_180 = 7,
+	UCLOUD_RTC_VIDEO_PROFILE_480_360 = 8,
+	UCLOUD_RTC_VIDEO_PROFILE_960_720 = 9
 } eUCloudRtcVideoProfile;
 
 //桌面profile
@@ -419,6 +430,7 @@ typedef enum {
 	MIX_LAYOUT_ADAPTION3, //单人模式
 }eUCloudMixLayout;
 
+typedef int UcloudRtcLayoutLsit[3];
 //转推配置
 typedef struct UCloudRtcTranscodeConfig {
 	//背景色
@@ -435,7 +447,9 @@ typedef struct UCloudRtcTranscodeConfig {
 	int mWidth; 
 	//输出分辨率高度
 	int mHeight; 
-	// 1.流式布局 2.讲课模式 3.自定义布局 4.模板自适应1 5.模板自适应2
+	//布局列表
+	UcloudRtcLayoutLsit mlayouts;
+	//当前使用得布局 1.流式布局 2.讲课模式 3.自定义布局 4.模板自适应1 5.模板自适应2 6.单人模式
 	eUCloudMixLayout mLayout;
 	//mLayout=3 时自定义风格内容
 	const char*  mStyle; 
@@ -443,15 +457,23 @@ typedef struct UCloudRtcTranscodeConfig {
 	tUCloudRtcRelayStream *mStreams; 
 	//混流用户数
 	int mStreamslength;
-
 	//水印位置
 	eUCloudRtcWaterMarkPos mWatermarkPos;
 	//水印类型
 	eUCloudRtcWaterMarkType mWaterMarkType;
 	//水印url  为图片水印时
 	const char* mWatermarkUrl;
+	//是否纯音频
+	bool mIsAudio;
+	//模式
+	eUCloudRtcRelayMode mMode;
 	UCloudRtcTranscodeConfig()
 	{
+		mlayouts[0] = MIX_LAYOUT_ADAPTION1;
+		mlayouts[1] = MIX_LAYOUT_ADAPTION2;
+		mlayouts[2] = MIX_LAYOUT_ADAPTION3;
+		mMode = UCLOUD_RTC_AUTO;
+		mIsAudio = false;
 		mLayout = MIX_LAYOUT_TEACH;
 		mMainViewUid = nullptr;
 		mStreams = nullptr;
@@ -503,12 +525,18 @@ typedef struct UCloudRtcRecordConfig {
 	}
 }tUCloudRtcRecordConfig;
 
-
-
 typedef enum {
 	DEVICE_VIDEO,      //视频设备
 	DEVICE_AUDIO,	 //音频设备
 }eUCloudDeviceType;
+
+typedef struct 
+{
+	bool mIsInline;
+	const char* mLogPath;
+	const char* mLogName;
+	eUCloudRtcLogLevel mLogLevel;
+}tUCloudRtcInitContext;
 
 //设备插拔回调
 class _EXPORT_API UcloudRtcDeviceChanged
