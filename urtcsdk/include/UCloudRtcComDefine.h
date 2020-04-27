@@ -91,6 +91,10 @@ typedef struct {
 	bool mEnableAudio;
 	//使能Data
 	bool mEnableData;
+	//mute video状态
+	bool mMuteVideo;
+	//mute audio状态
+	bool mMuteAudio;
 	//媒体类型
 	eUCloudRtcMeidaType mStreamMtype;
 }tUCloudRtcStreamInfo;
@@ -260,15 +264,15 @@ typedef enum {
 	//未知
 	UCLOUD_RTC_QUALITY_UNKNOWN = 0, 
 	//很坏
-	UCLOUD_RTC_QUALITY_DOWN = 1,  
+	UCLOUD_RTC_QUALITY_DOWN = 5,  
 	//勉强能沟通但不顺畅
-	UCLOUD_RTC_QUALITY_BAD = 2,  
+	UCLOUD_RTC_QUALITY_BAD = 4,  
 	//用户主观感受有瑕疵但不影响沟通
 	UCLOUD_RTC_QUALITY_POOR =  3, 
 	// 用户主观感觉和 excellent 差不多
-	UCLOUD_RTC_QUALITY_GOOD = 4, 
+	UCLOUD_RTC_QUALITY_GOOD = 2, 
 	//网络质量极好
-	UCLOUD_RTC_QUALITY_EXCELLENT = 5, 
+	UCLOUD_RTC_QUALITY_EXCELLENT = 1, 
 }eUCloudRtcQualityType;
 
 //rtmp状态
@@ -367,6 +371,7 @@ typedef struct {
 	//声道数
 	int mChannels;
 	int mNumSimples;
+	int renderTimeMs;
 }tUCloudRtcAudioFrame;
 
 //视频帧信息
@@ -377,6 +382,7 @@ typedef struct {
 	int mHeight;
 	//frametype
 	eUCloudRtcVideoFrameType mVideoType;
+	int renderTimeMs;
 }tUCloudRtcVideoFrame;
 
 //视频信息配置
@@ -577,7 +583,7 @@ public:
 	virtual void onLoaclRemoteMixAudioFrame(tUCloudRtcAudioFrame* audioframe) {}
 };
 
-//外部音频源
+//外部音频源(已废弃 采用UCloudIAudioFrameObserver )
 class  _EXPORT_API UCloudRtcExtendAudioCaptureSource
 {
 public:
@@ -587,7 +593,7 @@ public:
 	virtual  bool doCaptureAudioFrame(tUCloudRtcAudioFrame* audioframe) = 0;
 };
 
-//外部视频源
+//外部视频源（已废弃 采用UCloudIVideoFrameObserver）
 class  _EXPORT_API UCloudRtcExtendVideoCaptureSource
 {
 public:
@@ -596,7 +602,7 @@ public:
 	virtual  bool doCaptureVideoFrame(tUCloudRtcVideoFrame* videoframe) = 0;
 };
 
-//视频监听回调
+//视频设备startcapture监听回调
 class _EXPORT_API UCloudRtcVideoFrameObserver 
 {
 public:
@@ -615,5 +621,26 @@ public:
 	virtual  void onRemoteFrame(const tUCloudRtcVideoFrame* videoframe) = 0;
 };
 
+
+
+//视频监听回调
+class _EXPORT_API UCloudIVideoFrameObserver
+{
+public:
+	///视频采集到每一帧得回调
+	///@param videoframe 视频数据
+	virtual  bool onCaptureFrame(tUCloudRtcVideoFrame *videoFrame) = 0;
+	
+};
+
+//音频监听回调
+class _EXPORT_API UCloudIAudioFrameObserver
+{
+public:
+	///音频采集到每一帧得回调
+	///@param  audioFrame 音频数据
+	virtual  bool onCaptureFrame(tUCloudRtcAudioFrame* audioFrame) = 0;
+
+};
 #endif
 

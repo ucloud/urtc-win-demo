@@ -151,6 +151,21 @@ public:
 	///@param volume 音量大小
 	virtual void onLocalAudioLevel(int volume) {}
 
+
+	///远端音频播放首帧回调
+	///@param uid 用户id
+	///@param elapsed 从加入房间到收到远端音频距离的时间
+	virtual void onFirstRemoteAudioFrame(const char* uid, int elapsed) {}
+
+
+	///远端视频首帧回调
+	///@param uid 用户id
+	///@param width 宽度
+	///@param height 高度
+	///@param elapsed 从加入房间到收到远端视频渲染距离的时间
+	virtual void onFirstRemoteVideoFrame(const char* uid, int width, int height, int elapsed) {}
+
+
 	///踢人通知
 	///@param code 错误码
 	virtual void onKickoff(int code) {}
@@ -224,6 +239,13 @@ public:
 	///@return 0 succ
 	virtual int setVideoCodec(eUCloudRtcVideoCodec codec) = 0;
 
+	///该方法用于注册语音观测器对象
+	///@param codec 编码类型
+	virtual void registerAudioFrameObserver(UCloudIAudioFrameObserver *observer) = 0;
+
+	///该方法用于注册视频观测器对象
+	///@param codec 编码类型
+	virtual void registerVideoFrameObserver(UCloudIVideoFrameObserver *observer) = 0;
 
 	///开启rtsp推流
 	///@param type 媒体类型
@@ -322,6 +344,16 @@ public:
 	///@return 0 succ
 	virtual int muteMicBeforeJoin(bool mute) = 0;
 
+	///设置订阅成功后是否mute摄像头
+	///@param mute 是否禁掉视频  true：禁止 false:否
+	///@return 0 succ
+	virtual int muteRomoteCamBeforeSub(bool mute) = 0;
+
+	///设置订阅成功后是否mute mic
+	///@param mute 是否禁掉mic  true：禁止 false:否
+	///@return 0 succ
+	virtual int muteRomoteMicBeforeSub(bool mute) = 0;
+
 	///设置视频质量
 	///@param profile 分辨率
 	///@param videoconfig video配置
@@ -357,7 +389,7 @@ public:
 	///mute本地麦克
 	///@param mute true:是 false:否
 	///@return 0 succ
-	virtual int muteLocalMic(bool mute) = 0;
+	virtual int muteLocalMic(bool mute, eUCloudRtcMeidaType streamtype = UCLOUD_RTC_MEDIATYPE_VIDEO) = 0;
 
 	///mute本地视频
 	///@param mute true:是 false:否
