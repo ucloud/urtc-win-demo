@@ -518,6 +518,11 @@ public:
 	///@return 0 succ
 	virtual int setMuteBackImage(const unsigned char* image,const int width,const int height) = 0;
 
+	///开启系统采集音
+	///@param enabe true:开启 fasle:关闭
+	///@return 0 succ
+	virtual int enableCapturePlayBack(bool enable) = 0;
+
 protected:
 	virtual ~UCloudRtcEngine() {}
 };
