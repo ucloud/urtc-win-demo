@@ -1737,6 +1737,7 @@ void CSdkTestDemoDlg::OnBnClickedButtonRelay()
 	else
 	{
 		tUCloudRtcTranscodeConfig relayconfig;
+		relayconfig.mMode = UCLOUD_RTC_MANAUL;
 		relayconfig.mbgColor.mBlue = 0;
 		relayconfig.mbgColor.mGreen = 0;
 		relayconfig.mbgColor.mRed = 0;
@@ -1746,6 +1747,13 @@ void CSdkTestDemoDlg::OnBnClickedButtonRelay()
 		relayconfig.mHeight = 720;
 		relayconfig.mMainviewType = 1;
 		relayconfig.mMainViewUid = m_userid.data();
+		relayconfig.mLayout = MIX_LAYOUT_ADAPTION1;
+
+		tUCloudRtcRelayStream streams[1];
+		streams[0].mType = UCLOUD_RTC_MEDIATYPE_VIDEO;
+		streams[0].mUid = m_userid.data();
+		relayconfig.mStreams = streams;
+		relayconfig.mStreamslength = 1;
 		std::string url = "rtmp://rtcpush.ugslb.com/rtclive/" + m_roomid;
 		m_rtcengine->StartPushCDN(url.data(), &relayconfig);
 		//m_startrelay = true;

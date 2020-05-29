@@ -354,10 +354,15 @@ public:
 	///@return 0 succ
 	virtual int muteRomoteMicBeforeSub(bool mute) = 0;
 
-	///设置视频质量
+	///设置编码发送视频质量
 	///@param profile 分辨率
 	///@param videoconfig video配置
 	virtual void setVideoProfile(eUCloudRtcVideoProfile profile, tUCloudVideoConfig& videoconfig) = 0;
+	
+	///设置采集渲染视频分辨率
+	///@param profile 分辨率
+	///@param videoconfig video配置
+	virtual void setVideoCaptureProfile(eUCloudRtcVideoProfile profile) = 0;
 	
 	///切换摄像头
 	///@param info 设备信息

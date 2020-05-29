@@ -371,7 +371,7 @@ typedef struct {
 	//声道数
 	int mChannels;
 	int mNumSimples;
-	int renderTimeMs;
+	long long renderTimeMs;
 }tUCloudRtcAudioFrame;
 
 //视频帧信息
@@ -382,7 +382,7 @@ typedef struct {
 	int mHeight;
 	//frametype
 	eUCloudRtcVideoFrameType mVideoType;
-	int renderTimeMs;
+	long long renderTimeMs;
 }tUCloudRtcVideoFrame;
 
 //视频信息配置
@@ -473,6 +473,8 @@ typedef struct UCloudRtcTranscodeConfig {
 	bool mIsAudio;
 	//模式
 	eUCloudRtcRelayMode mMode;
+	//控制人(若此人无流状态超过1分钟 转推自动停止)
+	const char*  mKeyUid;
 	UCloudRtcTranscodeConfig()
 	{
 		mlayouts[0] = MIX_LAYOUT_ADAPTION1;
@@ -481,6 +483,7 @@ typedef struct UCloudRtcTranscodeConfig {
 		mMode = UCLOUD_RTC_AUTO;
 		mIsAudio = false;
 		mLayout = MIX_LAYOUT_TEACH;
+		mKeyUid = nullptr;
 		mMainViewUid = nullptr;
 		mStreams = nullptr;
 		mStyle = nullptr;
@@ -542,6 +545,7 @@ typedef struct
 	const char* mLogPath;
 	const char* mLogName;
 	eUCloudRtcLogLevel mLogLevel;
+	int mMaxReconnect;
 }tUCloudRtcInitContext;
 
 //设备插拔回调
