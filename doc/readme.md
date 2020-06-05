@@ -131,7 +131,7 @@ virtual int setSdkMode (eUCloudRtcSdkMode mode)
 
 virtual int setChannelType(eUCloudRtcUserStreamRole TYPE)
 
-可以设置为会议模式、直播模式。会议模式，默认都有推流权限；直播模式，推流、拉流权限，只能任选其一。
+可以设置为会议模式、直播模式。会议模式，默认都有推流权限；直播模式，可以设置流操作权限：双向、推流、拉流权限，任选其一。
 
 **返回值**
 
