@@ -105,6 +105,8 @@ void regRtcEventListener(UCloudRtcEventListener* listener)
 
 无
 
+<a name='class-setSdkMode'></a>
+
 ### 1.3  设置SDK模式
 
 virtual int setSdkMode (eUCloudRtcSdkMode mode)
@@ -123,7 +125,7 @@ virtual int setSdkMode (eUCloudRtcSdkMode mode)
 
 无
 
-<a name='class-setChannelType('></a>
+<a name='class-setChannelType'></a>
 
 ###  1.4  设置应用模式
 
