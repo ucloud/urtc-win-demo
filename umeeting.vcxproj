@@ -118,7 +118,7 @@
     </Link>
     <ClCompile>
       <AdditionalIncludeDirectories>./urtcsdk;./utils;./urtcsdk/include;./third_party</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

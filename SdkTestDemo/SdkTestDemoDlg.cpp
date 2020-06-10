@@ -585,7 +585,7 @@ void CSdkTestDemoDlg::OnPulibshCamStreamHandler(std::string jsonmsg) {
 			canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 			canvas.mUserid = m_userid;
 			canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
-			canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;
+			canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_GDI;
 			m_campub = true;
 			//DWORD ThreadID;
 			//m_audiopushthread = CreateThread(NULL, 0, PushPro, &m_campub, 0, &ThreadID);
