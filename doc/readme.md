@@ -105,6 +105,8 @@ void regRtcEventListener(UCloudRtcEventListener* listener)
 
 无
 
+<a name='class-setSdkMode'></a>
+
 ### 1.3  设置SDK模式
 
 virtual int setSdkMode (eUCloudRtcSdkMode mode)
@@ -123,13 +125,13 @@ virtual int setSdkMode (eUCloudRtcSdkMode mode)
 
 无
 
-<a name='class-setChannelType('></a>
+<a name='class-setChannelType'></a>
 
 ###  1.4  设置应用模式
 
 virtual int setChannelType(eUCloudRtcUserStreamRole TYPE)
 
-可以设置为会议模式、直播模式。会议模式，默认都有推流权限；直播模式，推流、拉流权限，只能任选其一。
+可以设置为会议模式、直播模式。会议模式，默认都有推流权限；直播模式，可以设置流操作权限：双向、推流、拉流权限，任选其一。
 
 **返回值**
 
