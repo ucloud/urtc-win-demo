@@ -32,6 +32,7 @@ public:
 	virtual int StopLocalRender(tRTCRenderView& renderview) = 0;
 	virtual int MuteLocalCamVideo(tRTCStreamMute& mute) = 0;
 	virtual int MuteLocalCamAudio(tRTCStreamMute& mute) = 0;
+	virtual int MuteLocalScreenAudio(tRTCStreamMute& mute) = 0;
 	virtual int MuteLocalScreen(tRTCStreamMute& mute) = 0;
 
 	virtual int SetCodecType(int codec) = 0;

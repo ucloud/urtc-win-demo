@@ -200,6 +200,14 @@ int URTCEngineImpl::MuteLocalCamAudio(tRTCStreamMute& mute)
 	return -1;
 }
 
+int URTCEngineImpl::MuteLocalScreenAudio(tRTCStreamMute& mute) {
+	if (m_rtcengine)
+	{
+		return m_rtcengine->muteLocalMic(mute.mMute, UCLOUD_RTC_MEDIATYPE_SCREEN);
+	}
+	return -1;
+}
+
 int URTCEngineImpl::MuteLocalScreen(tRTCStreamMute& mute)
 {
 	if (m_rtcengine)

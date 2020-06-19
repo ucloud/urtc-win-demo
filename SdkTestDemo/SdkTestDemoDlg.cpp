@@ -93,6 +93,10 @@ void CSdkTestDemoDlg::OnMuteAudio(std::string userid, eUCloudRtcMeidaType mediat
 	}
 	else if (userid == "screen")
 	{
+		tRTCStreamMute mutest;
+		mutest.mMute = mute;
+		mutest.mUserid = m_userid;
+		m_rtcengine->MuteLocalScreenAudio(mutest);
 	}
 	else {
 		tRTCStreamMute mutest;
@@ -585,7 +589,7 @@ void CSdkTestDemoDlg::OnPulibshCamStreamHandler(std::string jsonmsg) {
 			canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 			canvas.mUserid = m_userid;
 			canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_VIDEO;
-			canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_GDI;
+			canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;
 			m_campub = true;
 			//DWORD ThreadID;
 			//m_audiopushthread = CreateThread(NULL, 0, PushPro, &m_campub, 0, &ThreadID);
@@ -626,7 +630,7 @@ void CSdkTestDemoDlg::OnPulibshScreenStreamHandler(std::string jsonmsg) {
 			canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 			canvas.mUserid = m_userid;
 			canvas.mStreamMtype = UCLOUD_RTC_MEDIATYPE_SCREEN;
-			canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_GDI;
+			canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;
 			m_screenWnd->setUsed(true);
 			m_screenWnd->setReady(true);
 			m_screenpub = true;
@@ -770,7 +774,7 @@ void CSdkTestDemoDlg::OnSubStreamHandler(std::string jsonmsg) {
 				canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 				canvas.mUserid = uid.data();
 				canvas.mStreamMtype = mtype;
-				canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;
+				canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_GDI;
 				m_rtcengine->StartRemoteRender(canvas);
 			}
 
@@ -957,13 +961,18 @@ void CSdkTestDemoDlg::OnLocalStreamMuteHandler(std::string jsonmsg) {
 					m_localWnd->muteAudio(mute);
 				}
 				else {
-					m_localWnd->muteVideo(mute);
-					m_localWnd->muteVideo(mute);
+					m_localWnd->muteVideo(mute);				
 				}
 			}
 			else
 			{
-				m_screenWnd->muteVideo(mute);
+				if (trackype == UCLOUD_RTC_TRACKTYPE_AUDIO)
+				{
+					m_screenWnd->muteAudio(mute);
+				}
+				else {
+					m_screenWnd->muteVideo(mute);
+				}
 			}
 
 			char mutecontent[128] = { 0 };
@@ -1582,9 +1591,12 @@ void CSdkTestDemoDlg::OnBnClickedButtonPubs()
 	}
 	else 
 	{
+		bool audioEnable = m_audiocheck.GetCheck();
+		bool videoEnable = m_videocheck.GetCheck();
+
 		tRTCStreamInfo info;
-		info.mEnableVideo = true;
-		info.mEnableAudio = false;
+		info.mEnableVideo = videoEnable;
+		info.mEnableAudio = audioEnable;
 		info.mEnableData = false;
 		info.mStreamMtype = UCLOUD_RTC_MEDIATYPE_SCREEN;
 		info.mUserid = m_userid;
