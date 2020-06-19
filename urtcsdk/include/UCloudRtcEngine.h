@@ -22,7 +22,7 @@ public:
 	///@param roomid 房间id
 	virtual void onLeaveRoom(int code, const char* msg, const char* uid, const char* roomid) {}
 
-	///重新加入房间回调
+	///断线重连回调
 	///@param uid 用户id
 	///@param roomid 房间id
 	virtual void onRejoining(const char* uid, const char* roomid) {}
