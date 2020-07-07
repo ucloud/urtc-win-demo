@@ -774,7 +774,7 @@ void CSdkTestDemoDlg::OnSubStreamHandler(std::string jsonmsg) {
 				canvas.mRenderMode = UCLOUD_RTC_RENDER_MODE_FIT;
 				canvas.mUserid = uid.data();
 				canvas.mStreamMtype = mtype;
-				canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_GDI;
+				canvas.mRenderType = UCLOUD_RTC_RENDER_TYPE_D3D;
 				m_rtcengine->StartRemoteRender(canvas);
 			}
 
