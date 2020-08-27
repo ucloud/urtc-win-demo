@@ -369,6 +369,11 @@ public:
 	///@return 0 succ
 	virtual int switchCamera(tUCloudRtcDeviceInfo& info) = 0;
 
+    ///开关本地视频采集
+    ///@param enable 开启关闭本地视频采集
+    ///@return 0 succ
+    virtual int enableLocalCamera(bool enable) = 0;
+
 	///发布
 	///@param type 媒体类型 摄像头或者桌面
 	///@param hasvideo 是否带视频

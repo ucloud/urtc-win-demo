@@ -59,6 +59,8 @@ typedef struct
 	eUCloudRtcDesktopType mType;
 	//桌面id
 	int mDesktopId;
+	int mScreenW;
+	int mScreenH;
 	//标题
 	char mDesktopTitle[MAX_WINDOWS_TILE_LEN];
 }tUCloudRtcDeskTopInfo;
@@ -205,7 +207,9 @@ typedef enum {
 
 	UCLOUD_RTC_SCREEN_PROFILE_HIGH_PLUS = 4,
 	UCLOUD_RTC_SCREEN_PROFILE_HIGH_1 = 5,     //最大2m码率 25帧
-	UCLOUD_RTC_SCREEN_PROFILE_HIGH_PLUS_1 = 6 //最大2.5m码率 25帧
+	UCLOUD_RTC_SCREEN_PROFILE_HIGH_PLUS_1 = 6, //最大2.5m码率 25帧
+	UCLOUD_RTC_SCREEN_PROFILE_HIGH_0 = 7,     //最大1.6m码率 15帧
+	UCLOUD_RTC_SCREEN_PROFILE_HIGH_PLUS_0 = 8 //最大2m码率 18帧
 } eUCloudRtcScreenProfile;
 
 //应用类型

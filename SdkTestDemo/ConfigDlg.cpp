@@ -77,7 +77,8 @@ BOOL CConfigDlg::OnInitDialog()
 	}
 	m_videoprofile.SetCurSel(select);
 
-	m_seckey.SetWindowTextW(Ansi2WChar(URTCConfig::getInstance()->getSecKey().data()).data());
+	//m_seckey.SetWindowTextW(Ansi2WChar(URTCConfig::getInstance()->getSecKey().data()).data());
+	m_seckey.SetWindowTextW(Ansi2WChar("*****************************").data());
 	m_appid.SetWindowTextW(Ansi2WChar(URTCConfig::getInstance()->getAppId().data()).data());
 
 	bool audioonly = URTCConfig::getInstance()->isAudioOnly();
