@@ -1723,7 +1723,7 @@ void CSdkTestDemoDlg::OnBnClickedButtonMixfile()
 		const char* filepathc = temp.data();
 		if (m_rtcengine)
 		{
-			m_rtcengine->StartMixFile(filepathc, false, true, 0.8f);
+			m_rtcengine->StartMixFile(filepathc, true, true, 0.8f);
 			m_startaudiomix = true;
 		}
 		
