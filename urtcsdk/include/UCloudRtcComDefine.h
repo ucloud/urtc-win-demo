@@ -13,6 +13,14 @@
 #define MAX_DEVICE_ID_LENGTH 128 
 #define MAX_WINDOWS_TILE_LEN 256 
 
+//接入方式设置
+typedef enum
+{
+	UCLOUD_RTC_SERVER_GET_FROM_UTECH = 1,
+	UCLOUD_RTC_SERVER_GET_FROM_USER_GATEWAY,
+	UCLOUD_RTC_SERVER_GET_FROM_USER_DIRECT
+}eUCloudServerGetFrom;
+
 //设备信息
 typedef struct {
 	//设备名称
@@ -320,10 +328,11 @@ typedef struct
 //鉴权信息
 typedef struct
 {
-	const char* mAppId;
-	const char* mRoomId;
-	const char* mUserId;
-	const char* mUserToken;
+	const char* mAppId = nullptr;
+	const char* mRoomId = nullptr;
+	const char* mUserId = nullptr;
+	const char* mUserToken = nullptr;
+	const char* mServerUrl = nullptr;
 }tUCloudRtcAuth;
 
 //流信息

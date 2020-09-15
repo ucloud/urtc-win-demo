@@ -107,7 +107,7 @@ public:
 	virtual void onStartRecord(const int code, const char* msg, tUCloudRtcRecordInfo& info) {}
 
 	///停止录制回调
-	///@param code  0 succ
+	///@param code  0 succ 0代表主动停止成功 非0代表异常停止需要重新开启
 	///@param msg 错误提示信息
 	///@param recordid 录制ID
 	virtual void onStopRecord(const int code, const char* msg, const char* recordid) {}
@@ -165,6 +165,15 @@ public:
 	///@param elapsed 从加入房间到收到远端视频渲染距离的时间
 	virtual void onFirstRemoteVideoFrame(const char* uid, int width, int height, int elapsed) {}
 
+	///自定义消息接口发送结果
+	/// @param code 错误
+	/// @param msg 
+	virtual void onSendMsgRsp(int code, const char*msg) {};
+
+	///广播消息通知
+	///@param uid 用户id
+	///@param msg 用户消息
+	virtual void onBroadMsgNotify(const char*uid, const char*msg) {};
 
 	///踢人通知
 	///@param code 错误码
@@ -203,6 +212,11 @@ public:
 	///@param mode sdk使用模式 正式模式 测试模式
 	///@return 0 succ
 	virtual int setSdkMode(eUCloudRtcSdkMode mode) = 0;
+
+	///设置接入方式
+	///@param from 接入点设置
+	///@return 0 succ
+	virtual int setServerGetFrom(eUCloudServerGetFrom from) = 0;
 
 	///设置频道类别
 	///@param roomtype 房间类型 大班 小班
@@ -532,6 +546,10 @@ public:
 	///@param enabe true:开启 fasle:关闭
 	///@return 0 succ
 	virtual int enableCapturePlayBack(bool enable) = 0;
+
+
+	///发送自定义消息
+	virtual int sendMessage(const char*msg) = 0;
 
 protected:
 	virtual ~UCloudRtcEngine() {}
