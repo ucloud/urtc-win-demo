@@ -1235,7 +1235,7 @@ void CSdkTestDemoDlg::OnStopRecord(std::string jsonmsg)
 		std::string msg = doc["msg"].GetString();
 		if (code == 0)
 		{
-			m_startrecord = true;
+			m_startrecord = false;
 			SetDlgItemText(IDC_BUTTON_RECORD, L"开启录制");
 			std::string desc = "停止录制成功 ";
 			OnMessageShow(desc);
