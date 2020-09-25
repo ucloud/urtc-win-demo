@@ -42,6 +42,9 @@ public:
 	CComboBox m_codectype;
 	int m_sdkmode;
 	int m_chtype;
+
+	CEdit m_privateaddr;
+	CButton m_privatemode;
 	afx_msg void OnBnClickedRadioNormal();
 	afx_msg void OnBnClickedRadioChC();
 	CStatic m_sectxt;
@@ -49,4 +52,7 @@ public:
 	afx_msg void OnStnClickedSecKey();
 	afx_msg void OnBnClickedCheckPubrole();
 	afx_msg void OnBnClickedCheckSubrole();
+
+	afx_msg void OnBnClickedCheckPrivatemode();
+	afx_msg void OnEnChangeEditPrivateaddr();
 };

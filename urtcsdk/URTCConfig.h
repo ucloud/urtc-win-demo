@@ -62,6 +62,12 @@ public:
 
 	void setRoomId(std::string rid);
 	std::string getRoomId();
+
+	void setPrivateMode(bool bMode);
+	bool getPrivateMode();
+
+	void setPrivateAddr(std::string& addr);
+	std::string& getPrivatAddr();
 protected:
 	URTCConfig();
 	~URTCConfig();
@@ -92,6 +98,9 @@ private:
 
 	std::string mUserid;
 	std::string mRoomid;
+
+	std::string mPrivateAddr;
+	bool mPrivateMode = false;
 };
 
 #endif

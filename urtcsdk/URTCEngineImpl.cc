@@ -32,6 +32,13 @@ int URTCEngineImpl::InitRTCEngine(void* callback)
 	m_rtcengine->setVideoProfile(URTCConfig::getInstance()->getVideoProfile(), videoconfig);
 	m_rtcengine->setDesktopProfile(UCLOUD_RTC_SCREEN_PROFILE_HIGH_PLUS);
 	m_rtcengine->setSdkMode(URTCConfig::getInstance()->getSdkMode());
+	if (URTCConfig::getInstance()->getPrivateMode()) {
+		m_rtcengine->setServerGetFrom(UCLOUD_RTC_SERVER_GET_FROM_USER_DIRECT);
+	}
+	else {
+		m_rtcengine->setServerGetFrom(UCLOUD_RTC_SERVER_GET_FROM_UTECH);
+	}
+
 	return 0;
 }
 
@@ -84,6 +91,10 @@ int URTCEngineImpl::JoinRoom(tRTCAuthInfo& auth)
 		uauth.mUserId = auth.mUserid.data();
 		uauth.mRoomId = auth.mRoomid.data();
 		uauth.mUserToken = auth.mToken.data();
+		if (URTCConfig::getInstance()->getPrivateMode()) {
+			uauth.mServerUrl = URTCConfig::getInstance()->getPrivatAddr().data();
+		}
+	
 		return m_rtcengine->joinChannel(uauth);
 	}
 	return -1;

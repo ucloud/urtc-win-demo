@@ -40,6 +40,8 @@ void CConfigDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Radio(pDX, IDC_RADIO_CH_C, m_chtype);
 	DDX_Control(pDX, IDC_SEC_KEY, m_sectxt);
 	DDX_Control(pDX, IDC_COM_CODEC, m_codectype);
+	DDX_Control(pDX, IDC_CHECK_PRIVATEMODE, m_privatemode);
+	DDX_Control(pDX, IDC_EDIT_PRIVATEADDR, m_privateaddr);
 }
 
 BOOL CConfigDlg::OnInitDialog()
@@ -144,6 +146,10 @@ BOOL CConfigDlg::OnInitDialog()
 	m_codectype.InsertString(1, L"H264");
 
 	m_codectype.SetCurSel(1);
+
+	m_privatemode.SetCheck(URTCConfig::getInstance()->getPrivateMode() ? 1 : 0);
+	m_privateaddr.SetWindowTextW(Ansi2WChar(URTCConfig::getInstance()->getPrivatAddr().data()).data());
+	
 	return TRUE;
 }
 
@@ -158,6 +164,8 @@ BEGIN_MESSAGE_MAP(CConfigDlg, CDialogEx)
 	ON_STN_CLICKED(IDC_SEC_KEY, &CConfigDlg::OnStnClickedSecKey)
 	ON_BN_CLICKED(IDC_CHECK_PUBROLE, &CConfigDlg::OnBnClickedCheckPubrole)
 	ON_BN_CLICKED(IDC_CHECK_SUBROLE, &CConfigDlg::OnBnClickedCheckSubrole)
+	ON_BN_CLICKED(IDC_CHECK_PRIVATEMODE, &CConfigDlg::OnBnClickedCheckPrivatemode)
+	ON_EN_CHANGE(IDC_EDIT_PRIVATEADDR, &CConfigDlg::OnEnChangeEditPrivateaddr)
 END_MESSAGE_MAP()
 
 
@@ -184,7 +192,7 @@ void CConfigDlg::OnBnClickedButtonSave()
 		CString seckey;
 		m_seckey.GetWindowTextW(seckey);
 		std::string keystr = WChatToUTF8Str(seckey.GetBuffer());
-		if (keystr.length() > 0)
+		if (keystr.length() > 0 && keystr != "*****************************")
 		{
 			URTCConfig::getInstance()->setSecKey(keystr);
 		}
@@ -289,6 +297,21 @@ void CConfigDlg::OnBnClickedButtonSave()
 
 	URTCConfig::getInstance()->setCodecType((eUCloudRtcVideoCodec)
 		(m_codectype.GetCurSel() + 1));
+
+	int privatemode = m_privatemode.GetCheck();
+	if (privatemode) {
+		URTCConfig::getInstance()->setPrivateMode(privatemode);
+		CString addr;
+		m_privateaddr.GetWindowTextW(addr);
+		std::string addrstr = WChatToUTF8Str(addr.GetBuffer());
+		if (addrstr.length() > 0)
+		{
+			URTCConfig::getInstance()->setPrivateAddr(addrstr);
+		}
+	}
+	else {
+		URTCConfig::getInstance()->setPrivateMode(false);
+	}
 	
 	CDialogEx::OnOK();
 }
@@ -369,4 +392,23 @@ void CConfigDlg::OnBnClickedCheckSubrole()
 			m_rolepub.SetCheck(0);
 		}
 	}*/
+}
+
+
+
+
+void CConfigDlg::OnBnClickedCheckPrivatemode()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+
+void CConfigDlg::OnEnChangeEditPrivateaddr()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
 }

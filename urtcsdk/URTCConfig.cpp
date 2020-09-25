@@ -190,3 +190,21 @@ std::string URTCConfig::getRoomId()
 {
 	return this->mRoomid;
 }
+
+
+void  URTCConfig::setPrivateMode(bool bMode) {
+	mPrivateMode = bMode;
+}
+
+bool  URTCConfig::getPrivateMode() {
+	return mPrivateMode;
+}
+
+
+void  URTCConfig::setPrivateAddr(std::string& addr) {
+	mPrivateAddr = addr;
+}
+
+std::string& URTCConfig::getPrivatAddr() {
+	return mPrivateAddr;
+}
