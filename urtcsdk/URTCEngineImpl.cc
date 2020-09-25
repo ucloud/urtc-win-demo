@@ -1,6 +1,6 @@
 #include "URTCEngineImpl.h"
 #include "URTCConfig.h"
-
+#include "windows.h"
 URTCEngineImpl::URTCEngineImpl()
 {
 	m_eventhandler = new URTCEventHandler;
@@ -14,7 +14,22 @@ URTCEngineImpl::~URTCEngineImpl()
 int URTCEngineImpl::InitRTCEngine(void* callback)
 {
 	m_eventhandler->initEventHandler(callback);
-	m_rtcengine = UCloudRtcEngine::sharedInstance();
+	
+	tUCloudRtcInitContext context;
+	SYSTEMTIME m_time;
+	GetLocalTime(&m_time);
+	char szDateTime[30] = { 0 };
+	sprintf(szDateTime, "%02d%02d%02d%02d%02d%02d.log", m_time.wYear, m_time.wMonth,
+		m_time.wDay, m_time.wHour, m_time.wMinute, m_time.wSecond);
+	std::string time(szDateTime);
+
+	context.mLogPath = "./";
+	context.mLogName = time.data();
+	context.mMaxReconnect = 999;
+	context.mIsMediaCodec = URTCConfig::getInstance()->getIntelMediaCodec();
+	context.mMediaCodec = INTEL_MEDIACODEC;
+	m_rtcengine = UCloudRtcEngine::sharedInstance(&context);
+
 	m_rtcengine->regRtcEventListener(m_eventhandler);
 	m_rtcengine->setChannelType(URTCConfig::getInstance()->getChannelType());
 	m_rtcengine->setStreamRole(URTCConfig::getInstance()->getStreamRole());

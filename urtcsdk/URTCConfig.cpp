@@ -208,3 +208,10 @@ void  URTCConfig::setPrivateAddr(std::string& addr) {
 std::string& URTCConfig::getPrivatAddr() {
 	return mPrivateAddr;
 }
+
+void  URTCConfig::setIntelMediaCodec(bool bUseMediaCodec) {
+	mIntelMediaCodec = bUseMediaCodec;
+}
+bool  URTCConfig::getIntelMediaCodec() {
+	return mIntelMediaCodec;
+}

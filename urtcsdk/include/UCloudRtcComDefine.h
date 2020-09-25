@@ -555,13 +555,20 @@ typedef enum {
 	DEVICE_AUDIO,	 //音频设备
 }eUCloudDeviceType;
 
+typedef enum {
+	INTEL_MEDIACODEC,  //intel hard codec
+	AMD_MEDIACODEC,   //amd chard odec  
+}eUcloudMediaCodec;
+
 typedef struct 
 {
-	bool mIsInline;
-	const char* mLogPath;
-	const char* mLogName;
-	eUCloudRtcLogLevel mLogLevel;
-	int mMaxReconnect;
+	bool mIsInline  = true;
+	const char* mLogPath  = nullptr;
+	const char* mLogName  = nullptr;
+	eUCloudRtcLogLevel mLogLevel = UCLOUD_RTC_LOG_LEVEL_DEBUG;
+	int mMaxReconnect = 999;
+	bool mIsMediaCodec = false;
+	eUcloudMediaCodec mMediaCodec = INTEL_MEDIACODEC;
 }tUCloudRtcInitContext;
 
 //设备插拔回调

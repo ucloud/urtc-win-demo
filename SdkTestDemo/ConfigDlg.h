@@ -37,6 +37,7 @@ public:
 	CButton m_rolesub;
 	CEdit m_appid;
 	CButton m_audioonly;
+	
 
 	CComboBox m_videoprofile;
 	CComboBox m_codectype;
@@ -45,6 +46,8 @@ public:
 
 	CEdit m_privateaddr;
 	CButton m_privatemode;
+
+	CButton m_intelmediacodec;
 	afx_msg void OnBnClickedRadioNormal();
 	afx_msg void OnBnClickedRadioChC();
 	CStatic m_sectxt;
@@ -55,4 +58,5 @@ public:
 
 	afx_msg void OnBnClickedCheckPrivatemode();
 	afx_msg void OnEnChangeEditPrivateaddr();
+	afx_msg void OnBnClickedCheckIntelmediacodec();
 };

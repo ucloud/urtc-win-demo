@@ -68,6 +68,9 @@ public:
 
 	void setPrivateAddr(std::string& addr);
 	std::string& getPrivatAddr();
+
+	void setIntelMediaCodec(bool bUseMediaCodec);
+	bool getIntelMediaCodec();
 protected:
 	URTCConfig();
 	~URTCConfig();
@@ -101,6 +104,8 @@ private:
 
 	std::string mPrivateAddr;
 	bool mPrivateMode = false;
+
+	bool mIntelMediaCodec = false;
 };
 
 #endif

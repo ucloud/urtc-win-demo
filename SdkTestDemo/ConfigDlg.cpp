@@ -42,6 +42,8 @@ void CConfigDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COM_CODEC, m_codectype);
 	DDX_Control(pDX, IDC_CHECK_PRIVATEMODE, m_privatemode);
 	DDX_Control(pDX, IDC_EDIT_PRIVATEADDR, m_privateaddr);
+	DDX_Control(pDX, IDC_CHECK_INTELMEDIACODEC, m_intelmediacodec);
+	
 }
 
 BOOL CConfigDlg::OnInitDialog()
@@ -149,6 +151,8 @@ BOOL CConfigDlg::OnInitDialog()
 
 	m_privatemode.SetCheck(URTCConfig::getInstance()->getPrivateMode() ? 1 : 0);
 	m_privateaddr.SetWindowTextW(Ansi2WChar(URTCConfig::getInstance()->getPrivatAddr().data()).data());
+
+	m_intelmediacodec.SetCheck(URTCConfig::getInstance()->getIntelMediaCodec() ? 1 : 0);
 	
 	return TRUE;
 }
@@ -166,6 +170,7 @@ BEGIN_MESSAGE_MAP(CConfigDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECK_SUBROLE, &CConfigDlg::OnBnClickedCheckSubrole)
 	ON_BN_CLICKED(IDC_CHECK_PRIVATEMODE, &CConfigDlg::OnBnClickedCheckPrivatemode)
 	ON_EN_CHANGE(IDC_EDIT_PRIVATEADDR, &CConfigDlg::OnEnChangeEditPrivateaddr)
+	ON_BN_CLICKED(IDC_CHECK_INTELMEDIACODEC, &CConfigDlg::OnBnClickedCheckIntelmediacodec)
 END_MESSAGE_MAP()
 
 
@@ -312,7 +317,8 @@ void CConfigDlg::OnBnClickedButtonSave()
 	else {
 		URTCConfig::getInstance()->setPrivateMode(false);
 	}
-	
+
+	m_intelmediacodec.GetCheck() ? URTCConfig::getInstance()->setIntelMediaCodec(true):URTCConfig::getInstance()->setIntelMediaCodec(false);
 	CDialogEx::OnOK();
 }
 
@@ -411,4 +417,10 @@ void CConfigDlg::OnEnChangeEditPrivateaddr()
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
 	// TODO:  在此添加控件通知处理程序代码
+}
+
+
+void CConfigDlg::OnBnClickedCheckIntelmediacodec()
+{
+	// TODO: 在此添加控件通知处理程序代码
 }
