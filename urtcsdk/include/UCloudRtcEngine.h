@@ -551,6 +551,23 @@ public:
 	///发送自定义消息
 	virtual int sendMessage(const char*msg) = 0;
 
+	///获取混音文件播放总时长
+	virtual int getAudioMixingDuration() = 0;
+
+	///获取混音当前播放进度
+	virtual int getAudioMixingCurrentPosition() = 0;
+
+	///恢复当前混音
+	virtual int resumeAudioMixing() = 0;
+
+	///暂停当前混音
+	virtual int pauseAudioMixing() = 0;
+
+	///设置播放进度
+	virtual int setAudioMixingPosition(int) = 0;
+
+	///更新混音音量
+	virtual int updateAudioMixingVolume(int) = 0;
 protected:
 	virtual ~UCloudRtcEngine() {}
 };
