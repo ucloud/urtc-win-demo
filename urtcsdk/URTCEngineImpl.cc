@@ -354,6 +354,8 @@ int URTCEngineImpl::StartRecord(tRecordConfig& config)
 		uconfig.mWatermarkUrl = "";
 		uconfig.mIsaverage = false;
 		uconfig.mMixerTemplateType = 9;
+		uconfig.mFps = config.mfps;
+		uconfig.mBitrate = config.mBitrate;
 		return m_rtcengine->startRecord(uconfig);
 	}
 	return -1;

@@ -107,6 +107,7 @@ public:
 	virtual void onStartRecord(const int code, const char* msg, tUCloudRtcRecordInfo& info) {}
 
 	///停止录制回调
+
 	///@param code  0 succ 0代表主动停止成功 非0代表异常停止需要重新开启
 	///@param msg 错误提示信息
 	///@param recordid 录制ID
@@ -546,6 +547,7 @@ public:
 	///@param enabe true:开启 fasle:关闭
 	///@return 0 succ
 	virtual int enableCapturePlayBack(bool enable) = 0;
+
 
 
 	///发送自定义消息

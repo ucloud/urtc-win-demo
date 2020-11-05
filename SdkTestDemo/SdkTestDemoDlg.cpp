@@ -1678,7 +1678,7 @@ void CSdkTestDemoDlg::OnBnClickedButtonRecord()
 			tRecordConfig recordconfig;
 			recordconfig.mMainviewmediatype = 1;
 			recordconfig.mMainviewuid = m_userid.data();
-			recordconfig.mProfile = 1;
+			recordconfig.mProfile = 2;
 			recordconfig.mRecordType = 2;
 			recordconfig.mWatermarkPos = 1;
 
@@ -1686,6 +1686,8 @@ void CSdkTestDemoDlg::OnBnClickedButtonRecord()
 			recordconfig.mWatermarkUrl = "hello urtc";
 			recordconfig.mIsaverage = false;
 			recordconfig.mMixerTemplateType = 5;
+			recordconfig.mBitrate = 1000;
+			recordconfig.mfps = 30;
 			m_rtcengine->StartRecord(recordconfig);
 		}
 	}

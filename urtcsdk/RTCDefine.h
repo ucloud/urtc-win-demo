@@ -82,6 +82,8 @@ struct tRecordConfig
 	const char* mWatermarkUrl; //when mWaterMarkType is text this is text content
 	bool mIsaverage; //record layout is one big other average 
 	int mMixerTemplateType; //record layout (1 -- 9 )
+	int mfps;
+	int mBitrate;
 };
 
 typedef std::map<std::string, tUserInfo*>::iterator userit;

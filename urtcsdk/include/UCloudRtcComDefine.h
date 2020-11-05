@@ -532,8 +532,11 @@ typedef struct UCloudRtcRecordConfig {
 	//是否均分 (true .流式布局，false:讲课模式)
 	bool mIsaverage;		
 	//模板类型
-	int mMixerTemplateType;			
-
+	int mMixerTemplateType;	
+	//帧率只能是15的倍数
+	int mFps;
+	//码率
+	int mBitrate;
 	//混流的用户
 	tUCloudRtcRelayStream *mStreams;
 	//混流的用户长度
@@ -547,6 +550,8 @@ typedef struct UCloudRtcRecordConfig {
 		mBucketRegion = nullptr;
 		mStreams = nullptr;
 		mLayout = MIX_LAYOUT_OLD;
+		mFps = 0;
+		mBitrate = 0;
 	}
 }tUCloudRtcRecordConfig;
 
