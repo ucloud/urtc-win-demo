@@ -66,7 +66,7 @@
 * [1.55  旁路推流 - addPublishStreamUrl](#class-addPublishStreamUrl)
 * [1.56  停止旁路推流 - removePublishStreamUrl](#class-removePublishStreamUrl)
 * [1.57  更新旁路推流合流的流 - updateRtmpMixStream](#class-updateRtmpMixStream)
-
+* [1.58  设置接入方式 - setServerGetFrom](#class-setServerGetFrom)
 <a name='class-UCloudRtcEngine'></a>
 
 ### 1.1  获取引擎
@@ -1259,6 +1259,27 @@ virtual int updateRtmpMixStream(eUCloudRtmpOpration cmd, tUCloudRtcRelayStream* 
 **消息回调**
 
 virtual void onRtmpUpdateMixStreamRes(eUCloudRtmpOpration& cmd,const int code, const char* msg)
+
+<a name='class-updateRtmpMixStream'></a>
+
+### 1.58  设置接入方式
+
+virtual int setServerGetFrom(eUCloudServerGetFrom from) = 0;
+
+**返回值**
+
+0 成功
+**参数说明**    
+
+
+| 名称    | 说明 | 数据类型 | 可空 |
+| -| -| -| -|
+| from[in]    | 接入类型<br> 详见eUCloudServerGetFrom参数说明。  | int| N |
+
+
+**消息回调**
+
+
 
 
 
