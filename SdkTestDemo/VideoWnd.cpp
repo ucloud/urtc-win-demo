@@ -123,37 +123,36 @@ void CVideoWnd::OnSize(UINT nType, int cx, int cy)
         centerVideo(m_rcContainer, m_nWidth, m_nHeight);
     }
 
-    int offset = 0;
-    //Mute
+	//close
+	int offset = 0;
+	pc = GetDlgItem(IDC_BTN_VIDEO_ON);
+	if (nullptr == pc) {
+		return;
+	}
+
+	pc->GetWindowRect(rcBtn);
+	GetDlgItem(IDC_BTN_VIDEO_ON)->MoveWindow(0, rcClient.bottom - rcBtn.Height(), rcBtn.Width(), rcBtn.Height());
+	offset += rcBtn.Width();
+
+	//Mute
 	pc = GetDlgItem(IDC_BTN_MUTE);
-    if (nullptr == pc) {
-        return;
-    }
+	if (nullptr == pc) {
+		return;
+	}
 
-    pc->GetWindowRect(rcBtn);
-    GetDlgItem(IDC_BTN_MUTE_A)->MoveWindow(0, rcClient.bottom-rcBtn.Height(), rcBtn.Width(), rcBtn.Height());
-    offset += rcBtn.Width();
+	pc->GetWindowRect(rcBtn);
+	GetDlgItem(IDC_BTN_MUTE_A)->MoveWindow(offset, rcClient.bottom - rcBtn.Height(), rcBtn.Width(), rcBtn.Height());
+	offset += rcBtn.Width();
 
-    //Close Video
-    //offset++;
-    //pc = GetDlgItem(IDC_BTN_VIDEO_ON);
-    //if (nullptr == pc) {
-    //    return;
-    //}
+	//Role
+	offset = offset + 5;
+	pc = GetDlgItem(IDC_BTN_MUTE_V);
+	if (nullptr == pc) {
+		return;
+	}
 
-    //pc->GetWindowRect(rcBtn);
-    //GetDlgItem(IDC_BTN_VIDEO_ON)->MoveWindow(offset, rcClient.bottom - rcBtn.Height(), rcBtn.Width(), rcBtn.Height());
-    //offset += rcBtn.Width();
-
-    //Role
-    offset = offset+5;
-    pc = GetDlgItem(IDC_BTN_MUTE_V);
-    if (nullptr == pc) {
-        return;
-    }
-
-    pc->GetWindowRect(rcBtn);
-    GetDlgItem(IDC_BTN_MUTE_V)->MoveWindow(offset, rcClient.bottom - rcBtn.Height(), rcBtn.Width(), rcBtn.Height());
+	pc->GetWindowRect(rcBtn);
+	GetDlgItem(IDC_BTN_MUTE_V)->MoveWindow(offset, rcClient.bottom - rcBtn.Height(), rcBtn.Width(), rcBtn.Height());
 }
 
 
@@ -219,9 +218,11 @@ void CVideoWnd::centerVideo(CRect rcContainer, int w, int h)
     x = rcContainer.left + (screenW - finalW) / 2;
     x2 = x + finalW;
 
-    y = rcContainer.top + (screenH - finalH) / 2;
+    y = rcContainer.top;
     y2 = y + finalH;
-
+	if (y2 > screenH) {
+		y2 = screenH;
+	}
     rcVideo.SetRect(x, y, x2, y2);
 	m_rcContainer.SetRect(x, y, x2, y2);
     pWnd->MoveWindow(rcVideo);
@@ -334,12 +335,28 @@ void CVideoWnd::OnBnClickedBtnVideoOn()
 {
 	if (m_videostart)
 	{
-		CString str = L"start";
+		CString str = L"Min";
 		SetDlgItemText(IDC_BTN_VIDEO_ON, str);
+
+		DWORD   dwStyle;
+		dwStyle = GetStyle();
+		ModifyStyle(dwStyle,
+			WS_DLGFRAME | WS_POPUP | WS_VISIBLE | WS_BORDER,
+			SWP_SHOWWINDOW | SWP_FRAMECHANGED);
+		SetParent(GetDesktopWindow());
+		MoveWindow(0, 0, 800, 600);
 	}
 	else {
-		CString str = L"close";
+		CString str = L"Max";
 		SetDlgItemText(IDC_BTN_VIDEO_ON, str);
+
+
+		DWORD   dwStyle;
+		dwStyle = GetStyle();
+		ModifyStyle(dwStyle, WS_CHILD | WS_VISIBLE, SWP_SHOWWINDOW);
+		SetParent(m_parent); //m_p1为传入子窗口时保存起来的CWnd*的值。	
+
+		MoveWindow(m_old.left, m_old.top, 240, 240);
 	}
 	m_videostart = !m_videostart;
 

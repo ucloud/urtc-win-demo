@@ -59,7 +59,7 @@ public:
         }
 
     }
-
+	void setOldRect(CRect orgin) { m_old = orgin; };
     void SetTitle(std::wstring strTitle);
 	void SetType(eUCloudRtcMeidaType type);
 	void TestEnble();

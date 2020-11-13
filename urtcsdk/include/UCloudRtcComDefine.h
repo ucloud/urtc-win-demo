@@ -529,7 +529,7 @@ typedef struct UCloudRtcRecordConfig {
 	eUCloudRtcWaterMarkType mWaterMarkType;  
 	//水印url  为图片水印时
 	const char* mWatermarkUrl;	
-	//是否均分 (true .流式布局，false:讲课模式)
+	//是否自动 (true .自动，false:手动)
 	bool mIsaverage;		
 	//模板类型
 	int mMixerTemplateType;	
@@ -552,6 +552,7 @@ typedef struct UCloudRtcRecordConfig {
 		mLayout = MIX_LAYOUT_OLD;
 		mFps = 0;
 		mBitrate = 0;
+		mIsaverage = true;
 	}
 }tUCloudRtcRecordConfig;
 

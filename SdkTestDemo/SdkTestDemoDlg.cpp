@@ -166,6 +166,10 @@ CVideoWnd* CSdkTestDemoDlg::CreateVideoWindow(eUCloudRtcMeidaType type, int x, i
 
 	pWnd->MoveWindow(x, y, 240, 240, true);
 	pWnd->ShowWindow(SW_SHOW);
+	CRect r;
+	pWnd->GetWindowRect(r);
+	ScreenToClient(r);
+	pWnd->setOldRect(r);
 	return pWnd;
 }
 
@@ -203,8 +207,8 @@ void CSdkTestDemoDlg::InitURTCConfig()
 
 	if (URTCConfig::getInstance()->isAutoPublish())
 	{
-		GetDlgItem(IDC_BUTTON_PUBC)->ShowWindow(FALSE);
-		GetDlgItem(IDC_BUTTON_PUBS)->ShowWindow(FALSE);
+		GetDlgItem(IDC_BUTTON_PUBC)->ShowWindow(TRUE);
+		GetDlgItem(IDC_BUTTON_PUBS)->ShowWindow(TRUE);
 		m_audiocheck.ShowWindow(FALSE);
 		m_videocheck.ShowWindow(FALSE);
 	}
@@ -1686,7 +1690,7 @@ void CSdkTestDemoDlg::OnBnClickedButtonRecord()
 			recordconfig.mWatermarkUrl = "hello urtc";
 			recordconfig.mIsaverage = false;
 			recordconfig.mMixerTemplateType = 5;
-			recordconfig.mBitrate = 500;
+			recordconfig.mBitrate = 1000;
 			recordconfig.mfps = 30;
 			m_rtcengine->StartRecord(recordconfig);
 		}

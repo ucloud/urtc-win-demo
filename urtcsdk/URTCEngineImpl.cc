@@ -352,10 +352,15 @@ int URTCEngineImpl::StartRecord(tRecordConfig& config)
 
 		uconfig.mWaterMarkType = UCLOUD_RTC_WATERMARK_TYPE_TIME;
 		uconfig.mWatermarkUrl = "";
-		uconfig.mIsaverage = false;
-		uconfig.mMixerTemplateType = 9;
+		uconfig.mIsaverage = config.mIsaverage;
+		uconfig.mMixerTemplateType = 1;
 		uconfig.mFps = config.mfps;
 		uconfig.mBitrate = config.mBitrate;
+		uconfig.mStreamslength = 1;
+		tUCloudRtcRelayStream objstreams[1];
+		objstreams[0].mUid = config.mMainviewuid;
+		objstreams[0].mType = (eUCloudRtcMeidaType)config.mMainviewmediatype;
+		uconfig.mStreams = objstreams;
 		return m_rtcengine->startRecord(uconfig);
 	}
 	return -1;
