@@ -71,8 +71,8 @@ public:
 	virtual  bool doCaptureVideoFrame(tUCloudRtcVideoFrame* videoframe);
 
 	//device change call back
-	virtual void onInterfaceArrival(const char* dccname, int len);
-	virtual void onInterfaceRemoved(const char* dccname, int len);
+	virtual void onInterfaceArrival(eUCloudDeviceType dtype, const char* dccname, int len);
+	virtual void onInterfaceRemoved(eUCloudDeviceType dtype, const char* dccname, int len);
 
 
 private:

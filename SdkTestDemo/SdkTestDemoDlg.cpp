@@ -1629,14 +1629,14 @@ void CSdkTestDemoDlg::onCaptureFrame(unsigned char* videoframe, int buflen)
 	PostMessage(VIDEO_FRAME_CALLBACK, (WPARAM)buf, buflen);
 }
 
-void CSdkTestDemoDlg::onInterfaceArrival(const char* dccname, int len)
+void CSdkTestDemoDlg::onInterfaceArrival(eUCloudDeviceType dtype, const char* dccname, int len)
 {
 	std::string device = dccname;
 	std::string msg = "发现设备:" + device;
 	OnMessageShow(msg);
 }
 
-void CSdkTestDemoDlg::onInterfaceRemoved(const char* dccname, int len)
+void CSdkTestDemoDlg::onInterfaceRemoved(eUCloudDeviceType dtype, const char* dccname, int len)
 {
 	std::string device = dccname;
 	std::string msg = "移除设备:" + device;
