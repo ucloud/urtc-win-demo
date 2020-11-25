@@ -570,6 +570,7 @@ public:
 
 	///¸üĞÂ»ìÒôÒôÁ¿
 	virtual int updateAudioMixingVolume(int) = 0;
+
 protected:
 	virtual ~UCloudRtcEngine() {}
 };

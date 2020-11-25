@@ -10,7 +10,7 @@
 #endif
 
 #define  C_API extern "C"
-#define MAX_DEVICE_ID_LENGTH 128 
+#define MAX_DEVICE_ID_LENGTH 512 
 #define MAX_WINDOWS_TILE_LEN 256 
 
 //接入方式设置

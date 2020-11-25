@@ -10,9 +10,9 @@ URTCConfig* URTCConfig::getInstance()
 URTCConfig::URTCConfig()
 {
 	mVideoprofile = UCLOUD_RTC_VIDEO_PROFILE_640_360;
-	mSeckey = "you key ";
-	mAppid = "you appid";
-
+	mSeckey = "9129304dbf8c5c4bf68d70824462409f";
+	mAppid = "URtc-h4r1txxy";
+	mPrivateAddr = "wss://ip:port/ws";
 	mAutoPub = false;
 	mAutoSub = true;
 
