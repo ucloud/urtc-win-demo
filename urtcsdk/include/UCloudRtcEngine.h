@@ -570,7 +570,15 @@ public:
 
 	///更新混音音量
 	virtual int updateAudioMixingVolume(int) = 0;
+	
+	//录制
+	virtual const char* acquire(const char* jsonobj) = 0;
+	virtual const char* startMix(const char* jsonobj) = 0;
+	virtual const char* stopMix(const char* jsonobj) = 0;
+	virtual const char* queryMix(const char* jsonobj) = 0;
+	virtual const char* updateMix(const char* jsonobj) = 0;
 
+	virtual const char* getTestToken(const char* appid, const char* uid, const char* rid) = 0;
 protected:
 	virtual ~UCloudRtcEngine() {}
 };
