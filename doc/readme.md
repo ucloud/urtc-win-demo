@@ -1191,6 +1191,7 @@ virtual void regDeviceChangeCallback(UcloudRtcDeviceChanged* callback)
 **返回值**
 
 无
+
 **参数说明**    
 
 
@@ -1211,6 +1212,7 @@ virtual int addPublishStreamUrl(const char* url, tUCloudRtcTranscodeConfig *conf
 **返回值**
 
 0 成功
+
 **参数说明**    
 
 
@@ -1231,6 +1233,7 @@ virtual int removePublishStreamUrl(const char* url)
 **返回值**
 
 0 成功
+
 **参数说明**    
 
 
@@ -1251,6 +1254,7 @@ virtual int updateRtmpMixStream(eUCloudRtmpOpration cmd, tUCloudRtcRelayStream* 
 **返回值**
 
 0 成功
+
 **参数说明**    
 
 
@@ -1273,6 +1277,7 @@ virtual int setServerGetFrom(eUCloudServerGetFrom from) = 0;
 **返回值**
 
 0 成功
+
 **参数说明**    
 
 
@@ -1289,6 +1294,7 @@ virtual int pushVideoFrameData(tUCloudRtcVideoFrame *video) = 0;
 **返回值**
 
 0 成功
+
 **参数说明**    
 
 
@@ -1305,6 +1311,7 @@ virtual int pushAudioFrameData(tUCloudRtcAudioFrame *audio) = 0;
 **返回值**
 
 0 成功
+
 **参数说明**    
 
 
@@ -1321,6 +1328,7 @@ virtual int SetExtendMediaDataMode(eUCloudExtendMediaDataMode mode) = 0;
 **返回值**
 
 0 成功
+
 **参数说明**    
 
 
@@ -1337,6 +1345,7 @@ virtual int setAudioProfile(eUCloudAudioProfile audio_profile) = 0;
 **返回值**
 
 0 成功
+
 **参数说明**    
 
 
