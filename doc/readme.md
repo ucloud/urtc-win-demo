@@ -67,6 +67,10 @@
 * [1.56  停止旁路推流 - removePublishStreamUrl](#class-removePublishStreamUrl)
 * [1.57  更新旁路推流合流的流 - updateRtmpMixStream](#class-updateRtmpMixStream)
 * [1.58  设置接入方式 - setServerGetFrom](#class-setServerGetFrom)
+* [1.59  推送视频数据 - pushVideoFrameData](#class-pushVideoFrameData)
+* [1.60  推送音频数据 - pushAudioFrameData](#class-pushAudioFrameData)
+* [1.61  设置外部源送数据模式 - SetExtendMediaDataMode](#class-SetExtendMediaDataMode)
+* [1.62  设置音频编码模式 - setAudioProfile](#class-setAudioProfile)
 <a name='class-UCloudRtcEngine'></a>
 
 ### 1.1  获取引擎
@@ -1260,7 +1264,7 @@ virtual int updateRtmpMixStream(eUCloudRtmpOpration cmd, tUCloudRtcRelayStream* 
 
 virtual void onRtmpUpdateMixStreamRes(eUCloudRtmpOpration& cmd,const int code, const char* msg)
 
-<a name='class-updateRtmpMixStream'></a>
+<a name='class-setServerGetFrom'></a>
 
 ### 1.58  设置接入方式
 
@@ -1276,9 +1280,69 @@ virtual int setServerGetFrom(eUCloudServerGetFrom from) = 0;
 | -| -| -| -|
 | from[in]    | 接入类型<br> 详见eUCloudServerGetFrom参数说明。  | int| N |
 
+<a name='class-pushVideoFrameData'></a>
 
-**消息回调**
+### 1.59  推送视频数据
 
+virtual int pushVideoFrameData(tUCloudRtcVideoFrame *video) = 0;
+
+**返回值**
+
+0 成功
+**参数说明**    
+
+
+| 名称    | 说明 | 数据类型 | 可空 |
+| -| -| -| -|
+| video[in]    | 接入类型<br> 详见tUCloudRtcVideoFrame参数说明。  | int| N |
+
+<a name='class-pushAudioFrameData'></a>
+
+### 1.60  推送音频数据
+
+virtual int pushAudioFrameData(tUCloudRtcAudioFrame *audio) = 0;
+
+**返回值**
+
+0 成功
+**参数说明**    
+
+
+| 名称    | 说明 | 数据类型 | 可空 |
+| -| -| -| -|
+| audio[in]    | 接入类型<br> 详见tUCloudRtcAudioFrame参数说明。  | int| N |
+
+<a name='class-SetExtendMediaDataMode'></a>
+
+### 1.61  设置外部源送数据模式
+
+virtual int SetExtendMediaDataMode(eUCloudExtendMediaDataMode mode) = 0;
+
+**返回值**
+
+0 成功
+**参数说明**    
+
+
+| 名称    | 说明 | 数据类型 | 可空 |
+| -| -| -| -|
+| mode[in]    | 接入类型<br> 详见eUCloudExtendMediaDataMode参数说明。  | int| N |
+
+<a name='class-setAudioProfile'></a>
+
+### 1.62  setAudioProfile
+
+virtual int setAudioProfile(eUCloudAudioProfile audio_profile) = 0;
+
+**返回值**
+
+0 成功
+**参数说明**    
+
+
+| 名称    | 说明 | 数据类型 | 可空 |
+| -| -| -| -|
+| audio_profile[in]    | 接入类型<br> 详见eUCloudAudioProfile参数说明。  | int| N |
 
 
 
@@ -2015,6 +2079,12 @@ typedef enum _tUCloudRtcReturnErrCode {
 * [4.37  上下行网络类型 - eUCloudRtcNetworkQuality](#struct-eUCloudRtcNetworkQuality)
 * [4.38  网络评分 - eUCloudRtcQualityType](#struct-eUCloudRtcQualityType)
 * [4.39  热插拔回调 - UcloudRtcDeviceChanged](#struct-UcloudRtcDeviceChanged)
+* [4.40 音频外部采集 - UCloudRtcExtendAudioCaptureSource](#struct-UCloudRtcExtendAudioCaptureSource)
+* [4.41  转推的流 - UCloudRtcRelayStream](#struct-UCloudRtcRelayStream)
+* [4.42  转推混流操作类型 - eUCloudMixLayout](#struct-eUCloudMixLayout)
+* [4.43  转推配置 - UCloudRtcTranscodeConfig](#struct-UCloudRtcTranscodeConfig)
+* [4.44  外部源模式 - eUCloudExtendMediaDataMode](#struct-eUCloudExtendMediaDataMode)
+* [4.45  音频编码属性 - eUCloudAudioProfile](#struct-eUCloudAudioProfile)
 
 <a name='struct-tUCloudRtcDeviceInfo'></a>
 
@@ -2715,4 +2785,31 @@ typedef struct UCloudRtcTranscodeConfig {
 	}
 }tUCloudRtcTranscodeConfig;
 ```
+<a name='struct-eUCloudExtendMediaDataMode'></a>
 
+###  4.44 外部源模式
+
+```cpp
+typedef enum {
+    UCloud_EMDM_UNKNOWN = 0,
+    UCloud_EMDM_PUSH,       //推流模式
+    UCloud_EMDM_PULL,       //拉流模式
+}eUCloudExtendMediaDataMode;
+```
+
+<a name='struct-eUCloudAudioProfile'></a>
+
+###  4.45  音频编码属性
+
+```cpp
+typedef enum {
+    UCloud_Audio_Profile_Default = 0,  //默认模式， 单声道， 32K码率
+    UCloud_Audio_Profile_Stand,  //标准模式， 单声道， 64K码率
+    UCloud_Audio_Profile_Stand_Stereo, //标准立体声， 双声道， 80K码率
+    UCloud_Audio_Profile_Hight,   //高音质模式， 单声道， 96K码率
+    UCloud_Audio_Profile_Hight_Stereo, //高音质立体声， 双声道， 128K码率
+    UCloud_Audio_Profile_Stand_Stereo_Disable_2A, // 标准立体声， 双声道， 80K码率， 禁用AEC， AGC
+    UCloud_Audio_Profile_Hight_Disable_2A,   //高音质模式， 单声道， 96K码率， 禁用AEC， AGC
+    UCloud_Audio_Profile_Hight_Stereo_Disable_2A, //高音质立体声， 双声道， 128K码率， 禁用AEC， AGC
+}eUCloudAudioProfile;
+```
