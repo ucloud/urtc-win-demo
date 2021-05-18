@@ -2,7 +2,7 @@
 #define _UCLOUD_RTC_MEDIA_DEVICE_CPP_H_
 #include "UCloudRTCComDefine.h"
 
-class  _EXPORT_API UCloudRtcAudioLevelListener
+class UCloudRtcAudioLevelListener
 {
 public:
 	///回调音频能量
@@ -134,12 +134,10 @@ public:
 
 	///停止摄像头Capture测试
 	virtual int stopCaptureFrame() = 0;
-
-protected:
-	UCloudRtcMediaDevice() { }
-	virtual ~UCloudRtcMediaDevice() {}
 };
 
+_EXPORT_API_C UCloudRtcMediaDevice* getUCloudRtcMediaDeviceInterface();
+_EXPORT_API_C void releaseUCloudRtcMediaDeviceInterface(UCloudRtcMediaDevice** engine);
 #endif
 
 

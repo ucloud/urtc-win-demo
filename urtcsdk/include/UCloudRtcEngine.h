@@ -4,7 +4,7 @@
 
 #include "UCloudRtcComDefine.h"
 
-class  _EXPORT_API UCloudRtcEventListener
+class UCloudRtcEventListener
 {
 public:
 	virtual void onServerDisconnect() {}
@@ -199,11 +199,11 @@ public:
 	static UCloudRtcEngine *sharedInstance(tUCloudRtcInitContext* context);
 
 	///销毁引擎
-	static void destroy();
+	static void destroy();	
 
-	///获取sdk版本
-	///@return sdk版本号
-	static const char *getSdkVersion();
+    ///获取sdk版本
+    ///@return sdk版本号
+    virtual const char *getSdkVersion() = 0;
 
 	///注册监听
 	///@param listener 派生自回调接口的实例
@@ -570,6 +570,31 @@ public:
 
 	///更新混音音量
 	virtual int updateAudioMixingVolume(int) = 0;
+
+    ///推送一帧外部采集的视频数据给SDK
+    ///@param video 视频数据
+    ///@return 0 succ
+    virtual int pushVideoFrameData(tUCloudRtcVideoFrame *video) = 0;
+
+    ///推送一帧外部采集的音频数据给SDK
+    ///@param audio 视频数据
+    ///@return 0 succ
+    virtual int pushAudioFrameData(tUCloudRtcAudioFrame *audio) = 0;
+
+    ///设置外部采集数据的获取方式 
+    ///@param mode  UCloud_EMDM_PUSH：推送数据给sdk   UCloud_EMDM_PULL：SDK拉数据
+    ///@return 0 succ
+    virtual int SetExtendMediaDataMode(eUCloudExtendMediaDataMode mode) = 0;
+
+    ///设置音频的编码属性
+    ///@param audio_profile  UCloud_Audio_Profile_Default：普通语音交流  UCloud_Audio_Profile_Music ：音乐模式
+    ///@return 0 succ
+    virtual int setAudioProfile(eUCloudAudioProfile audio_profile) = 0;
+
+    ///设置声音延迟时间
+    ///@param delay_ms 延迟时间， 单位ms
+    ///@return 0 succ
+    virtual int setAudioDelayTime(int delay_ms) = 0;
 	
 	//录制
 	virtual const char* acquire(const char* jsonobj) = 0;
@@ -579,8 +604,8 @@ public:
 	virtual const char* updateMix(const char* jsonobj) = 0;
 
 	virtual const char* getTestToken(const char* appid, const char* uid, const char* rid) = 0;
-protected:
-	virtual ~UCloudRtcEngine() {}
 };
 
+_EXPORT_API_C UCloudRtcEngine* getUCloudRtcEngineInterface(tUCloudRtcInitContext* context);
+_EXPORT_API_C void releaseUCloudRtcEngineInterface(UCloudRtcEngine** engine);
 #endif

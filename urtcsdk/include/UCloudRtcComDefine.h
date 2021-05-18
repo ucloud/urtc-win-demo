@@ -407,6 +407,7 @@ typedef struct {
 	int mHeight;
 	//帧率
 	int mFrameRate;
+    int mBitrate; //kbps
 }tUCloudVideoConfig;
 
 //合流背景色配置
@@ -415,6 +416,23 @@ typedef struct  {
 	int mGreen;
 	int mBlue;
 }tUCloudBackgroundColor;
+
+typedef enum {
+    UCloud_EMDM_UNKNOWN = 0,
+    UCloud_EMDM_PUSH,       //推流模式
+    UCloud_EMDM_PULL,       //拉流模式
+}eUCloudExtendMediaDataMode;
+
+typedef enum {
+    UCloud_Audio_Profile_Default = 0,  //默认模式， 单声道， 32K码率
+    UCloud_Audio_Profile_Stand,  //标准模式， 单声道， 64K码率
+    UCloud_Audio_Profile_Stand_Stereo, //标准立体声， 双声道， 80K码率
+    UCloud_Audio_Profile_Hight,   //高音质模式， 单声道， 96K码率
+    UCloud_Audio_Profile_Hight_Stereo, //高音质立体声， 双声道， 128K码率
+    UCloud_Audio_Profile_Stand_Stereo_Disable_2A, // 标准立体声， 双声道， 80K码率， 禁用AEC， AGC
+    UCloud_Audio_Profile_Hight_Disable_2A,   //高音质模式， 单声道， 96K码率， 禁用AEC， AGC
+    UCloud_Audio_Profile_Hight_Stereo_Disable_2A, //高音质立体声， 双声道， 128K码率， 禁用AEC， AGC
+}eUCloudAudioProfile;
 
 //视频编码质量
 typedef enum {
@@ -578,7 +596,7 @@ typedef struct
 }tUCloudRtcInitContext;
 
 //设备插拔回调
-class _EXPORT_API UcloudRtcDeviceChanged
+class UcloudRtcDeviceChanged
 {
 public:
 	///发现设备
@@ -602,7 +620,7 @@ public:
 };
 
 //音频监听回调
-class  _EXPORT_API UCloudRtcAudioFrameCallback
+class UCloudRtcAudioFrameCallback
 {
 public:
 	///本地音频源数据callback
@@ -617,7 +635,7 @@ public:
 };
 
 //外部音频源(已废弃 采用UCloudIAudioFrameObserver )
-class  _EXPORT_API UCloudRtcExtendAudioCaptureSource
+class  UCloudRtcExtendAudioCaptureSource
 {
 public:
 	virtual ~UCloudRtcExtendAudioCaptureSource() {}
@@ -627,7 +645,7 @@ public:
 };
 
 //外部视频源（已废弃 采用UCloudIVideoFrameObserver）
-class  _EXPORT_API UCloudRtcExtendVideoCaptureSource
+class  UCloudRtcExtendVideoCaptureSource
 {
 public:
 	///视频源数据 内部会自动调用此接口
@@ -636,7 +654,7 @@ public:
 };
 
 //视频设备startcapture监听回调
-class _EXPORT_API UCloudRtcVideoFrameObserver 
+class UCloudRtcVideoFrameObserver 
 {
 public:
 	///视频采集数据回调
@@ -646,7 +664,7 @@ public:
 };
 
 //外部渲染
-class _EXPORT_API UCloudRtcExtendVideoRender
+class UCloudRtcExtendVideoRender
 {
 public:
 	///外部渲染
@@ -657,7 +675,7 @@ public:
 
 
 //视频监听回调
-class _EXPORT_API UCloudIVideoFrameObserver
+class UCloudIVideoFrameObserver
 {
 public:
 	///视频采集到每一帧得回调
@@ -667,7 +685,7 @@ public:
 };
 
 //音频监听回调
-class _EXPORT_API UCloudIAudioFrameObserver
+class UCloudIAudioFrameObserver
 {
 public:
 	///音频采集到每一帧得回调
