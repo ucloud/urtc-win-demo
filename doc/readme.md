@@ -71,6 +71,10 @@
 * [1.60  推送音频数据 - pushAudioFrameData](#class-pushAudioFrameData)
 * [1.61  设置外部源送数据模式 - SetExtendMediaDataMode](#class-SetExtendMediaDataMode)
 * [1.62  设置音频编码模式 - setAudioProfile](#class-setAudioProfile)
+* [1.63  开启采集视频镜像功能 - enableCameraMirror](#class-enableCameraMirror)
+* [1.64  增加水印 - addWaterMark](#class-addWaterMark)
+* [1.65  打开或关闭水印 - enableWaterMark](#class-enableWaterMark)
+* [1.66  设置声音延迟时间 - setAudioDelayTime](#class-setAudioDelayTime)
 <a name='class-UCloudRtcEngine'></a>
 
 ### 1.1  获取引擎
@@ -1351,7 +1355,71 @@ virtual int setAudioProfile(eUCloudAudioProfile audio_profile) = 0;
 
 | 名称    | 说明 | 数据类型 | 可空 |
 | -| -| -| -|
-| audio_profile[in]    | 接入类型<br> 详见eUCloudAudioProfile参数说明。  | int| N |
+| audio_profile[in]    | 接入类型<br> 详见eUCloudAudioProfile参数说明。  | struct| N |
+
+<a name='class-enableCameraMirror'></a>
+### 1.63  enableCameraMirror
+
+virtual int enableCameraMirror(bool enable) = 0;
+
+**返回值**
+
+0 成功
+
+**参数说明**    
+
+
+| 名称    | 说明 | 数据类型 | 可空 |
+| -| -| -| -|
+| enable[in]    | 设置摄像头图像是否镜像  | bool| N |
+
+<a name='class-addWaterMark'></a>
+### 1.64  addWaterMark
+
+virtual int addWaterMark(tUCloudWaterMark& watermark) = 0;
+
+**返回值**
+
+0 成功
+
+**参数说明**    
+
+
+| 名称    | 说明 | 数据类型 | 可空 |
+| -| -| -| -|
+| watermark[in]    | 接入类型<br> 详见tUCloudWaterMark参数说明。  | struct| N |
+
+<a name='class-enableWaterMark'></a>
+### 1.65  enableWaterMark
+
+virtual int enableWaterMark(eUCloudWaterMarkType type) = 0;
+
+**返回值**
+
+0 成功
+
+**参数说明**    
+
+
+| 名称    | 说明 | 数据类型 | 可空 |
+| -| -| -| -|
+| type[in]    | 接入类型<br> 详见eUCloudWaterMarkType参数说明。  | enum| N |
+
+<a name='class-setAudioDelayTime'></a>
+### 1.66  setAudioDelayTime
+
+virtual int setAudioDelayTime(int delay_ms) = 0;
+
+**返回值**
+
+0 成功
+
+**参数说明**    
+
+
+| 名称    | 说明 | 数据类型 | 可空 |
+| -| -| -| -|
+| delay_ms[in]    | 设置声音延时。  | int| N |
 
 
 
@@ -2094,6 +2162,10 @@ typedef enum _tUCloudRtcReturnErrCode {
 * [4.43  转推配置 - UCloudRtcTranscodeConfig](#struct-UCloudRtcTranscodeConfig)
 * [4.44  外部源模式 - eUCloudExtendMediaDataMode](#struct-eUCloudExtendMediaDataMode)
 * [4.45  音频编码属性 - eUCloudAudioProfile](#struct-eUCloudAudioProfile)
+* [4.46  水印参数 - tUCloudWaterMark](#struct-tUCloudWaterMark)
+* [4.47  水印类型 - eUCloudWaterMarkType](#struct-eUCloudWaterMarkType)
+* [4.48  水印位置 - eUCloudWaterMarkPosition](#struct-eUCloudWaterMarkPosition)
+
 
 <a name='struct-tUCloudRtcDeviceInfo'></a>
 
@@ -2822,3 +2894,48 @@ typedef enum {
     UCloud_Audio_Profile_Hight_Stereo_Disable_2A, //高音质立体声， 双声道， 128K码率， 禁用AEC， AGC
 }eUCloudAudioProfile;
 ```
+
+<a name='struct-tUCloudWaterMark'></a>
+### 4.46  水印参数
+
+```cpp
+typedef struct
+{
+    eUCloudWaterMarkType mType;   //水印类型
+    eUCloudWaterMarkPosition mPos;  //水印位置
+    int mPosX;                      //具体参见eUCloudWaterMarkPosition说明
+    int mPosY;                      //具体参见eUCloudWaterMarkPosition说明
+    const char * mContent;          //水印内容 UTF-8 编码
+    int mFontSize = 32;             //水印的字体大小
+}tUCloudWaterMark;
+```
+
+
+<a name='struct-eUCloudWaterMarkType'></a>
+### 4.47  水印类型
+
+```cpp
+typedef enum {
+    WATER_MARK_NONE = 0x00000000,         //关闭水印
+    WATER_MARK_STRING = 0x00000001,       //字符串水印
+    WATER_MARK_TIMESTAMP = 0x00000002,    //时间水印， 以字符串形式，按一定周期传入
+    WATER_MARK_JPEG = 0x00000004,         //图片水印， 传入图片的文件路径，仅支持JPG格式
+    WATER_MARK_ALL = WATER_MARK_STRING | WATER_MARK_TIMESTAMP | WATER_MARK_JPEG,  //打开所有水印
+}eUCloudWaterMarkType;
+```
+
+<a name='struct-eUCloudWaterMarkPosition'></a>
+### 4.48  水印位置
+
+```cpp
+typedef enum {
+    WATER_MARK_TOP_LEFT = 0,  //水印以左上角坐标起始点，mPosX是水印距离图片左边缘的距离，mPosY是水印距离上边缘的距离
+    WATER_MARK_BOTTON_LEFT,   //水印以左下角坐标起始点，mPosX是水印距离图片左边缘的距离，mPosY是水印距离下边缘的距离
+    WATER_MARK_TOP_RIGHT,     //水印以右上角坐标起始点，mPosX是水印距离图片右边缘的距离，mPosY是水印距离上边缘的距离
+    WATER_MARK_BOTTON_RIGHT,  //水印以右下角坐标起始点，mPosX是水印距离图片右边缘的距离，mPosY是水印距离下边缘的距离
+    WATER_MARK_VERTICAL_CENTER, //水印垂直居中，mPosX为水印距离图片左边缘的距离， mPosY不使用
+    WATER_MARK_HORIZONTAL_CENTER,  //水印水平居中，mPosY为水印距离图片上边缘的距离， mPosX不使用
+}eUCloudWaterMarkPosition;
+```
+
+
