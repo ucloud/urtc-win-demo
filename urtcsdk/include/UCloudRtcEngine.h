@@ -8,595 +8,610 @@ class UCloudRtcEventListener
 {
 public:
 	virtual void onServerDisconnect() {}
-	///¼ÓÈë·¿¼ä»Øµ÷
-	///@param code ´íÎóÂë  0³É¹¦
-	///@param msg ´íÎóĞÅÏ¢
-	///@param uid ÓÃ»§id
-	///@param roomid ·¿¼äid
+	///åŠ å…¥æˆ¿é—´å›è°ƒ
+	///@param code é”™è¯¯ç   0æˆåŠŸ
+	///@param msg é”™è¯¯ä¿¡æ¯
+	///@param uid ç”¨æˆ·id
+	///@param roomid æˆ¿é—´id
 	virtual void onJoinRoom(int code, const char* msg, const char* uid, const char* roomid) {}
 
-	///Àë¿ª·¿¼ä»Øµ÷
-	///@param code ´íÎóÂë  0³É¹¦
-	///@param msg ´íÎóĞÅÏ¢
-	///@param uid ÓÃ»§id
-	///@param roomid ·¿¼äid
+	///ç¦»å¼€æˆ¿é—´å›è°ƒ
+	///@param code é”™è¯¯ç   0æˆåŠŸ
+	///@param msg é”™è¯¯ä¿¡æ¯
+	///@param uid ç”¨æˆ·id
+	///@param roomid æˆ¿é—´id
 	virtual void onLeaveRoom(int code, const char* msg, const char* uid, const char* roomid) {}
 
-	///¶ÏÏßÖØÁ¬»Øµ÷
-	///@param uid ÓÃ»§id
-	///@param roomid ·¿¼äid
+	///æ–­çº¿é‡è¿å›è°ƒ
+	///@param uid ç”¨æˆ·id
+	///@param roomid æˆ¿é—´id
 	virtual void onRejoining(const char* uid, const char* roomid) {}
 
-	///ÖØĞÂ¼ÓÈë·¿¼ä³É¹¦»Øµ÷
-	///@param uid ÓÃ»§id
-	///@param roomid ·¿¼äid
+	///é‡æ–°åŠ å…¥æˆ¿é—´æˆåŠŸå›è°ƒ
+	///@param uid ç”¨æˆ·id
+	///@param roomid æˆ¿é—´id
 	virtual void onReJoinRoom(const char* uid, const char* roomid) {}
 
-	///±¾µØÁ÷·¢²¼»Øµ÷
-	///@param code ´íÎóÂë  0 succ
-	///@param msg ±¾µØ·¢²¼´íÎóĞÅÏ¢
-	///@param info ·¢²¼³É¹¦ºó±¾µØÁ÷ĞÅÏ¢
+	///æœ¬åœ°æµå‘å¸ƒå›è°ƒ
+	///@param code é”™è¯¯ç   0 succ
+	///@param msg æœ¬åœ°å‘å¸ƒé”™è¯¯ä¿¡æ¯
+	///@param info å‘å¸ƒæˆåŠŸåæœ¬åœ°æµä¿¡æ¯
 	virtual void onLocalPublish(const int code, const char* msg, tUCloudRtcStreamInfo& info) {}
 
-	///±¾µØÁ÷È¡Ïû·¢²¼»Øµ÷
-	///@param code ´íÎóÂë  0 succ
-	///@param msg ±¾µØ·¢²¼´íÎóĞÅÏ¢
-	///@param info È¡Ïû·¢²¼³É¹¦ºó±¾µØÁ÷ĞÅÏ¢
+	///æœ¬åœ°æµå–æ¶ˆå‘å¸ƒå›è°ƒ
+	///@param code é”™è¯¯ç   0 succ
+	///@param msg æœ¬åœ°å‘å¸ƒé”™è¯¯ä¿¡æ¯
+	///@param info å–æ¶ˆå‘å¸ƒæˆåŠŸåæœ¬åœ°æµä¿¡æ¯
 	virtual void onLocalUnPublish(const int code, const char* msg, tUCloudRtcStreamInfo& info) {}
 
-	///Ô¶¶ËÓÃ»§¼ÓÈë»Øµ÷
-	///@param uid Ô¶¶ËÓÃ»§id
+	///è¿œç«¯ç”¨æˆ·åŠ å…¥å›è°ƒ
+	///@param uid è¿œç«¯ç”¨æˆ·id
 	virtual void onRemoteUserJoin(const char* uid) {}
 
-	///Ô¶¶ËÓÃ»§Àë¿ª»Øµ÷
-	///@param uid Ô¶¶ËÓÃ»§id
-	///@param reson Àë¿ªÔ­Òò
+	///è¿œç«¯ç”¨æˆ·ç¦»å¼€å›è°ƒ
+	///@param uid è¿œç«¯ç”¨æˆ·id
+	///@param reson ç¦»å¼€åŸå› 
 	virtual void onRemoteUserLeave(const char* uid, int reson) {}
 
-	///Ô¶¶ËÁ÷·¢²¼»Øµ÷
-	///@param info Ô¶¶ËÁ÷ĞÅÏ¢
+	///è¿œç«¯æµå‘å¸ƒå›è°ƒ
+	///@param info è¿œç«¯æµä¿¡æ¯
 	virtual void onRemotePublish(tUCloudRtcStreamInfo& info) {}
 
-	///Ô¶¶ËÁ÷È¡Ïû·¢²¼»Øµ÷
-	///@param info Ô¶¶ËÁ÷ĞÅÏ¢
+	///è¿œç«¯æµå–æ¶ˆå‘å¸ƒå›è°ƒ
+	///@param info è¿œç«¯æµä¿¡æ¯
 	virtual void onRemoteUnPublish(tUCloudRtcStreamInfo& info) {}
 
-	///¶©ÔÄ»Øµ÷
-	///@param code ¶©ÔÄ½á¹û 0 succ
-	///@param msg ¶©ÔÄÌáÊ¾ĞÅÏ¢
-	///@param info ¶©ÔÄÁ÷ĞÅÏ¢
+	///è®¢é˜…å›è°ƒ
+	///@param code è®¢é˜…ç»“æœ 0 succ
+	///@param msg è®¢é˜…æç¤ºä¿¡æ¯
+	///@param info è®¢é˜…æµä¿¡æ¯
 	virtual void onSubscribeResult(const int code, const char* msg, tUCloudRtcStreamInfo& info) {}
 
-	///È¡Ïû¶©ÔÄ»Øµ÷
-	///@param code È¡Ïû¶©ÔÄ½á¹û 0 succ
-	///@param msg ¶©ÔÄÌáÊ¾ĞÅÏ¢
-	///@param info ¶©ÔÄÁ÷ĞÅÏ¢
+	///å–æ¶ˆè®¢é˜…å›è°ƒ
+	///@param code å–æ¶ˆè®¢é˜…ç»“æœ 0 succ
+	///@param msg è®¢é˜…æç¤ºä¿¡æ¯
+	///@param info è®¢é˜…æµä¿¡æ¯
 	virtual void onUnSubscribeResult(const int code, const char* msg, tUCloudRtcStreamInfo& info) {}
 
-	///±¾µØmute»Øµ÷
-	///@param code mute»Øµ÷½á¹û 0 succ
-	///@param msg  ÌáÊ¾ĞÅÏ¢
-	///@param mediatype Ã½ÌåÀàĞÍ
-	///@param tracktype trackÀàĞÍ
-	///@param mute mute×´Ì¬
+	///æœ¬åœ°muteå›è°ƒ
+	///@param code muteå›è°ƒç»“æœ 0 succ
+	///@param msg  æç¤ºä¿¡æ¯
+	///@param mediatype åª’ä½“ç±»å‹
+	///@param tracktype trackç±»å‹
+	///@param mute muteçŠ¶æ€
 	virtual void onLocalStreamMuteRsp(const int code, const char* msg,
 		eUCloudRtcMeidaType mediatype, eUCloudRtcTrackType tracktype, bool mute) {}
 
-	///Ô¶¶Ëmute»Øµ÷
-	///@param code mute»Øµ÷½á¹û 0 succ
-	///@param msg  ÌáÊ¾ĞÅÏ¢
-	///@param uid  Ô¶¶ËÓÃ»§id
-	///@param mediatype Ã½ÌåÀàĞÍ
-	///@param tracktype trackÀàĞÍ
-	///@param mute mute×´Ì¬
+	///è¿œç«¯muteå›è°ƒ
+	///@param code muteå›è°ƒç»“æœ 0 succ
+	///@param msg  æç¤ºä¿¡æ¯
+	///@param uid  è¿œç«¯ç”¨æˆ·id
+	///@param mediatype åª’ä½“ç±»å‹
+	///@param tracktype trackç±»å‹
+	///@param mute muteçŠ¶æ€
 	virtual void onRemoteStreamMuteRsp(const int code, const char* msg, const char* uid,
 		eUCloudRtcMeidaType mediatype, eUCloudRtcTrackType tracktype, bool mute) {}
 
-	///Ô¶¶ËÒôÆµ¹ì»òÕßÊÓÆµ¹ì×´Ì¬»Øµ÷
-	///@param uid  Ô¶¶ËÓÃ»§id
-	///@param mediatype Ã½ÌåÀàĞÍ
-	///@param tracktype trackÀàĞÍ
-	///@param mute mute×´Ì¬
+	///è¿œç«¯éŸ³é¢‘è½¨æˆ–è€…è§†é¢‘è½¨çŠ¶æ€å›è°ƒ
+	///@param uid  è¿œç«¯ç”¨æˆ·id
+	///@param mediatype åª’ä½“ç±»å‹
+	///@param tracktype trackç±»å‹
+	///@param mute muteçŠ¶æ€
 	virtual void onRemoteTrackNotify(const char* uid,
 		eUCloudRtcMeidaType mediatype, eUCloudRtcTrackType tracktype, bool mute) {}
 
-	///¿ªÆôÂ¼ÖÆ»Øµ÷
+	///å¼€å¯å½•åˆ¶å›è°ƒ
 	///@param code  0 succ
-	///@param msg ´íÎóÌáÊ¾ĞÅÏ¢
-	///@param info Â¼ÖÆĞÅÏ¢
+	///@param msg é”™è¯¯æç¤ºä¿¡æ¯
+	///@param info å½•åˆ¶ä¿¡æ¯
 	virtual void onStartRecord(const int code, const char* msg, tUCloudRtcRecordInfo& info) {}
 
-	///Í£Ö¹Â¼ÖÆ»Øµ÷
+	///åœæ­¢å½•åˆ¶å›è°ƒ
 
-	///@param code  0 succ 0´ú±íÖ÷¶¯Í£Ö¹³É¹¦ ·Ç0´ú±íÒì³£Í£Ö¹ĞèÒªÖØĞÂ¿ªÆô
-	///@param msg ´íÎóÌáÊ¾ĞÅÏ¢
-	///@param recordid Â¼ÖÆID
+	///@param code  0 succ 0ä»£è¡¨ä¸»åŠ¨åœæ­¢æˆåŠŸ é0ä»£è¡¨å¼‚å¸¸åœæ­¢éœ€è¦é‡æ–°å¼€å¯
+	///@param msg é”™è¯¯æç¤ºä¿¡æ¯
+	///@param recordid å½•åˆ¶ID
 	virtual void onStopRecord(const int code, const char* msg, const char* recordid) {}
 
-	///±¾µØÊı¾İÍ³¼Æ»Øµ÷
-	///@param rtstats Í³¼ÆĞÅÏ¢
+	///æœ¬åœ°æ•°æ®ç»Ÿè®¡å›è°ƒ
+	///@param rtstats ç»Ÿè®¡ä¿¡æ¯
 	virtual void onSendRTCStats(tUCloudRtcStreamStats& rtstats) {}
 
-	///Ô¶¶ËÊı¾İÍ³¼Æ»Øµ÷
-	///@param rtstats Í³¼ÆĞÅÏ¢
+	///è¿œç«¯æ•°æ®ç»Ÿè®¡å›è°ƒ
+	///@param rtstats ç»Ÿè®¡ä¿¡æ¯
 	virtual void onRemoteRTCStats(tUCloudRtcStreamStats rtstats) {}
 
-	///Ô¶¶ËÒôÆµÄÜÁ¿»Øµ÷
-	///@param uid ÓÃ»§ID
-	///@param volume ÒôÁ¿´óĞ¡
+	///è¿œç«¯éŸ³é¢‘èƒ½é‡å›è°ƒ
+	///@param uid ç”¨æˆ·ID
+	///@param volume éŸ³é‡å¤§å°
 	virtual void onRemoteAudioLevel(const char* uid, int volume) {}
 
-	///ÍøÂçÆÀ·Ö»Øµ÷
-	///@param uid ÓÃ»§ID
-	///@param rtype ÍøÂçÉÏÏÂĞÍÀàĞÍ
-	///@param Quality ÆÀ·Ö
+	///ç½‘ç»œè¯„åˆ†å›è°ƒ
+	///@param uid ç”¨æˆ·ID
+	///@param rtype ç½‘ç»œä¸Šä¸‹å‹ç±»å‹
+	///@param Quality è¯„åˆ†
 	virtual void onNetworkQuality(const char* uid, eUCloudRtcNetworkQuality&rtype, eUCloudRtcQualityType& Quality) {}
 
-	///ÅÔÍÆ×´Ì¬»Øµ÷
-	///@param state rtmp×´Ì¬
-	///@param url cdnµØÖ·
-	///@param code ´íÎóÂë
+	///æ—æ¨çŠ¶æ€å›è°ƒ
+	///@param state rtmpçŠ¶æ€
+	///@param url cdnåœ°å€
+	///@param code é”™è¯¯ç 
 	virtual void onRtmpStreamingStateChanged(const int 	state, const char* url, int code) {};
 
-	///ÅÔÍÆ¸üĞÂ»ìºÏÁ÷»Øµ÷
-	///@param cmd ²Ù×÷ÀàĞÍ
-	///@param code ´íÎóÂë
-	///@param msg ´íÎóĞÅÏ¢
+	///æ—æ¨æ›´æ–°æ··åˆæµå›è°ƒ
+	///@param cmd æ“ä½œç±»å‹
+	///@param code é”™è¯¯ç 
+	///@param msg é”™è¯¯ä¿¡æ¯
 	virtual void onRtmpUpdateMixStreamRes(eUCloudRtmpOpration& cmd,const int code, const char* msg) {};
 
-	///Éè±¸±¨´í»Øµ÷
-	///@param code Éè±¸±¨´í»Øµ÷
+	///è®¾å¤‡æŠ¥é”™å›è°ƒ
+	///@param code è®¾å¤‡æŠ¥é”™å›è°ƒ
 	virtual void onCaptureError(const int code, const int detail) {}
 
-	///±¾µØÒôÆµÄÜÁ¿»Øµ÷
-	///@param volume ÒôÁ¿´óĞ¡
+	///æœ¬åœ°éŸ³é¢‘èƒ½é‡å›è°ƒ
+	///@param volume éŸ³é‡å¤§å°
 	virtual void onLocalAudioLevel(int volume) {}
 
 
-	///Ô¶¶ËÒôÆµ²¥·ÅÊ×Ö¡»Øµ÷
-	///@param uid ÓÃ»§id
-	///@param elapsed ´Ó¼ÓÈë·¿¼äµ½ÊÕµ½Ô¶¶ËÒôÆµ¾àÀëµÄÊ±¼ä
+	///è¿œç«¯éŸ³é¢‘æ’­æ”¾é¦–å¸§å›è°ƒ
+	///@param uid ç”¨æˆ·id
+	///@param elapsed ä»åŠ å…¥æˆ¿é—´åˆ°æ”¶åˆ°è¿œç«¯éŸ³é¢‘è·ç¦»çš„æ—¶é—´
 	virtual void onFirstRemoteAudioFrame(const char* uid, int elapsed) {}
 
 
-	///Ô¶¶ËÊÓÆµÊ×Ö¡»Øµ÷
-	///@param uid ÓÃ»§id
-	///@param width ¿í¶È
-	///@param height ¸ß¶È
-	///@param elapsed ´Ó¼ÓÈë·¿¼äµ½ÊÕµ½Ô¶¶ËÊÓÆµäÖÈ¾¾àÀëµÄÊ±¼ä
+	///è¿œç«¯è§†é¢‘é¦–å¸§å›è°ƒ
+	///@param uid ç”¨æˆ·id
+	///@param width å®½åº¦
+	///@param height é«˜åº¦
+	///@param elapsed ä»åŠ å…¥æˆ¿é—´åˆ°æ”¶åˆ°è¿œç«¯è§†é¢‘æ¸²æŸ“è·ç¦»çš„æ—¶é—´
 	virtual void onFirstRemoteVideoFrame(const char* uid, int width, int height, int elapsed) {}
 
-	///×Ô¶¨ÒåÏûÏ¢½Ó¿Ú·¢ËÍ½á¹û
-	/// @param code ´íÎó
+	///è‡ªå®šä¹‰æ¶ˆæ¯æ¥å£å‘é€ç»“æœ
+	/// @param code é”™è¯¯
 	/// @param msg 
 	virtual void onSendMsgRsp(int code, const char*msg) {};
 
-	///¹ã²¥ÏûÏ¢Í¨Öª
-	///@param uid ÓÃ»§id
-	///@param msg ÓÃ»§ÏûÏ¢
+	///å¹¿æ’­æ¶ˆæ¯é€šçŸ¥
+	///@param uid ç”¨æˆ·id
+	///@param msg ç”¨æˆ·æ¶ˆæ¯
 	virtual void onBroadMsgNotify(const char*uid, const char*msg) {};
 
-	///ÌßÈËÍ¨Öª
-	///@param code ´íÎóÂë
+	///è¸¢äººé€šçŸ¥
+	///@param code é”™è¯¯ç 
 	virtual void onKickoff(int code) {}
 
-	///¾¯¸æ»Øµ÷
-	///@param warn ´íÎóÂë
+	///è­¦å‘Šå›è°ƒ
+	///@param warn é”™è¯¯ç 
 	virtual void onWarning(int warn) {}
 
-	///´íÎó»Øµ÷
-	///@param error ´íÎóÂë
+	///é”™è¯¯å›è°ƒ
+	///@param error é”™è¯¯ç 
 	virtual void onError(int error) {}
 };
 
 class _EXPORT_API UCloudRtcEngine
 {
 public:
-	///´´½¨ÒıÇæ
-	///@param bIsInline ÊÇ·ñ²ÉÓÃ×Ô²É¼¯
-	///@return ´´½¨³öµÄengine
+	///åˆ›å»ºå¼•æ“
+	///@param bIsInline æ˜¯å¦é‡‡ç”¨è‡ªé‡‡é›†
+	///@return åˆ›å»ºå‡ºçš„engine
 	static UCloudRtcEngine *sharedInstance(bool bIsInline = true);
 	static UCloudRtcEngine *sharedInstance(tUCloudRtcInitContext* context);
 
-	///Ïú»ÙÒıÇæ
+	///é”€æ¯å¼•æ“
 	static void destroy();	
 
-    ///»ñÈ¡sdk°æ±¾
-    ///@return sdk°æ±¾ºÅ
+    ///è·å–sdkç‰ˆæœ¬
+    ///@return sdkç‰ˆæœ¬å·
     virtual const char *getSdkVersion() = 0;
 
-	///×¢²á¼àÌı
-	///@param listener ÅÉÉú×Ô»Øµ÷½Ó¿ÚµÄÊµÀı
+	///æ³¨å†Œç›‘å¬
+	///@param listener æ´¾ç”Ÿè‡ªå›è°ƒæ¥å£çš„å®ä¾‹
 	virtual void regRtcEventListener(UCloudRtcEventListener* listener) = 0;
 
-	///ÉèÖÃsdkÄ£Ê½
-	///@param mode sdkÊ¹ÓÃÄ£Ê½ ÕıÊ½Ä£Ê½ ²âÊÔÄ£Ê½
+	///è®¾ç½®sdkæ¨¡å¼
+	///@param mode sdkä½¿ç”¨æ¨¡å¼ æ­£å¼æ¨¡å¼ æµ‹è¯•æ¨¡å¼
 	///@return 0 succ
 	virtual int setSdkMode(eUCloudRtcSdkMode mode) = 0;
 
-	///ÉèÖÃ½ÓÈë·½Ê½
-	///@param from ½ÓÈëµãÉèÖÃ
+	///è®¾ç½®æ¥å…¥æ–¹å¼
+	///@param from æ¥å…¥ç‚¹è®¾ç½®
 	///@return 0 succ
 	virtual int setServerGetFrom(eUCloudServerGetFrom from) = 0;
 
-	///ÉèÖÃÆµµÀÀà±ğ
-	///@param roomtype ·¿¼äÀàĞÍ ´ó°à Ğ¡°à
+	///è®¾ç½®é¢‘é“ç±»åˆ«
+	///@param roomtype æˆ¿é—´ç±»å‹ å¤§ç­ å°ç­
 	///@return 0 succ
 	virtual int setChannelType(eUCloudRtcChannelType roomtype) = 0;
 
-	///ÉèÖÃ½ÇÉ«
-	///@param role ÍÆÁ÷ À­Á÷ ÍÆÀ­Á÷
+	///è®¾ç½®è§’è‰²
+	///@param role æ¨æµ æ‹‰æµ æ¨æ‹‰æµ
 	///@return 0 succ
 	virtual int setStreamRole(eUCloudRtcUserStreamRole role) = 0;
 
-	///ÉèÖÃÈÕÖ¾¼¶±ğ
-	///@param level ÈÕÖ¾¼¶±ğ
+	///è®¾ç½®æ—¥å¿—çº§åˆ«
+	///@param level æ—¥å¿—çº§åˆ«
 	virtual void setLogLevel(eUCloudRtcLogLevel level) = 0;
 
-	///ÉèÖÃkey
-	///@param seckey ¹ÙÍø¿ØÖÆÌ¨µÄappkey
+	///è®¾ç½®key
+	///@param seckey å®˜ç½‘æ§åˆ¶å°çš„appkey
 	virtual void setTokenSecKey(const char* seckey) = 0;
 
-	///ÉèÖÃ×Ô¶¯·¢²¼
-	///@param autoPub ×Ô¶¯·¢²¼
-	///@param autoSub ×Ô¶¯¶©ÔÄ
+	///è®¾ç½®è‡ªåŠ¨å‘å¸ƒ
+	///@param autoPub è‡ªåŠ¨å‘å¸ƒ
+	///@param autoSub è‡ªåŠ¨è®¢é˜…
 	///@return 0 succ
 	virtual int setAutoPublishSubscribe(bool autoPub, bool autoSub) = 0;
 
 
-	///ÉèÖÃÊÇ·ñ´¿ÒôÆµ
-	///@param audioOnly ÊÇ·ñ´¿ÒôÆµ
+	///è®¾ç½®æ˜¯å¦çº¯éŸ³é¢‘
+	///@param audioOnly æ˜¯å¦çº¯éŸ³é¢‘
 	///@return 0 succ
 	virtual int setAudioOnlyMode(bool audioOnly) = 0;
 
-	///ÉèÖÃ±àÂë
-	///@param codec ±àÂëÀàĞÍ
+	///è®¾ç½®ç¼–ç 
+	///@param codec ç¼–ç ç±»å‹
 	///@return 0 succ
 	virtual int setVideoCodec(eUCloudRtcVideoCodec codec) = 0;
 
-	///¸Ã·½·¨ÓÃÓÚ×¢²áÓïÒô¹Û²âÆ÷¶ÔÏó
-	///@param codec ±àÂëÀàĞÍ
+	///è¯¥æ–¹æ³•ç”¨äºæ³¨å†Œè¯­éŸ³è§‚æµ‹å™¨å¯¹è±¡
+	///@param codec ç¼–ç ç±»å‹
 	virtual void registerAudioFrameObserver(UCloudIAudioFrameObserver *observer) = 0;
 
-	///¸Ã·½·¨ÓÃÓÚ×¢²áÊÓÆµ¹Û²âÆ÷¶ÔÏó
-	///@param codec ±àÂëÀàĞÍ
+	///è¯¥æ–¹æ³•ç”¨äºæ³¨å†Œè§†é¢‘è§‚æµ‹å™¨å¯¹è±¡
+	///@param codec ç¼–ç ç±»å‹
 	virtual void registerVideoFrameObserver(UCloudIVideoFrameObserver *observer) = 0;
 
-	///¿ªÆôrtspÍÆÁ÷
-	///@param type Ã½ÌåÀàĞÍ
-	///@param enable ÊÇ·ñÊ¹ÓÃÀ©Õ¹rtspÁ÷
-	///@param rtspurl rtspµØÖ·
+	///å¼€å¯rtspæ¨æµ
+	///@param type åª’ä½“ç±»å‹
+	///@param enable æ˜¯å¦ä½¿ç”¨æ‰©å±•rtspæµ
+	///@param rtspurl rtspåœ°å€
 	///@return 0 succ
 	virtual int enableExtendRtspVideocapture(eUCloudRtcMeidaType type, bool enable, const char* rtspurl) = 0;
 	
-	///¿ªÆôÍâ²¿²É¼¯ÊÓÆµ
-	///@param enable ÊÇ·ñÊ¹ÓÃÀ©Õ¹µÄÍâ²¿²É¼¯ÉãÏñÍ·
-	///@param videocapture Íâ²¿ÊÓÆµÔ´
+	///å¼€å¯å¤–éƒ¨é‡‡é›†è§†é¢‘
+	///@param enable æ˜¯å¦ä½¿ç”¨æ‰©å±•çš„å¤–éƒ¨é‡‡é›†æ‘„åƒå¤´
+	///@param videocapture å¤–éƒ¨è§†é¢‘æº
 	///@return 0 succ
 	virtual int enableExtendVideocapture(bool enable, UCloudRtcExtendVideoCaptureSource* videocapture) = 0;
 	
-	///³õÊ¼»¯Íâ²¿ÒôÆµÔ´
-	///@param audiocapture Íâ²¿ÒôÆµÔ´
+	///åˆå§‹åŒ–å¤–éƒ¨éŸ³é¢‘æº
+	///@param audiocapture å¤–éƒ¨éŸ³é¢‘æº
 	///@return 0 succ
 	virtual int initExtendAudioSource(UCloudRtcExtendAudioCaptureSource* audiocapture) = 0;
 
-	///¿ªÆôÍâ²¿²É¼¯ÒôÆµ
-	///@param enable ÊÇ·ñÊ¹ÓÃÀ©Õ¹µÄÍâ²¿²É¼¯ÒôÆµ
-	///@param audiocapture Íâ²¿ÒôÆµÔ´(note :±ØĞëÏÈ³õÊ¼»¯initExtendAudioSourceÒ»´Î)
+	///å¼€å¯å¤–éƒ¨é‡‡é›†éŸ³é¢‘
+	///@param enable æ˜¯å¦ä½¿ç”¨æ‰©å±•çš„å¤–éƒ¨é‡‡é›†éŸ³é¢‘
+	///@param audiocapture å¤–éƒ¨éŸ³é¢‘æº(note :å¿…é¡»å…ˆåˆå§‹åŒ–initExtendAudioSourceä¸€æ¬¡)
 	///@return 0 succ
 	virtual int enableExtendAudiocapture(bool enable, UCloudRtcExtendAudioCaptureSource* audiocapture) = 0;
 	
-	///¿ªÆô»ìÒô
-	///@param filepath ÎÄ¼şÂ·¾¶
-	///@param replace ÊÇ·ñÌæ´úÂó¿Ë·ç
-	///@param loop ÊÇ·ñÑ­»·
-	///@param musicvol ÒôÁ¿
+	///å¼€å¯æ··éŸ³
+	///@param filepath æ–‡ä»¶è·¯å¾„
+	///@param replace æ˜¯å¦æ›¿ä»£éº¦å…‹é£
+	///@param loop æ˜¯å¦å¾ªç¯
+	///@param musicvol éŸ³é‡
 	///@return 0 succ
 	virtual int startAudioMixing(const char* filepath, bool replace, bool loop, float musicvol) = 0;
 	
-	///Í£Ö¹»ìÒô
+	///åœæ­¢æ··éŸ³
 	///@return 0 succ
 	virtual int stopAudioMixing() = 0;
 	
-	///×¢²áÒôÆµ½ÓÊÕ»Øµ÷
-	///@param callback ÅÉÉú×ÔUCloudRtcAudioFrameCallback µÄÊµÀı (note :ÔÚsetChanleTypeºóµ÷ÓÃ)
+	///æ³¨å†ŒéŸ³é¢‘æ¥æ”¶å›è°ƒ
+	///@param callback æ´¾ç”Ÿè‡ªUCloudRtcAudioFrameCallback çš„å®ä¾‹ (note :åœ¨setChanleTypeåè°ƒç”¨)
 	///@return 0 succ
 	virtual void regAudioFrameCallback(UCloudRtcAudioFrameCallback* callback) = 0;
 	
-	///×¢²áÉè±¸²å°ÎÍ¨Öª»Øµ÷
-	///@param callback ÅÉÉú×ÔUcloudRtcDeviceChanged µÄÊµÀı
+	///æ³¨å†Œè®¾å¤‡æ’æ‹”é€šçŸ¥å›è°ƒ
+	///@param callback æ´¾ç”Ÿè‡ªUcloudRtcDeviceChanged çš„å®ä¾‹
 	///@return 0 succ
 	virtual void regDeviceChangeCallback(UcloudRtcDeviceChanged* callback) = 0;
 	
-	///¼ÓÈë·¿¼ä
-	///@param auth ¼øÈ¨ĞÅÏ¢
+	///åŠ å…¥æˆ¿é—´
+	///@param auth é‰´æƒä¿¡æ¯
 	///@return 0 succ
 	virtual int joinChannel(tUCloudRtcAuth& auth) = 0;
 	
-	///Àë¿ª·¿¼ä
+	///ç¦»å¼€æˆ¿é—´
 	///@return 0 succ
 	virtual int leaveChannel() = 0;
 	
-	///»ñÈ¡×ÀÃæÊıÄ¿
-	///@return ÊıÄ¿
+	///è·å–æ¡Œé¢æ•°ç›®
+	///@return æ•°ç›®
 	virtual int getDesktopNums() = 0;
 	
-	///»ñÈ¡×ÀÃæĞÅÏ¢
-	///@param pos Î»ÖÃ
-	///@param [out] info ×ÀÃæĞÅÏ¢
+	///è·å–æ¡Œé¢ä¿¡æ¯
+	///@param pos ä½ç½®
+	///@param [out] info æ¡Œé¢ä¿¡æ¯
 	///@return 0 succ
 	virtual int getDesktopInfo(int pos, tUCloudRtcDeskTopInfo& info) = 0;
 	
-	///»ñÈ¡´°¿ÚÊıÄ¿
+	///è·å–çª—å£æ•°ç›®
 	virtual int getWindowNums() = 0;
 	
-	///»ñÈ¡×ÀÃæ´°¿ÚĞÅÏ¢
-	///@param pos Î»ÖÃ
-	///@param [out] info ´°¿ÚĞÅÏ¢
+	///è·å–æ¡Œé¢çª—å£ä¿¡æ¯
+	///@param pos ä½ç½®
+	///@param [out] info çª—å£ä¿¡æ¯
 	///@return 0 succ
 	virtual int getWindowInfo(int pos, tUCloudRtcDeskTopInfo& info) = 0;
 	
-	///ÉèÖÃ×ÀÃæ·ÖÏíÀàĞÍ
-	///@param desktoptype ×¿ÃæÀàĞÍ
+	///è®¾ç½®æ¡Œé¢åˆ†äº«ç±»å‹
+	///@param desktoptype å“é¢ç±»å‹
 	///@return 0 succ
 	virtual int setUseDesktopCapture(eUCloudRtcDesktopType desktoptype) = 0;
 
-	///ÉèÖÃ×ÀÃæ·ÖÏíprofile
-	///@param profile ·Ö±æÂÊ
+	///è®¾ç½®æ¡Œé¢åˆ†äº«profile
+	///@param profile åˆ†è¾¨ç‡
 	virtual void setDesktopProfile(eUCloudRtcScreenProfile profile) = 0;
 
-	///ÉèÖÃ×ÀÃæ·ÖÏí²ÎÊı
-	///@param pgram ·ÖÏí²ÎÊı
+	///è®¾ç½®æ¡Œé¢åˆ†äº«å‚æ•°
+	///@param pgram åˆ†äº«å‚æ•°
 	virtual void setCaptureScreenPagrams(tUCloudRtcScreenPargram& pgram) = 0;
 
-	///ÉèÖÃ¼ÓÈë·¿¼äÇ°ÊÇ·ñ¿ªÆôÉãÏñÍ·
-	///@param mute ÊÇ·ñ½ûµôÊÓÆµ  true£º½ûÖ¹ false:·ñ
+	///è®¾ç½®åŠ å…¥æˆ¿é—´å‰æ˜¯å¦å¼€å¯æ‘„åƒå¤´
+	///@param mute æ˜¯å¦ç¦æ‰è§†é¢‘  trueï¼šç¦æ­¢ false:å¦
 	///@return 0 succ
 	virtual int muteCamBeforeJoin(bool mute) = 0;
 
-	///ÉèÖÃ¼ÓÈë·¿¼äÇ°ÊÇ·ñmute mic
-	///@param mute ÊÇ·ñ½ûµômic  true£º½ûÖ¹ false:·ñ
+	///è®¾ç½®åŠ å…¥æˆ¿é—´å‰æ˜¯å¦mute mic
+	///@param mute æ˜¯å¦ç¦æ‰mic  trueï¼šç¦æ­¢ false:å¦
 	///@return 0 succ
 	virtual int muteMicBeforeJoin(bool mute) = 0;
 
-	///ÉèÖÃ¶©ÔÄ³É¹¦ºóÊÇ·ñmuteÉãÏñÍ·
-	///@param mute ÊÇ·ñ½ûµôÊÓÆµ  true£º½ûÖ¹ false:·ñ
+	///è®¾ç½®è®¢é˜…æˆåŠŸåæ˜¯å¦muteæ‘„åƒå¤´
+	///@param mute æ˜¯å¦ç¦æ‰è§†é¢‘  trueï¼šç¦æ­¢ false:å¦
 	///@return 0 succ
 	virtual int muteRomoteCamBeforeSub(bool mute) = 0;
 
-	///ÉèÖÃ¶©ÔÄ³É¹¦ºóÊÇ·ñmute mic
-	///@param mute ÊÇ·ñ½ûµômic  true£º½ûÖ¹ false:·ñ
+	///è®¾ç½®è®¢é˜…æˆåŠŸåæ˜¯å¦mute mic
+	///@param mute æ˜¯å¦ç¦æ‰mic  trueï¼šç¦æ­¢ false:å¦
 	///@return 0 succ
 	virtual int muteRomoteMicBeforeSub(bool mute) = 0;
 
-	///ÉèÖÃ±àÂë·¢ËÍÊÓÆµÖÊÁ¿
-	///@param profile ·Ö±æÂÊ
-	///@param videoconfig videoÅäÖÃ
+	///è®¾ç½®ç¼–ç å‘é€è§†é¢‘è´¨é‡
+	///@param profile åˆ†è¾¨ç‡
+	///@param videoconfig videoé…ç½®
 	virtual void setVideoProfile(eUCloudRtcVideoProfile profile, tUCloudVideoConfig& videoconfig) = 0;
 	
-	///ÉèÖÃ²É¼¯äÖÈ¾ÊÓÆµ·Ö±æÂÊ
-	///@param profile ·Ö±æÂÊ
-	///@param videoconfig videoÅäÖÃ
+	///è®¾ç½®é‡‡é›†æ¸²æŸ“è§†é¢‘åˆ†è¾¨ç‡
+	///@param profile åˆ†è¾¨ç‡
+	///@param videoconfig videoé…ç½®
 	virtual void setVideoCaptureProfile(eUCloudRtcVideoProfile profile) = 0;
 	
-	///ÇĞ»»ÉãÏñÍ·
-	///@param info Éè±¸ĞÅÏ¢
+	///åˆ‡æ¢æ‘„åƒå¤´
+	///@param info è®¾å¤‡ä¿¡æ¯
 	///@return 0 succ
 	virtual int switchCamera(tUCloudRtcDeviceInfo& info) = 0;
 
-    ///¿ª¹Ø±¾µØÊÓÆµ²É¼¯
-    ///@param enable ¿ªÆô¹Ø±Õ±¾µØÊÓÆµ²É¼¯
+    ///å¼€å…³æœ¬åœ°è§†é¢‘é‡‡é›†
+    ///@param enable å¼€å¯å…³é—­æœ¬åœ°è§†é¢‘é‡‡é›†
     ///@return 0 succ
     virtual int enableLocalCamera(bool enable) = 0;
 
-	///·¢²¼
-	///@param type Ã½ÌåÀàĞÍ ÉãÏñÍ·»òÕß×ÀÃæ
-	///@param hasvideo ÊÇ·ñ´øÊÓÆµ
-	///@param hasaudio ÊÇ·ñ´øÒôÆµ
+	///å‘å¸ƒ
+	///@param type åª’ä½“ç±»å‹ æ‘„åƒå¤´æˆ–è€…æ¡Œé¢
+	///@param hasvideo æ˜¯å¦å¸¦è§†é¢‘
+	///@param hasaudio æ˜¯å¦å¸¦éŸ³é¢‘
 	///@return 0 succ
 	virtual int publish(eUCloudRtcMeidaType type, bool hasvideo, bool hasaudio) = 0;
 
-	///È¡Ïû·¢²¼
-	///@param type Ã½ÌåÀàĞÍ
+	///å–æ¶ˆå‘å¸ƒ
+	///@param type åª’ä½“ç±»å‹
 	///@return 0 succ
 	virtual int unPublish(eUCloudRtcMeidaType type) = 0;
 
-	///¿ªÊ¼Ô¤ÀÀ
-	///@param view Ô¤ÀÀµÄveiwĞÅÏ¢
+	///å¼€å§‹é¢„è§ˆ
+	///@param view é¢„è§ˆçš„veiwä¿¡æ¯
 	///@return 0 succ
 	virtual int startPreview(tUCloudRtcVideoCanvas& view) = 0;
 
-	///Í£Ö¹Ô¤ÀÀ
-	///@param view Ô¤ÀÀµÄveiwĞÅÏ¢
+	///åœæ­¢é¢„è§ˆ
+	///@param view é¢„è§ˆçš„veiwä¿¡æ¯
 	///@return 0 succ
 	virtual int stopPreview(tUCloudRtcVideoCanvas& view) = 0;
 
-	///mute±¾µØÂó¿Ë
-	///@param mute true:ÊÇ false:·ñ
+	///muteæœ¬åœ°éº¦å…‹
+	///@param mute true:æ˜¯ false:å¦
 	///@return 0 succ
 	virtual int muteLocalMic(bool mute, eUCloudRtcMeidaType streamtype = UCLOUD_RTC_MEDIATYPE_VIDEO) = 0;
 
-	///mute±¾µØÊÓÆµ
-	///@param mute true:ÊÇ false:·ñ
-	///@param streamtype Ã½ÌåÀàĞÍ 
+	///muteæœ¬åœ°è§†é¢‘
+	///@param mute true:æ˜¯ false:å¦
+	///@param streamtype åª’ä½“ç±»å‹ 
 	///@return 0 succ
 	virtual int muteLocalVideo(bool mute, eUCloudRtcMeidaType streamtype) = 0;
 
-	///¶©ÔÄ
-	///@param info:¶©ÔÄµÄÁ÷
+	///è®¢é˜…
+	///@param info:è®¢é˜…çš„æµ
 	///@return 0 succ
 	virtual int subscribe(tUCloudRtcStreamInfo& info) = 0;
 
-	///È¡Ïû¶©ÔÄ
-	///@param info:È¡Ïû¶©ÔÄµÄÁ÷
+	///å–æ¶ˆè®¢é˜…
+	///@param info:å–æ¶ˆè®¢é˜…çš„æµ
 	///@return 0 succ
 	virtual int unSubscribe(tUCloudRtcStreamInfo& info) = 0;
 
 
-	///¿ªÆôÔ¶¶ËäÖÈ¾
-	///@param view:¿ªÆôÔ¶¶ËäÖÈ¾µÄÊÓÍ¼ĞÅÏ¢
+	///å¼€å¯è¿œç«¯æ¸²æŸ“
+	///@param view:å¼€å¯è¿œç«¯æ¸²æŸ“çš„è§†å›¾ä¿¡æ¯
 	///@return 0 succ
 	virtual int startRemoteView(tUCloudRtcVideoCanvas& view) = 0;
 
 
-	///Í£Ö¹Ô¶¶ËäÖÈ¾
-	///@param view:ÊÓÍ¼ĞÅÏ¢
+	///åœæ­¢è¿œç«¯æ¸²æŸ“
+	///@param view:è§†å›¾ä¿¡æ¯
 	///@return 0 succ
 	virtual int stopRemoteView(tUCloudRtcVideoCanvas& view) = 0;
 
-	///muteÔ¶¶ËÒôÆµ
-	///@param info:muteÁ÷ĞÅÏ¢
-	///@param info:mute true:ÊÇ false:·ñ
+	///muteè¿œç«¯éŸ³é¢‘
+	///@param info:muteæµä¿¡æ¯
+	///@param info:mute true:æ˜¯ false:å¦
 	///@return 0 succ
 	virtual int muteRemoteAudio(tUCloudRtcMuteSt& info, bool mute) = 0;
 
 
-	///mute Ô¶¶ËÊÓÆµ
-	///@param info:muteÁ÷ĞÅÏ¢
-	///@param info:mute true:ÊÇ false:·ñ
+	///mute è¿œç«¯è§†é¢‘
+	///@param info:muteæµä¿¡æ¯
+	///@param info:mute true:æ˜¯ false:å¦
 	///@return 0 succ
 	virtual int muteRemoteVideo(tUCloudRtcMuteSt& info, bool mute) = 0;
 
 
-	///ÊÇ·ñ¿ªÆô²¥·Å
-	///@param enable true:ÊÇ false:·ñ
+	///æ˜¯å¦å¼€å¯æ’­æ”¾
+	///@param enable true:æ˜¯ false:å¦
 	///@return 0 succ
 	virtual int enableAllAudioPlay(bool enable) = 0;
 
 
-	///¿ªÊ¼Â¼ÖÆ
-	///@param recordconfig Â¼ÖÆÅäÖÃ
+	///å¼€å§‹å½•åˆ¶
+	///@param recordconfig å½•åˆ¶é…ç½®
 	///@return 0 succ
 	virtual int startRecord(tUCloudRtcRecordConfig& recordconfig) = 0;
 
-	///Í£Ö¹Â¼ÖÆ
+	///åœæ­¢å½•åˆ¶
 	///@return 0 succ
 	virtual int stopRecord() = 0;
 
-	///ÉèÖÃÉãÏñÍ·ÊÇ·ñ¿ªÆô
-	///@param enable true:ÊÇ false:·ñ
+	///è®¾ç½®æ‘„åƒå¤´æ˜¯å¦å¼€å¯
+	///@param enable true:æ˜¯ false:å¦
 	///@return 0 succ
 	virtual int configLocalCameraPublish(bool enable) = 0;
 
-	///±¾µØÉãÏñÍ·ÊÇ·ñ¿ªÆô
+	///æœ¬åœ°æ‘„åƒå¤´æ˜¯å¦å¼€å¯
 	///@return true false
 	virtual bool isLocalCameraPublishEnabled() = 0;
 
-	///ÉèÖÃ·ÖÏí×ÀÃæ¿ªÆô
-	///@param enable true:ÊÇ false:·ñ
+	///è®¾ç½®åˆ†äº«æ¡Œé¢å¼€å¯
+	///@param enable true:æ˜¯ false:å¦
 	///@return 0 succ
 	virtual int configLocalScreenPublish(bool enable) = 0;
 
-	///·ÖÏí×ÀÃæÊÇ·ñ¿ªÆô
+	///åˆ†äº«æ¡Œé¢æ˜¯å¦å¼€å¯
 	///@return true false
 	virtual bool isLocalScreenPublishEnabled() = 0;
 
-	///ÅäÖÃ±¾µØÒôÆµ·¢²¼
-	///@param enable true:ÊÇ false:·ñ
+	///é…ç½®æœ¬åœ°éŸ³é¢‘å‘å¸ƒ
+	///@param enable true:æ˜¯ false:å¦
 	///@return 0 succ
 	virtual int configLocalAudioPublish(bool enable) = 0;
 
-	///±¾µØ·¢²¼ÊÇ·ñ½ûÖ¹
+	///æœ¬åœ°å‘å¸ƒæ˜¯å¦ç¦æ­¢
 	///@return true false
 	virtual bool isLocalAudioPublishEnabled() = 0;
 
-	///ÊÇ·ñ×Ô¶¯·¢²¼
+	///æ˜¯å¦è‡ªåŠ¨å‘å¸ƒ
 	///@return true false
 	virtual bool isAutoPublish() = 0;
 
-	///ÊÇ·ñ×Ô¶¯¶©ÔÄ
+	///æ˜¯å¦è‡ªåŠ¨è®¢é˜…
 	///@return true false
 	virtual bool isAutoSubscribe() = 0;
 
-	///ÊÇ·ñ´¿ÒôÆµ
+	///æ˜¯å¦çº¯éŸ³é¢‘
 	///@return true false
 	virtual bool isAudioOnly() = 0;
 
-	///ÅÔÂ·ÍÆÁ÷
-	///@param url cdnµØÖ·
-	///@param config ×ªÍÆÅäÖÃ(note: ³õÊ¼Ä£°å»á×Ô¶¯Ñ¡Ôñmlayouts[0]£¬²¼¾ÖÁĞ±í×î´óÖ§³Ö3ÖÖÔÚ·¿¼äÄÚÇĞ»»)
+	///æ—è·¯æ¨æµ
+	///@param url cdnåœ°å€
+	///@param config è½¬æ¨é…ç½®(note: åˆå§‹æ¨¡æ¿ä¼šè‡ªåŠ¨é€‰æ‹©mlayouts[0]ï¼Œå¸ƒå±€åˆ—è¡¨æœ€å¤§æ”¯æŒ3ç§åœ¨æˆ¿é—´å†…åˆ‡æ¢)
 	///@return 0 succ
 	virtual int addPublishStreamUrl(const char* url, tUCloudRtcTranscodeConfig *config) = 0;
 
-	///¸üĞÂ×ªÍÆÉèÖÃ
-	///@param url cdn µØÖ·
-	///@param ×ªÍÆ¸üĞÂÉèÖÃ
+	///æ›´æ–°è½¬æ¨è®¾ç½®
+	///@param url cdn åœ°å€
+	///@param è½¬æ¨æ›´æ–°è®¾ç½®
 	///@return 0 succ
 	virtual int updateTranscodeConfig(const char* url, tUCloudRtcTranscodeConfig *config) = 0;
 
-	///Í£Ö¹ÅÔÂ·ÍÆÁ÷
-	///@param url cdnµØÖ·
+	///åœæ­¢æ—è·¯æ¨æµ
+	///@param url cdnåœ°å€
 	///@return 0 succ
 	virtual int removePublishStreamUrl(const char* url) = 0;
 
 
-	///¸üĞÂÅÔÂ·ÍÆÁ÷ºÏÁ÷µÄÁ÷
-	///@param cmd rtmp²Ù×÷ÀàĞÍ
-	///@param streams ×ªÍÆµÄÁ÷ÀàĞÍ
-	///@param streams ×ªÍÆµÄÁ÷³¤¶È
+	///æ›´æ–°æ—è·¯æ¨æµåˆæµçš„æµ
+	///@param cmd rtmpæ“ä½œç±»å‹
+	///@param streams è½¬æ¨çš„æµç±»å‹
+	///@param streams è½¬æ¨çš„æµé•¿åº¦
 	///@return 0 succ
 	virtual int updateRtmpMixStream(eUCloudRtmpOpration cmd, tUCloudRtcRelayStream* streams,int length) = 0;
 
-	///ÉèÖÃmuteºóµÄË®Ó¡Í¼ yuv420¸ñÊ½ ÄÚ²¿×Ô¶¯Ëõ·Å 
-	///@param rgb¸ñÊ½µÄ×Ö½ÚÊı×é
-	///@param ³¤¶È
+	///è®¾ç½®muteåçš„æ°´å°å›¾ yuv420æ ¼å¼ å†…éƒ¨è‡ªåŠ¨ç¼©æ”¾ 
+	///@param rgbæ ¼å¼çš„å­—èŠ‚æ•°ç»„
+	///@param é•¿åº¦
 	///@return 0 succ
 	virtual int setMuteBackImage(const unsigned char* image,const int width,const int height) = 0;
 
-	///¿ªÆôÏµÍ³²É¼¯Òô
-	///@param enabe true:¿ªÆô fasle:¹Ø±Õ
+	///å¼€å¯ç³»ç»Ÿé‡‡é›†éŸ³
+	///@param enabe true:å¼€å¯ fasle:å…³é—­
 	///@return 0 succ
 	virtual int enableCapturePlayBack(bool enable) = 0;
 
 
 
-	///·¢ËÍ×Ô¶¨ÒåÏûÏ¢
+	///å‘é€è‡ªå®šä¹‰æ¶ˆæ¯
 	virtual int sendMessage(const char*msg) = 0;
 
-	///»ñÈ¡»ìÒôÎÄ¼ş²¥·Å×ÜÊ±³¤
+	///è·å–æ··éŸ³æ–‡ä»¶æ’­æ”¾æ€»æ—¶é•¿
 	virtual int getAudioMixingDuration() = 0;
 
-	///»ñÈ¡»ìÒôµ±Ç°²¥·Å½ø¶È
+	///è·å–æ··éŸ³å½“å‰æ’­æ”¾è¿›åº¦
 	virtual int getAudioMixingCurrentPosition() = 0;
 
-	///»Ö¸´µ±Ç°»ìÒô
+	///æ¢å¤å½“å‰æ··éŸ³
 	virtual int resumeAudioMixing() = 0;
 
-	///ÔİÍ£µ±Ç°»ìÒô
+	///æš‚åœå½“å‰æ··éŸ³
 	virtual int pauseAudioMixing() = 0;
 
-	///ÉèÖÃ²¥·Å½ø¶È
+	///è®¾ç½®æ’­æ”¾è¿›åº¦
 	virtual int setAudioMixingPosition(int) = 0;
 
-	///¸üĞÂ»ìÒôÒôÁ¿
+	///æ›´æ–°æ··éŸ³éŸ³é‡
 	virtual int updateAudioMixingVolume(int) = 0;
 
-    ///ÍÆËÍÒ»Ö¡Íâ²¿²É¼¯µÄÊÓÆµÊı¾İ¸øSDK
-    ///@param video ÊÓÆµÊı¾İ
+    ///æ¨é€ä¸€å¸§å¤–éƒ¨é‡‡é›†çš„è§†é¢‘æ•°æ®ç»™SDK
+    ///@param video è§†é¢‘æ•°æ®
     ///@return 0 succ
     virtual int pushVideoFrameData(tUCloudRtcVideoFrame *video) = 0;
 
-    ///ÍÆËÍÒ»Ö¡Íâ²¿²É¼¯µÄÒôÆµÊı¾İ¸øSDK
-    ///@param audio ÊÓÆµÊı¾İ
+    ///æ¨é€ä¸€å¸§å¤–éƒ¨é‡‡é›†çš„éŸ³é¢‘æ•°æ®ç»™SDK
+    ///@param audio è§†é¢‘æ•°æ®
     ///@return 0 succ
     virtual int pushAudioFrameData(tUCloudRtcAudioFrame *audio) = 0;
 
-    ///ÉèÖÃÍâ²¿²É¼¯Êı¾İµÄ»ñÈ¡·½Ê½ 
-    ///@param mode  UCloud_EMDM_PUSH£ºÍÆËÍÊı¾İ¸øsdk   UCloud_EMDM_PULL£ºSDKÀ­Êı¾İ
+    ///è®¾ç½®å¤–éƒ¨é‡‡é›†æ•°æ®çš„è·å–æ–¹å¼ 
+    ///@param mode  UCloud_EMDM_PUSHï¼šæ¨é€æ•°æ®ç»™sdk   UCloud_EMDM_PULLï¼šSDKæ‹‰æ•°æ®
     ///@return 0 succ
     virtual int SetExtendMediaDataMode(eUCloudExtendMediaDataMode mode) = 0;
 
-    ///ÉèÖÃÒôÆµµÄ±àÂëÊôĞÔ
-    ///@param audio_profile  UCloud_Audio_Profile_Default£ºÆÕÍ¨ÓïÒô½»Á÷  UCloud_Audio_Profile_Music £ºÒôÀÖÄ£Ê½
+    ///è®¾ç½®éŸ³é¢‘çš„ç¼–ç å±æ€§
+    ///@param audio_profile  UCloud_Audio_Profile_Defaultï¼šæ™®é€šè¯­éŸ³äº¤æµ  UCloud_Audio_Profile_Music ï¼šéŸ³ä¹æ¨¡å¼
     ///@return 0 succ
     virtual int setAudioProfile(eUCloudAudioProfile audio_profile) = 0;
 
-    ///ÉèÖÃÉùÒôÑÓ³ÙÊ±¼ä
-    ///@param delay_ms ÑÓ³ÙÊ±¼ä£¬ µ¥Î»ms
+    ///å¼€å¯é‡‡é›†è§†é¢‘é•œåƒåŠŸèƒ½
+    ///@param enabe true:å¼€å¯ fasle:å…³é—­
+    ///@return 0 succ
+    virtual int enableCameraMirror(bool enable) = 0;
+
+    ///å¢åŠ æ°´å°
+    ///@param tUCloudWaterMark è¯¦è§ tUCloudWaterMarkè¯´æ˜
+    ///@return 0 succ
+    virtual int addWaterMark(tUCloudWaterMark& watermark) = 0;
+
+    ///æ‰“å¼€æˆ–å…³é—­æ°´å°
+    ///@param eUCloudWaterMarkType è¯¦è§ eUCloudWaterMarkTypeè¯´æ˜
+    ///@return 0 succ
+    virtual int enableWaterMark(eUCloudWaterMarkType type) = 0;
+
+    ///è®¾ç½®å£°éŸ³å»¶è¿Ÿæ—¶é—´
+    ///@param delay_ms å»¶è¿Ÿæ—¶é—´ï¼Œ å•ä½ms
     ///@return 0 succ
     virtual int setAudioDelayTime(int delay_ms) = 0;
 	
-	//Â¼ÖÆ
+	//å½•åˆ¶
 	virtual const char* acquire(const char* jsonobj) = 0;
 	virtual const char* startMix(const char* jsonobj) = 0;
 	virtual const char* stopMix(const char* jsonobj) = 0;

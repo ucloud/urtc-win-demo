@@ -19,11 +19,11 @@ int URTCEngineImpl::InitRTCEngine(void* callback)
 	SYSTEMTIME m_time;
 	GetLocalTime(&m_time);
 	char szDateTime[30] = { 0 };
-	sprintf(szDateTime, "%02d%02d%02d%02d%02d%02d.log", m_time.wYear, m_time.wMonth,
+	sprintf(szDateTime, "%02d%02d%02d%02d%02d%02d", m_time.wYear, m_time.wMonth,
 		m_time.wDay, m_time.wHour, m_time.wMinute, m_time.wSecond);
 	std::string time(szDateTime);
 
-	context.mLogPath = "./";
+	context.mLogPath = "";
 	context.mLogName = time.data();
 	context.mMaxReconnect = 999;
 	context.mIsMediaCodec = URTCConfig::getInstance()->getIntelMediaCodec();

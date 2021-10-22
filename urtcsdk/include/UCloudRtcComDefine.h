@@ -13,7 +13,7 @@
 #define MAX_DEVICE_ID_LENGTH 512 
 #define MAX_WINDOWS_TILE_LEN 256 
 
-//½ÓÈë·½Ê½ÉèÖÃ
+//æ¥å…¥æ–¹å¼è®¾ç½®
 typedef enum
 {
 	UCLOUD_RTC_SERVER_GET_FROM_UTECH = 1,
@@ -21,122 +21,122 @@ typedef enum
 	UCLOUD_RTC_SERVER_GET_FROM_USER_DIRECT
 }eUCloudServerGetFrom;
 
-//Éè±¸ĞÅÏ¢
+//è®¾å¤‡ä¿¡æ¯
 typedef struct {
-	//Éè±¸Ãû³Æ
+	//è®¾å¤‡åç§°
 	char mDeviceName[MAX_DEVICE_ID_LENGTH];
-	//Éè±¸ID
+	//è®¾å¤‡ID
 	char mDeviceId[MAX_DEVICE_ID_LENGTH];
 }tUCloudRtcDeviceInfo;
 
-//Ã½ÌåÅäÖÃ
+//åª’ä½“é…ç½®
 typedef struct {
-	//Ê¹ÄÜvideo
+	//ä½¿èƒ½video
 	bool mVideoEnable;
-	//Ê¹ÄÜaudio
+	//ä½¿èƒ½audio
 	bool mAudioEnable;
 }tUCloudRtcMediaConfig;
 
-//×ÀÃæÅäÖÃ
+//æ¡Œé¢é…ç½®
 typedef struct
 {
-	//ÆÁÄ»Ë÷Òı
+	//å±å¹•ç´¢å¼•
 	long mScreenindex;
-	//x×ø±ê
+	//xåæ ‡
 	int  mXpos;
-	//y×ø±ê
+	//yåæ ‡
 	int mYpos;
-	//¿í¶È
+	//å®½åº¦
 	int mWidth;
-	//³¤¶È
+	//é•¿åº¦
 	int mHeight;
 }tUCloudRtcScreenPargram;
 
-//×ÀÃæÀàĞÍ
+//æ¡Œé¢ç±»å‹
 typedef enum {
-	//ÆÁÄ»
+	//å±å¹•
 	UCLOUD_RTC_DESKTOPTYPE_SCREEN = 1,
-	//´°¿Ú
+	//çª—å£
 	UCLOUD_RTC_DESKTOPTYPE_WINDOW
 }eUCloudRtcDesktopType;
 
-//×ÀÃæ´°¿ÚĞÅÏ¢
+//æ¡Œé¢çª—å£ä¿¡æ¯
 typedef struct
 {
-	//×ÀÃæÀàĞÍ
+	//æ¡Œé¢ç±»å‹
 	eUCloudRtcDesktopType mType;
-	//×ÀÃæid
+	//æ¡Œé¢id
 	int mDesktopId;
 	int mScreenW;
 	int mScreenH;
-	//±êÌâ
+	//æ ‡é¢˜
 	char mDesktopTitle[MAX_WINDOWS_TILE_LEN];
 }tUCloudRtcDeskTopInfo;
 
-//¹ìµÀÀàĞÍ
+//è½¨é“ç±»å‹
 typedef enum {
 	UCLOUD_RTC_TRACKTYPE_AUDIO = 1,
 	UCLOUD_RTC_TRACKTYPE_VIDEO 
 }eUCloudRtcTrackType;
 
-//Ã½ÌåÀàĞÍ
+//åª’ä½“ç±»å‹
 typedef enum {
-	//ÎŞ
+	//æ— 
 	UCLOUD_RTC_MEDIATYPE_NONE = 0,
-	//ÉãÏñÍ·Á÷(Òô¹ìºÍÊÓÆµ¹ì)
+	//æ‘„åƒå¤´æµ(éŸ³è½¨å’Œè§†é¢‘è½¨)
 	UCLOUD_RTC_MEDIATYPE_VIDEO = 1,
-	//×ÀÃæ
+	//æ¡Œé¢
 	UCLOUD_RTC_MEDIATYPE_SCREEN = 2
 }eUCloudRtcMeidaType;
 
-//Á÷ĞÅÏ¢
+//æµä¿¡æ¯
 typedef struct {
-	//ÓÃ»§ID
+	//ç”¨æˆ·ID
 	const char* mUserId;
-	//Á÷ID
+	//æµID
 	const char* mStreamId;
-	//Ê¹ÄÜVIDEO
+	//ä½¿èƒ½VIDEO
 	bool mEnableVideo;
-	//Ê¹ÄÜAUDIO
+	//ä½¿èƒ½AUDIO
 	bool mEnableAudio;
-	//Ê¹ÄÜData
+	//ä½¿èƒ½Data
 	bool mEnableData;
-	//mute video×´Ì¬
+	//mute videoçŠ¶æ€
 	bool mMuteVideo;
-	//mute audio×´Ì¬
+	//mute audioçŠ¶æ€
 	bool mMuteAudio;
-	//Ã½ÌåÀàĞÍ
+	//åª’ä½“ç±»å‹
 	eUCloudRtcMeidaType mStreamMtype;
 }tUCloudRtcStreamInfo;
 
-//mute ×´Ì¬
+//mute çŠ¶æ€
 typedef struct {
-	//ÓÃ»§ID
+	//ç”¨æˆ·ID
 	const char* mUserId;
-	//Á÷ID
+	//æµID
 	const char* mStreamId;
-	//ÊÇ·ñmute
+	//æ˜¯å¦mute
 	bool mMute;
-	//Ã½ÌåÀàĞÍ
+	//åª’ä½“ç±»å‹
 	eUCloudRtcMeidaType mStreamMtype;
 }tUCloudRtcMuteSt;
 
-//Â¼ÖÆµÄprofile
+//å½•åˆ¶çš„profile
 typedef enum {
 	UCLOUD_RTC_RECORDPROFILE_SD = 1, 
 	UCLOUD_RTC_RECORDPROFILE_HD, 
 	UCLOUD_RTC_RECORDPROFILE_HDPLUS, 
 }eUCloudRtcRecordProfile;
 
-//Â¼ÖÆÀàĞÍ
+//å½•åˆ¶ç±»å‹
 typedef enum {
-	//´¿ÒôÆµÄ£Ê½
+	//çº¯éŸ³é¢‘æ¨¡å¼
 	UCLOUD_RTC_RECORDTYPE_AUDIOONLY = 1, 
-	//ÒôÊÓÆµÄ£Ê½
+	//éŸ³è§†é¢‘æ¨¡å¼
 	UCLOUD_RTC_RECORDTYPE_AUDIOVIDEO
 }eUCloudRtcRecordType;
 
-//Ë®Ó¡Î»ÖÃ
+//æ°´å°ä½ç½®
 typedef enum {
 	UCLOUD_RTC_WATERMARKPOS_LEFTTOP = 1,
 	UCLOUD_RTC_WATERMARKPOS_LEFTBOTTOM,
@@ -144,47 +144,47 @@ typedef enum {
 	UCLOUD_RTC_WATERMARKPOS_RIGHTBOTTOM
 }eUCloudRtcWaterMarkPos;
 
-//Ë®Ó¡ÀàĞÍ
+//æ°´å°ç±»å‹
 typedef enum {
-	//Ä¬ÈÏÎŞ
+	//é»˜è®¤æ— 
 	UCLOUD_RTC_WATERMARK_TYPE_NONE = 0,
-	//Ê±¼äË®Ó¡
+	//æ—¶é—´æ°´å°
 	UCLOUD_RTC_WATERMARK_TYPE_TIME = 1,
-	//Í¼Æ¬Ë®Ó¡
+	//å›¾ç‰‡æ°´å°
 	UCLOUD_RTC_WATERMARK_TYPE_PIC,
-	//ÎÄ×ÖË®Ó¡
+	//æ–‡å­—æ°´å°
 	UCLOUD_RTC_WATERMARK_TYPE_TEXT,
 }eUCloudRtcWaterMarkType;
 
-//×ªÍÆÄ£Ê½
+//è½¬æ¨æ¨¡å¼
 typedef enum {
-	//×Ô¶¯
+	//è‡ªåŠ¨
 	UCLOUD_RTC_AUTO = 1,
-	//ÊÖ¶¯
+	//æ‰‹åŠ¨
 	UCLOUD_RTC_MANAUL = 2,
 }eUCloudRtcRelayMode;
 
-//äÖÈ¾Ëõ·ÅÀàĞÍ
+//æ¸²æŸ“ç¼©æ”¾ç±»å‹
 typedef enum {
 	//default full
 	UCLOUD_RTC_RENDER_MODE_DEFAULT = 0,
-	//fit Ä£Ê½
+	//fit æ¨¡å¼
 	UCLOUD_RTC_RENDER_MODE_FIT = 1,
-	//fillÄ£Ê½
+	//fillæ¨¡å¼
 	UCLOUD_RTC_RENDER_MODE_FILL = 2 
 } eUCloudRtcRenderMode;
 
-//äÖÈ¾ÀàĞÍ
+//æ¸²æŸ“ç±»å‹
 typedef enum {
 	//GDI
 	UCLOUD_RTC_RENDER_TYPE_GDI = 1,
 	//D3D
 	UCLOUD_RTC_RENDER_TYPE_D3D = 2,
-	//Íâ²¿äÖÈ¾
+	//å¤–éƒ¨æ¸²æŸ“
 	UCLOUD_RTC_RENDER_TYPE_EXTEND = 3,
 } eUCloudRtcRenderType;
 
-//ÈÕÖ¾¼¶±ğ
+//æ—¥å¿—çº§åˆ«
 typedef enum {
 	UCLOUD_RTC_LOG_LEVEL_DEBUG,
 	UCLOUD_RTC_LOG_LEVEL_INFO,
@@ -193,7 +193,7 @@ typedef enum {
 	UCLOUD_RTC_LOG_LEVEL_NONE,
 } eUCloudRtcLogLevel;
 
-//ÊÓÆµprofile
+//è§†é¢‘profile
 typedef enum {
 	UCLOUD_RTC_VIDEO_PROFILE_NONE = -1, 
 	UCLOUD_RTC_VIDEO_PROFILE_320_180 = 1,
@@ -207,57 +207,57 @@ typedef enum {
 	UCLOUD_RTC_VIDEO_PROFILE_960_720 = 9
 } eUCloudRtcVideoProfile;
 
-//×ÀÃæprofile
+//æ¡Œé¢profile
 typedef enum {
 	UCLOUD_RTC_SCREEN_PROFILE_LOW = 1,
 	UCLOUD_RTC_SCREEN_PROFILE_MIDDLE = 2,
 	UCLOUD_RTC_SCREEN_PROFILE_HIGH = 3,
 
 	UCLOUD_RTC_SCREEN_PROFILE_HIGH_PLUS = 4,
-	UCLOUD_RTC_SCREEN_PROFILE_HIGH_1 = 5,     //×î´ó2mÂëÂÊ 25Ö¡
-	UCLOUD_RTC_SCREEN_PROFILE_HIGH_PLUS_1 = 6, //×î´ó2.5mÂëÂÊ 25Ö¡
-	UCLOUD_RTC_SCREEN_PROFILE_HIGH_0 = 7,     //×î´ó1.6mÂëÂÊ 15Ö¡
-	UCLOUD_RTC_SCREEN_PROFILE_HIGH_PLUS_0 = 8 //×î´ó2mÂëÂÊ 18Ö¡
+	UCLOUD_RTC_SCREEN_PROFILE_HIGH_1 = 5,     //æœ€å¤§2mç ç‡ 25å¸§
+	UCLOUD_RTC_SCREEN_PROFILE_HIGH_PLUS_1 = 6, //æœ€å¤§2.5mç ç‡ 25å¸§
+	UCLOUD_RTC_SCREEN_PROFILE_HIGH_0 = 7,     //æœ€å¤§1.6mç ç‡ 15å¸§
+	UCLOUD_RTC_SCREEN_PROFILE_HIGH_PLUS_0 = 8 //æœ€å¤§2mç ç‡ 18å¸§
 } eUCloudRtcScreenProfile;
 
-//Ó¦ÓÃÀàĞÍ
+//åº”ç”¨ç±»å‹
 typedef enum {
-	//ÊÓÆµ»áÒéÄ£Ê½
+	//è§†é¢‘ä¼šè®®æ¨¡å¼
 	UCLOUD_RTC_CHANNEL_TYPE_COMMUNICATION,
-	//Ö±²¥Ä£Ê½
+	//ç›´æ’­æ¨¡å¼
 	UCLOUD_RTC_CHANNEL_TYPE_BROADCAST
 }eUCloudRtcChannelType;
 
-//È¨ÏŞÉèÖÃ
+//æƒé™è®¾ç½®
 typedef enum {
-	// ÍÆÁ÷È¨ÏŞ
+	// æ¨æµæƒé™
 	UCLOUD_RTC_USER_STREAM_ROLE_PUB, 
-	// À­Á÷È¨ÏŞ
+	// æ‹‰æµæƒé™
 	UCLOUD_RTC_USER_STREAM_ROLE_SUB,
-	// ÍÆÀ­Á÷
+	// æ¨æ‹‰æµ
 	UCLOUD_RTC_USER_STREAM_ROLE_BOTH 
 } eUCloudRtcUserStreamRole;
 
-//SDK Ä£Ê½
+//SDK æ¨¡å¼
 typedef enum {
-	//ÕıÊ½Ä£Ê½ tokenÓĞappserverÉú³É
+	//æ­£å¼æ¨¡å¼ tokenæœ‰appserverç”Ÿæˆ
 	UCLOUD_RTC_SDK_MODE_NORMAL, 
-	//²âÊÔÄ£Ê½ sdkÄÚ²¿Éú³É ĞèÉèÖÃappkey
+	//æµ‹è¯•æ¨¡å¼ sdkå†…éƒ¨ç”Ÿæˆ éœ€è®¾ç½®appkey
 	UCLOUD_RTC_SDK_MODE_TRIVAL, 
 } eUCloudRtcSdkMode;
 
-//ÊÓÆµ±àÂëÀàĞÍ
+//è§†é¢‘ç¼–ç ç±»å‹
 typedef enum {
 	UCLOUD_RTC_CODEC_VP8 = 1, 
 	UCLOUD_RTC_CODEC_H264 
 } eUCloudRtcVideoCodec;
 
-//ÒôÆµ±àÂëÀàĞÍ
+//éŸ³é¢‘ç¼–ç ç±»å‹
 typedef enum {
 	UCLOUD_RTC_CODEC_OPUS = 1, //default
 } eUCloudRtcAudioCodec;
 
-//FRAME ÀàĞÍ
+//FRAME ç±»å‹
 typedef enum {
 	UCLOUD_RTC_VIDEO_FRAME_TYPE_I420 = 1,
 	UCLOUD_RTC_VIDEO_FRAME_TYPE_RGB24,
@@ -266,66 +266,66 @@ typedef enum {
 	UCLOUD_RTC_VIDEO_FRAME_TYPE_ARGB,
 }eUCloudRtcVideoFrameType;
 
-//ÍøÂçÉÏÏÂĞÍÀàĞÍ
+//ç½‘ç»œä¸Šä¸‹å‹ç±»å‹
 typedef enum {
-	//ÉÏĞĞ
+	//ä¸Šè¡Œ
 	UCLOUD_RTC_NETWORK_TX = 1, 
-	//ÏÂĞĞ
+	//ä¸‹è¡Œ
 	UCLOUD_RTC_NETWORK_RX = 2,  
 }eUCloudRtcNetworkQuality;
 
-//ÍøÂçÆÀ·Ö
+//ç½‘ç»œè¯„åˆ†
 typedef enum {
-	//Î´Öª
+	//æœªçŸ¥
 	UCLOUD_RTC_QUALITY_UNKNOWN = 0, 
-	//ºÜ»µ
+	//å¾ˆå
 	UCLOUD_RTC_QUALITY_DOWN = 5,  
-	//ÃãÇ¿ÄÜ¹µÍ¨µ«²»Ë³³©
+	//å‹‰å¼ºèƒ½æ²Ÿé€šä½†ä¸é¡ºç•…
 	UCLOUD_RTC_QUALITY_BAD = 4,  
-	//ÓÃ»§Ö÷¹Û¸ĞÊÜÓĞè¦´Ãµ«²»Ó°Ïì¹µÍ¨
+	//ç”¨æˆ·ä¸»è§‚æ„Ÿå—æœ‰ç‘•ç–µä½†ä¸å½±å“æ²Ÿé€š
 	UCLOUD_RTC_QUALITY_POOR =  3, 
-	// ÓÃ»§Ö÷¹Û¸Ğ¾õºÍ excellent ²î²»¶à
+	// ç”¨æˆ·ä¸»è§‚æ„Ÿè§‰å’Œ excellent å·®ä¸å¤š
 	UCLOUD_RTC_QUALITY_GOOD = 2, 
-	//ÍøÂçÖÊÁ¿¼«ºÃ
+	//ç½‘ç»œè´¨é‡æå¥½
 	UCLOUD_RTC_QUALITY_EXCELLENT = 1, 
 }eUCloudRtcQualityType;
 
-//rtmp×´Ì¬
+//rtmpçŠ¶æ€
 typedef enum {
-	//ÍÆÁ÷Î´¿ªÊ¼»òÍ£Ö¹
+	//æ¨æµæœªå¼€å§‹æˆ–åœæ­¢
 	RTMP_STREAM_PUBLISH_STATE_IDLE ,   
-	//ÕıÔÚÍÆÁ÷
+	//æ­£åœ¨æ¨æµ
 	RTMP_STREAM_PUBLISH_STATE_RUNNING, 
-	//ÍÆÁ÷Ê§°Ü Ïê¼ûcode
+	//æ¨æµå¤±è´¥ è¯¦è§code
 	RTMP_STREAM_PUBLISH_STATE_FAILURE ,
-	//Í£Ö¹ÍÆÁ÷Ê§°Ü Ïê¼ûcode
+	//åœæ­¢æ¨æµå¤±è´¥ è¯¦è§code
 	RTMP_STREAM_PUBLISH_STATE_STOPFAILURE, 
-	//Òì³£Í£Ö¹ÍÆÁ÷(ÎŞÁ÷³¬Ê±Í£Ö¹)
+	//å¼‚å¸¸åœæ­¢æ¨æµ(æ— æµè¶…æ—¶åœæ­¢)
 	RTMP_STREAM_PUBLISH_STATE_EXCEPTIONSTOP, 
-	//¸üĞÂ²¼¾Ö½á¹û
-	RTMP_STREAM_PUBLISH_STATE_UPDATECONFIGRES,  //code Îª0Ê±¸üĞÂsucc
+	//æ›´æ–°å¸ƒå±€ç»“æœ
+	RTMP_STREAM_PUBLISH_STATE_UPDATECONFIGRES,  //code ä¸º0æ—¶æ›´æ–°succ
 }eUCloudRtmpState;
 
-// äÖÈ¾ÊÓÍ¼
+// æ¸²æŸ“è§†å›¾
 typedef struct
 {
-	//´°¿ÚÊÓÍ¼
+	//çª—å£è§†å›¾
 	void* mVideoView;
-	//ÓÃ»§id
+	//ç”¨æˆ·id
 	const char* mUserId;
-	//Á÷ID
+	//æµID
 	const char* mStreamId;
-	//Á÷ÀàĞÍ
+	//æµç±»å‹
 	eUCloudRtcMeidaType mStreamMtype;
-	//äÖÈ¾Ëõ·ÅÄ£Ê½
+	//æ¸²æŸ“ç¼©æ”¾æ¨¡å¼
 	eUCloudRtcRenderMode mRenderMode;
-	//äÖÈ¾ÀàĞÍ
+	//æ¸²æŸ“ç±»å‹
 	eUCloudRtcRenderType mRenderType;
 	//when extend render this decide callback frametype
 	eUCloudRtcVideoFrameType mVideoFrameType;
 }tUCloudRtcVideoCanvas;
 
-//¼øÈ¨ĞÅÏ¢
+//é‰´æƒä¿¡æ¯
 typedef struct
 {
 	const char* mAppId = nullptr;
@@ -333,17 +333,18 @@ typedef struct
 	const char* mUserId = nullptr;
 	const char* mUserToken = nullptr;
 	const char* mServerUrl = nullptr;
+	const char* mLogUrl = nullptr;
 }tUCloudRtcAuth;
 
-//Á÷ĞÅÏ¢
+//æµä¿¡æ¯
 typedef struct {
-	//ÓÃ»§id
+	//ç”¨æˆ·id
 	const char* mUserId;
-	//Á÷id
+	//æµid
 	const char* mStreamId;
-	//Á÷ÀàĞÍ
+	//æµç±»å‹
 	int mStreamMtype;
-	//trackÀàĞÍ 1 audio 2 video
+	//trackç±»å‹ 1 audio 2 video
 	int mTracktype; 
 	// audio bitrate,unit:bps
 	int mAudioBitrate = 0;  
@@ -355,44 +356,44 @@ typedef struct {
 	int mVideoHeight = 0;     
 	// video frames per secon
 	int mVideoFrameRate = 0;     
-	//¶ª°üÂÊ
+	//ä¸¢åŒ…ç‡
 	float mPacketLostRate = 0.0f;
 }tUCloudRtcStreamStats;
 
-//Â¼ÖÆĞÅÏ¢
+//å½•åˆ¶ä¿¡æ¯
 typedef struct {
-	//Â¼ÖÆID
+	//å½•åˆ¶ID
 	const char* mRecordId;
-	//Â¼ÖÆÎÄ¼şÃû
+	//å½•åˆ¶æ–‡ä»¶å
 	const char* mFileName;
 	//region
 	const char* mRegion;
 	//bucket
 	const char* mBucket;
-	//·¿¼äid
+	//æˆ¿é—´id
 	const char* mRoomid;
 }tUCloudRtcRecordInfo;
 
-//ÒôÆµÖ¡ĞÅÏ¢
+//éŸ³é¢‘å¸§ä¿¡æ¯
 typedef struct {
-	//ÓÃ»§id
+	//ç”¨æˆ·id
 	const char* mUserId;
-	//Á÷ID
+	//æµID
 	const char* mStreamId;
-	//audio Êı¾İ
+	//audio æ•°æ®
 	void* mAudioData;
 	int mBytePerSimple;
-	//²ÉÓÃÂÊ
+	//é‡‡ç”¨ç‡
 	int mSimpleRate;
-	//ÉùµÀÊı
+	//å£°é“æ•°
 	int mChannels;
 	int mNumSimples;
 	long long renderTimeMs;
 }tUCloudRtcAudioFrame;
 
-//ÊÓÆµÖ¡ĞÅÏ¢
+//è§†é¢‘å¸§ä¿¡æ¯
 typedef struct {
-	//ÊÓÆµÊı¾İ
+	//è§†é¢‘æ•°æ®
 	unsigned char* mDataBuf;
 	int mWidth;
 	int mHeight;
@@ -401,16 +402,16 @@ typedef struct {
 	long long renderTimeMs;
 }tUCloudRtcVideoFrame;
 
-//ÊÓÆµĞÅÏ¢ÅäÖÃ
+//è§†é¢‘ä¿¡æ¯é…ç½®
 typedef struct {
 	int mWidth;
 	int mHeight;
-	//Ö¡ÂÊ
+	//å¸§ç‡
 	int mFrameRate;
     int mBitrate; //kbps
 }tUCloudVideoConfig;
 
-//ºÏÁ÷±³¾°É«ÅäÖÃ
+//åˆæµèƒŒæ™¯è‰²é…ç½®
 typedef struct  {
 	int mRed;
 	int mGreen;
@@ -419,22 +420,22 @@ typedef struct  {
 
 typedef enum {
     UCloud_EMDM_UNKNOWN = 0,
-    UCloud_EMDM_PUSH,       //ÍÆÁ÷Ä£Ê½
-    UCloud_EMDM_PULL,       //À­Á÷Ä£Ê½
+    UCloud_EMDM_PUSH,       //æ¨æµæ¨¡å¼
+    UCloud_EMDM_PULL,       //æ‹‰æµæ¨¡å¼
 }eUCloudExtendMediaDataMode;
 
 typedef enum {
-    UCloud_Audio_Profile_Default = 0,  //Ä¬ÈÏÄ£Ê½£¬ µ¥ÉùµÀ£¬ 32KÂëÂÊ
-    UCloud_Audio_Profile_Stand,  //±ê×¼Ä£Ê½£¬ µ¥ÉùµÀ£¬ 64KÂëÂÊ
-    UCloud_Audio_Profile_Stand_Stereo, //±ê×¼Á¢ÌåÉù£¬ Ë«ÉùµÀ£¬ 80KÂëÂÊ
-    UCloud_Audio_Profile_Hight,   //¸ßÒôÖÊÄ£Ê½£¬ µ¥ÉùµÀ£¬ 96KÂëÂÊ
-    UCloud_Audio_Profile_Hight_Stereo, //¸ßÒôÖÊÁ¢ÌåÉù£¬ Ë«ÉùµÀ£¬ 128KÂëÂÊ
-    UCloud_Audio_Profile_Stand_Stereo_Disable_2A, // ±ê×¼Á¢ÌåÉù£¬ Ë«ÉùµÀ£¬ 80KÂëÂÊ£¬ ½ûÓÃAEC£¬ AGC
-    UCloud_Audio_Profile_Hight_Disable_2A,   //¸ßÒôÖÊÄ£Ê½£¬ µ¥ÉùµÀ£¬ 96KÂëÂÊ£¬ ½ûÓÃAEC£¬ AGC
-    UCloud_Audio_Profile_Hight_Stereo_Disable_2A, //¸ßÒôÖÊÁ¢ÌåÉù£¬ Ë«ÉùµÀ£¬ 128KÂëÂÊ£¬ ½ûÓÃAEC£¬ AGC
+    UCloud_Audio_Profile_Default = 0,  //é»˜è®¤æ¨¡å¼ï¼Œ å•å£°é“ï¼Œ 32Kç ç‡
+    UCloud_Audio_Profile_Stand,  //æ ‡å‡†æ¨¡å¼ï¼Œ å•å£°é“ï¼Œ 64Kç ç‡
+    UCloud_Audio_Profile_Stand_Stereo, //æ ‡å‡†ç«‹ä½“å£°ï¼Œ åŒå£°é“ï¼Œ 80Kç ç‡
+    UCloud_Audio_Profile_Hight,   //é«˜éŸ³è´¨æ¨¡å¼ï¼Œ å•å£°é“ï¼Œ 96Kç ç‡
+    UCloud_Audio_Profile_Hight_Stereo, //é«˜éŸ³è´¨ç«‹ä½“å£°ï¼Œ åŒå£°é“ï¼Œ 128Kç ç‡
+    UCloud_Audio_Profile_Stand_Stereo_Disable_2A, // æ ‡å‡†ç«‹ä½“å£°ï¼Œ åŒå£°é“ï¼Œ 80Kç ç‡ï¼Œ ç¦ç”¨AECï¼Œ AGC
+    UCloud_Audio_Profile_Hight_Disable_2A,   //é«˜éŸ³è´¨æ¨¡å¼ï¼Œ å•å£°é“ï¼Œ 96Kç ç‡ï¼Œ ç¦ç”¨AECï¼Œ AGC
+    UCloud_Audio_Profile_Hight_Stereo_Disable_2A, //é«˜éŸ³è´¨ç«‹ä½“å£°ï¼Œ åŒå£°é“ï¼Œ 128Kç ç‡ï¼Œ ç¦ç”¨AECï¼Œ AGC
 }eUCloudAudioProfile;
 
-//ÊÓÆµ±àÂëÖÊÁ¿
+//è§†é¢‘ç¼–ç è´¨é‡
 typedef enum {
 	UCLOUD_QUALITY_CB = 0, //CB
 	UCLOUD_QUALITY_B,
@@ -443,13 +444,13 @@ typedef enum {
 	UCLOUD_QUALITY_H
 }eUCloudRtcQualityLevel;
 
-//×ªÍÆ»ìÁ÷²Ù×÷ÀàĞÍ
+//è½¬æ¨æ··æµæ“ä½œç±»å‹
 typedef enum {
-	RTMP_STREAM_ADD,	 //Ìí¼Ó
-	RTMP_STREAM_REMOVE,  //É¾³ı
+	RTMP_STREAM_ADD,	 //æ·»åŠ 
+	RTMP_STREAM_REMOVE,  //åˆ é™¤
 }eUCloudRtmpOpration;
 
-//×ªÍÆµÄÁ÷
+//è½¬æ¨çš„æµ
 typedef struct UCloudRtcRelayStream {
 	const char* mUid;
 	eUCloudRtcMeidaType mType;
@@ -459,55 +460,55 @@ typedef struct UCloudRtcRelayStream {
 	}
 }tUCloudRtcRelayStream;
 
-//×ªÍÆ»ìÁ÷²Ù×÷ÀàĞÍ
+//è½¬æ¨æ··æµæ“ä½œç±»å‹
 typedef enum {
-	MIX_LAYOUT_OLD,       //¼æÈİÖ®Ç°Ä£°å
-	MIX_LAYOUT_FLOW,	  //Á÷Ê½²¼¾Ö
-	MIX_LAYOUT_TEACH,	  //½²¿Î²¼¾Ö
-	MIX_LAYOUT_CUSTOM,    //×Ô¶¨Òå
-	MIX_LAYOUT_ADAPTION1, //Ö÷½²Ä£Ê½
-	MIX_LAYOUT_ADAPTION2, //¶àÈËÄ£Ê½
-	MIX_LAYOUT_ADAPTION3, //µ¥ÈËÄ£Ê½
+	MIX_LAYOUT_OLD,       //å…¼å®¹ä¹‹å‰æ¨¡æ¿
+	MIX_LAYOUT_FLOW,	  //æµå¼å¸ƒå±€
+	MIX_LAYOUT_TEACH,	  //è®²è¯¾å¸ƒå±€
+	MIX_LAYOUT_CUSTOM,    //è‡ªå®šä¹‰
+	MIX_LAYOUT_ADAPTION1, //ä¸»è®²æ¨¡å¼
+	MIX_LAYOUT_ADAPTION2, //å¤šäººæ¨¡å¼
+	MIX_LAYOUT_ADAPTION3, //å•äººæ¨¡å¼
 }eUCloudMixLayout;
 
 typedef int UcloudRtcLayoutLsit[3];
-//×ªÍÆÅäÖÃ
+//è½¬æ¨é…ç½®
 typedef struct UCloudRtcTranscodeConfig {
-	//±³¾°É«
+	//èƒŒæ™¯è‰²
 	tUCloudBackgroundColor mbgColor; 
-	//Ö¡ÂÊ
+	//å¸§ç‡
 	int mFramerate;
-	//ÂëÂÊ
+	//ç ç‡
 	int mBitrate;   
-	//Ö÷½²ÈËµÄuid
+	//ä¸»è®²äººçš„uid
 	const char*  mMainViewUid; 
-	//Ö÷½²ÈË·ÅÖÃµÄÃ½ÌåÀàĞÍ
+	//ä¸»è®²äººæ”¾ç½®çš„åª’ä½“ç±»å‹
 	int mMainviewType; 
-	//Êä³ö·Ö±æÂÊ¿í¶È
+	//è¾“å‡ºåˆ†è¾¨ç‡å®½åº¦
 	int mWidth; 
-	//Êä³ö·Ö±æÂÊ¸ß¶È
+	//è¾“å‡ºåˆ†è¾¨ç‡é«˜åº¦
 	int mHeight; 
-	//²¼¾ÖÁĞ±í
+	//å¸ƒå±€åˆ—è¡¨
 	UcloudRtcLayoutLsit mlayouts;
-	//µ±Ç°Ê¹ÓÃµÃ²¼¾Ö 1.Á÷Ê½²¼¾Ö 2.½²¿ÎÄ£Ê½ 3.×Ô¶¨Òå²¼¾Ö 4.Ä£°å×ÔÊÊÓ¦1 5.Ä£°å×ÔÊÊÓ¦2 6.µ¥ÈËÄ£Ê½
+	//å½“å‰ä½¿ç”¨å¾—å¸ƒå±€ 1.æµå¼å¸ƒå±€ 2.è®²è¯¾æ¨¡å¼ 3.è‡ªå®šä¹‰å¸ƒå±€ 4.æ¨¡æ¿è‡ªé€‚åº”1 5.æ¨¡æ¿è‡ªé€‚åº”2 6.å•äººæ¨¡å¼
 	eUCloudMixLayout mLayout;
-	//mLayout=3 Ê±×Ô¶¨Òå·ç¸ñÄÚÈİ
+	//mLayout=3 æ—¶è‡ªå®šä¹‰é£æ ¼å†…å®¹
 	const char*  mStyle; 
-	//»ìÁ÷µÄÓÃ»§
+	//æ··æµçš„ç”¨æˆ·
 	tUCloudRtcRelayStream *mStreams; 
-	//»ìÁ÷ÓÃ»§Êı
+	//æ··æµç”¨æˆ·æ•°
 	int mStreamslength;
-	//Ë®Ó¡Î»ÖÃ
+	//æ°´å°ä½ç½®
 	eUCloudRtcWaterMarkPos mWatermarkPos;
-	//Ë®Ó¡ÀàĞÍ
+	//æ°´å°ç±»å‹
 	eUCloudRtcWaterMarkType mWaterMarkType;
-	//Ë®Ó¡url  ÎªÍ¼Æ¬Ë®Ó¡Ê±
+	//æ°´å°url  ä¸ºå›¾ç‰‡æ°´å°æ—¶
 	const char* mWatermarkUrl;
-	//ÊÇ·ñ´¿ÒôÆµ
+	//æ˜¯å¦çº¯éŸ³é¢‘
 	bool mIsAudio;
-	//Ä£Ê½
+	//æ¨¡å¼
 	eUCloudRtcRelayMode mMode;
-	//¿ØÖÆÈË(Èô´ËÈËÎŞÁ÷×´Ì¬³¬¹ı1·ÖÖÓ ×ªÍÆ×Ô¶¯Í£Ö¹)
+	//æ§åˆ¶äºº(è‹¥æ­¤äººæ— æµçŠ¶æ€è¶…è¿‡1åˆ†é’Ÿ è½¬æ¨è‡ªåŠ¨åœæ­¢)
 	const char*  mKeyUid;
 	UCloudRtcTranscodeConfig()
 	{
@@ -527,39 +528,39 @@ typedef struct UCloudRtcTranscodeConfig {
 	}
 }tUCloudRtcTranscodeConfig;
 
-//Â¼ÖÆĞÅÏ¢
+//å½•åˆ¶ä¿¡æ¯
 typedef struct UCloudRtcRecordConfig {
-	//Â¼ÖÆµÄÖ÷Á÷ÓÃ»§id
+	//å½•åˆ¶çš„ä¸»æµç”¨æˆ·id
 	const char* mMainviewuid;   
-	//´æ´¢bucket
+	//å­˜å‚¨bucket
 	const char* mBucket;    
-	//´æ´¢region
+	//å­˜å‚¨region
 	const char* mBucketRegion;  
-	//Â¼ÖÆprofile
+	//å½•åˆ¶profile
 	eUCloudRtcRecordProfile mProfile;  
-	//Â¼ÖÆÀàĞÍ
+	//å½•åˆ¶ç±»å‹
 	eUCloudRtcRecordType mRecordType;
-	//Ë®Ó¡Î»ÖÃ
+	//æ°´å°ä½ç½®
 	eUCloudRtcWaterMarkPos mWatermarkPos;
-	//Ö÷Á÷µÄÃ½ÌåÀàĞÍ
+	//ä¸»æµçš„åª’ä½“ç±»å‹
 	eUCloudRtcMeidaType mMainviewmediatype; 
-	//Ë®Ó¡ÀàĞÍ
+	//æ°´å°ç±»å‹
 	eUCloudRtcWaterMarkType mWaterMarkType;  
-	//Ë®Ó¡url  ÎªÍ¼Æ¬Ë®Ó¡Ê±
+	//æ°´å°url  ä¸ºå›¾ç‰‡æ°´å°æ—¶
 	const char* mWatermarkUrl;	
-	//ÊÇ·ñ×Ô¶¯ (true .×Ô¶¯£¬false:ÊÖ¶¯)
+	//æ˜¯å¦è‡ªåŠ¨ (true .è‡ªåŠ¨ï¼Œfalse:æ‰‹åŠ¨)
 	bool mIsaverage;		
-	//Ä£°åÀàĞÍ
+	//æ¨¡æ¿ç±»å‹
 	int mMixerTemplateType;	
-	//Ö¡ÂÊÖ»ÄÜÊÇ15µÄ±¶Êı
+	//å¸§ç‡åªèƒ½æ˜¯15çš„å€æ•°
 	int mFps;
-	//ÂëÂÊ
+	//ç ç‡
 	int mBitrate;
-	//»ìÁ÷µÄÓÃ»§
+	//æ··æµçš„ç”¨æˆ·
 	tUCloudRtcRelayStream *mStreams;
-	//»ìÁ÷µÄÓÃ»§³¤¶È
+	//æ··æµçš„ç”¨æˆ·é•¿åº¦
 	int mStreamslength; 
-	// 0.È¡¾öÓÚmIsaverage 1.Á÷Ê½²¼¾Ö 2.½²¿ÎÄ£Ê½ 3.×Ô¶¨Òå²¼¾Ö 4.Ä£°å×ÔÊÊÓ¦1 5.Ä£°å×ÔÊÊÓ¦2
+	// 0.å–å†³äºmIsaverage 1.æµå¼å¸ƒå±€ 2.è®²è¯¾æ¨¡å¼ 3.è‡ªå®šä¹‰å¸ƒå±€ 4.æ¨¡æ¿è‡ªé€‚åº”1 5.æ¨¡æ¿è‡ªé€‚åº”2
 	int mLayout; 
 	UCloudRtcRecordConfig() {
 		mWatermarkUrl = nullptr;
@@ -575,8 +576,8 @@ typedef struct UCloudRtcRecordConfig {
 }tUCloudRtcRecordConfig;
 
 typedef enum {
-	DEVICE_VIDEO,      //ÊÓÆµÉè±¸
-	DEVICE_AUDIO,	 //ÒôÆµÉè±¸
+	DEVICE_VIDEO,      //è§†é¢‘è®¾å¤‡
+	DEVICE_AUDIO,	 //éŸ³é¢‘è®¾å¤‡
 }eUCloudDeviceType;
 
 typedef enum {
@@ -595,101 +596,128 @@ typedef struct
 	eUcloudMediaCodec mMediaCodec = INTEL_MEDIACODEC;
 }tUCloudRtcInitContext;
 
-//Éè±¸²å°Î»Øµ÷
+typedef enum {
+    WATER_MARK_NONE = 0x00000000,         //å…³é—­æ°´å°
+    WATER_MARK_STRING = 0x00000001,       //å­—ç¬¦ä¸²æ°´å°
+    WATER_MARK_TIMESTAMP = 0x00000002,    //æ—¶é—´æ°´å°ï¼Œ ä»¥å­—ç¬¦ä¸²å½¢å¼ï¼ŒæŒ‰ä¸€å®šå‘¨æœŸä¼ å…¥
+    WATER_MARK_JPEG = 0x00000004,         //å›¾ç‰‡æ°´å°ï¼Œ ä¼ å…¥å›¾ç‰‡çš„æ–‡ä»¶è·¯å¾„ï¼Œä»…æ”¯æŒJPGæ ¼å¼
+    WATER_MARK_ALL = WATER_MARK_STRING | WATER_MARK_TIMESTAMP | WATER_MARK_JPEG,  //æ‰“å¼€æ‰€æœ‰æ°´å°
+}eUCloudWaterMarkType;
+
+typedef enum {
+    WATER_MARK_TOP_LEFT = 0,  //æ°´å°ä»¥å·¦ä¸Šè§’åæ ‡èµ·å§‹ç‚¹ï¼ŒmPosXæ˜¯æ°´å°è·ç¦»å›¾ç‰‡å·¦è¾¹ç¼˜çš„è·ç¦»ï¼ŒmPosYæ˜¯æ°´å°è·ç¦»ä¸Šè¾¹ç¼˜çš„è·ç¦»
+    WATER_MARK_BOTTON_LEFT,   //æ°´å°ä»¥å·¦ä¸‹è§’åæ ‡èµ·å§‹ç‚¹ï¼ŒmPosXæ˜¯æ°´å°è·ç¦»å›¾ç‰‡å·¦è¾¹ç¼˜çš„è·ç¦»ï¼ŒmPosYæ˜¯æ°´å°è·ç¦»ä¸‹è¾¹ç¼˜çš„è·ç¦»
+    WATER_MARK_TOP_RIGHT,     //æ°´å°ä»¥å³ä¸Šè§’åæ ‡èµ·å§‹ç‚¹ï¼ŒmPosXæ˜¯æ°´å°è·ç¦»å›¾ç‰‡å³è¾¹ç¼˜çš„è·ç¦»ï¼ŒmPosYæ˜¯æ°´å°è·ç¦»ä¸Šè¾¹ç¼˜çš„è·ç¦»
+    WATER_MARK_BOTTON_RIGHT,  //æ°´å°ä»¥å³ä¸‹è§’åæ ‡èµ·å§‹ç‚¹ï¼ŒmPosXæ˜¯æ°´å°è·ç¦»å›¾ç‰‡å³è¾¹ç¼˜çš„è·ç¦»ï¼ŒmPosYæ˜¯æ°´å°è·ç¦»ä¸‹è¾¹ç¼˜çš„è·ç¦»
+    WATER_MARK_VERTICAL_CENTER, //æ°´å°å‚ç›´å±…ä¸­ï¼ŒmPosXä¸ºæ°´å°è·ç¦»å›¾ç‰‡å·¦è¾¹ç¼˜çš„è·ç¦»ï¼Œ mPosYä¸ä½¿ç”¨
+    WATER_MARK_HORIZONTAL_CENTER,  //æ°´å°æ°´å¹³å±…ä¸­ï¼ŒmPosYä¸ºæ°´å°è·ç¦»å›¾ç‰‡ä¸Šè¾¹ç¼˜çš„è·ç¦»ï¼Œ mPosXä¸ä½¿ç”¨
+}eUCloudWaterMarkPosition;
+
+typedef struct
+{
+    eUCloudWaterMarkType mType;   //æ°´å°ç±»å‹
+    eUCloudWaterMarkPosition mPos;  //æ°´å°ä½ç½®
+    int mPosX;                      //å…·ä½“å‚è§eUCloudWaterMarkPositionè¯´æ˜
+    int mPosY;                      //å…·ä½“å‚è§eUCloudWaterMarkPositionè¯´æ˜
+    const char * mContent;          //æ°´å°å†…å®¹ UTF-8 ç¼–ç 
+    int mFontSize = 32;             //æ°´å°çš„å­—ä½“å¤§å°
+}tUCloudWaterMark;
+
+//è®¾å¤‡æ’æ‹”å›è°ƒ
 class UcloudRtcDeviceChanged
 {
 public:
-	///·¢ÏÖÉè±¸
-	///@param dtype Éè±¸ÀàĞÍ
-	///@param dccname Ãû³Æ
-	///@param len ³¤¶È
+	///å‘ç°è®¾å¤‡
+	///@param dtype è®¾å¤‡ç±»å‹
+	///@param dccname åç§°
+	///@param len é•¿åº¦
 	virtual void onInterfaceArrival(eUCloudDeviceType dtype,const char* dccname, int len) {}
 
-	///ÒÆ³ıÉè±¸
-	///@param dtype Éè±¸ÀàĞÍ
-	///@param dccname Ãû³Æ
-	///@param len ³¤¶È
+	///ç§»é™¤è®¾å¤‡
+	///@param dtype è®¾å¤‡ç±»å‹
+	///@param dccname åç§°
+	///@param len é•¿åº¦
 	virtual void onInterfaceRemoved(eUCloudDeviceType dtype, const char* dccname, int len) {}
 
-	///Éè±¸ÊôĞÔ¸Ä±ä
-	///@param dtype Éè±¸ÀàĞÍ
-	///@param dccname Éè±¸Ãû³Æ
-	///@param len ³¤¶È
+	///è®¾å¤‡å±æ€§æ”¹å˜
+	///@param dtype è®¾å¤‡ç±»å‹
+	///@param dccname è®¾å¤‡åç§°
+	///@param len é•¿åº¦
 	virtual void onInterfaceChangeValue(eUCloudDeviceType dtype, const char* dccname, int len) {}
 	virtual ~UcloudRtcDeviceChanged() {}
 };
 
-//ÒôÆµ¼àÌı»Øµ÷
+//éŸ³é¢‘ç›‘å¬å›è°ƒ
 class UCloudRtcAudioFrameCallback
 {
 public:
-	///±¾µØÒôÆµÔ´Êı¾İcallback
-	///@param audioframe ÒôÆµÊı¾İ
+	///æœ¬åœ°éŸ³é¢‘æºæ•°æ®callback
+	///@param audioframe éŸ³é¢‘æ•°æ®
 	virtual void onLocalAudioFrame(tUCloudRtcAudioFrame* audioframe) {}
-	///Ô¶¶ËÒôÆµÔ´Êı¾İcallback
-	///@param audioframe ÒôÆµÊı¾İ
+	///è¿œç«¯éŸ³é¢‘æºæ•°æ®callback
+	///@param audioframe éŸ³é¢‘æ•°æ®
 	virtual void onRemoteMixAudioFrame(tUCloudRtcAudioFrame* audioframe) {}
-	///±¾µØºÍÔ¶¶ËÒôÆµÔ´Êı¾İcallback
-	///@param audioframe ÒôÆµÊı¾İ
+	///æœ¬åœ°å’Œè¿œç«¯éŸ³é¢‘æºæ•°æ®callback
+	///@param audioframe éŸ³é¢‘æ•°æ®
 	virtual void onLoaclRemoteMixAudioFrame(tUCloudRtcAudioFrame* audioframe) {}
 };
 
-//Íâ²¿ÒôÆµÔ´(ÒÑ·ÏÆú ²ÉÓÃUCloudIAudioFrameObserver )
+//å¤–éƒ¨éŸ³é¢‘æº(å·²åºŸå¼ƒ é‡‡ç”¨UCloudIAudioFrameObserver )
 class  UCloudRtcExtendAudioCaptureSource
 {
 public:
 	virtual ~UCloudRtcExtendAudioCaptureSource() {}
-	///ÒôÆµÔ´Êı¾İ ÄÚ²¿»á×Ô¶¯µ÷ÓÃ´Ë½Ó¿Ú
-	///@param audioframe ÒôÆµÊı¾İ
+	///éŸ³é¢‘æºæ•°æ® å†…éƒ¨ä¼šè‡ªåŠ¨è°ƒç”¨æ­¤æ¥å£
+	///@param audioframe éŸ³é¢‘æ•°æ®
 	virtual  bool doCaptureAudioFrame(tUCloudRtcAudioFrame* audioframe) = 0;
 };
 
-//Íâ²¿ÊÓÆµÔ´£¨ÒÑ·ÏÆú ²ÉÓÃUCloudIVideoFrameObserver£©
+//å¤–éƒ¨è§†é¢‘æºï¼ˆå·²åºŸå¼ƒ é‡‡ç”¨UCloudIVideoFrameObserverï¼‰
 class  UCloudRtcExtendVideoCaptureSource
 {
 public:
-	///ÊÓÆµÔ´Êı¾İ ÄÚ²¿»á×Ô¶¯µ÷ÓÃ´Ë½Ó¿Ú
-	///@param videoframe ÊÓÆµÖ¡
+	///è§†é¢‘æºæ•°æ® å†…éƒ¨ä¼šè‡ªåŠ¨è°ƒç”¨æ­¤æ¥å£
+	///@param videoframe è§†é¢‘å¸§
 	virtual  bool doCaptureVideoFrame(tUCloudRtcVideoFrame* videoframe) = 0;
 };
 
-//ÊÓÆµÉè±¸startcapture¼àÌı»Øµ÷
+//è§†é¢‘è®¾å¤‡startcaptureç›‘å¬å›è°ƒ
 class UCloudRtcVideoFrameObserver 
 {
 public:
-	///ÊÓÆµ²É¼¯Êı¾İ»Øµ÷
-	///@param videoframe ÊÓÆµÊı¾İ
-	///@param buflen ³¤¶È
+	///è§†é¢‘é‡‡é›†æ•°æ®å›è°ƒ
+	///@param videoframe è§†é¢‘æ•°æ®
+	///@param buflen é•¿åº¦
 	virtual  void onCaptureFrame(unsigned char* videoframe, int buflen) = 0;
 };
 
-//Íâ²¿äÖÈ¾
+//å¤–éƒ¨æ¸²æŸ“
 class UCloudRtcExtendVideoRender
 {
 public:
-	///Íâ²¿äÖÈ¾
-	///@param videoframe ÍÂ³öµÄÊÓÆµÖ¡
+	///å¤–éƒ¨æ¸²æŸ“
+	///@param videoframe åå‡ºçš„è§†é¢‘å¸§
 	virtual  void onRemoteFrame(const tUCloudRtcVideoFrame* videoframe) = 0;
 };
 
 
 
-//ÊÓÆµ¼àÌı»Øµ÷
+//è§†é¢‘ç›‘å¬å›è°ƒ
 class UCloudIVideoFrameObserver
 {
 public:
-	///ÊÓÆµ²É¼¯µ½Ã¿Ò»Ö¡µÃ»Øµ÷
-	///@param videoframe ÊÓÆµÊı¾İ
+	///è§†é¢‘é‡‡é›†åˆ°æ¯ä¸€å¸§å¾—å›è°ƒ
+	///@param videoframe è§†é¢‘æ•°æ®
 	virtual  bool onCaptureFrame(tUCloudRtcVideoFrame *videoFrame) = 0;
 	
 };
 
-//ÒôÆµ¼àÌı»Øµ÷
+//éŸ³é¢‘ç›‘å¬å›è°ƒ
 class UCloudIAudioFrameObserver
 {
 public:
-	///ÒôÆµ²É¼¯µ½Ã¿Ò»Ö¡µÃ»Øµ÷
-	///@param  audioFrame ÒôÆµÊı¾İ
+	///éŸ³é¢‘é‡‡é›†åˆ°æ¯ä¸€å¸§å¾—å›è°ƒ
+	///@param  audioFrame éŸ³é¢‘æ•°æ®
 	virtual  bool onCaptureFrame(tUCloudRtcAudioFrame* audioFrame) = 0;
 
 };

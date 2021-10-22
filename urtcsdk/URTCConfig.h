@@ -87,8 +87,8 @@ private:
 	bool mPubAudio;
 	bool mPubScreen;
 
-	bool mMuteCamBeforeJoin;
-	bool mMuteMicBeforeJoin;
+	bool mMuteCamBeforeJoin = false;
+	bool mMuteMicBeforeJoin = false;
 
 	bool mAudioOnly;
 
